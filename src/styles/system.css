@@ -122,7 +122,7 @@ p { text-wrap: pretty; }
 .logo-mark { gap: .2rem; }
 .nav-link { font: 800 .98rem/1 var(--font-display); text-transform: uppercase; letter-spacing: .05em; color: inherit; padding: .4rem 0; background-image: none; }
 .nav-link:hover, .nav-link[aria-current="page"] { color: inherit; text-decoration: underline; text-decoration-color: var(--color-gold); text-decoration-thickness: 2px; text-underline-offset: 9px; }
-.nav-list { gap: clamp(1.1rem, 2.2vw, 2.1rem); }
+.nav-list { gap: clamp(.9rem, 1.8vw, 2.1rem); }
 .header-actions { gap: .6rem; }
 .site-header .btn { min-height: 44px; padding: 0 1.1rem; font-size: .95rem; }
 .site-header.overlay:not(.solid) .btn-ghost-sm { color: var(--color-white); border-color: rgb(255 255 255 / .8); background: transparent; }
@@ -133,7 +133,7 @@ p { text-wrap: pretty; }
 .menu-toggle { border-radius: var(--radius-btn); border: 2px solid currentColor; background: transparent; color: inherit; font: 800 .95rem var(--font-display); text-transform: uppercase; min-height: 44px; padding: 0 1rem; }
 .header-call, .header-cta { display: none; }
 @media (min-width: 48rem) { .header-call, .header-cta { display: inline-flex; } }
-@media (min-width: 75rem) { .nav-list, .header-cta { display: flex; } .menu-toggle { display: none; } }
+@media (min-width: 68.75rem) { .nav-list, .header-cta { display: flex; } .menu-toggle { display: none; } }
 .mobile-panel { background: var(--color-charcoal); color: var(--color-white); }
 .mobile-panel a { font: 800 1.6rem/1.15 var(--font-display); text-transform: uppercase; letter-spacing: .02em; }
 .mobile-panel .sub a { font: 600 1rem/1.4 var(--font-sans); text-transform: none; color: var(--color-on-dark-muted); }
@@ -400,3 +400,23 @@ p { text-wrap: pretty; }
 }
 @media (max-width: 47.99rem) { .hp-area-chip { min-height: 44px; } }
 .hp-cta-note a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* ---- Visual decision pass (services, projects, typography, navigation) ---- */
+/* Services, desktop: three cards over two equal cards (chosen over the four-plus-band arrangement) */
+@media (min-width: 72rem) {
+  .hp-svc-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .hp-svc.compact { grid-column: span 2; }
+  .hp-svc.compact:nth-child(n+4), .hp-svc.band { grid-column: span 3; }
+  .hp-svc.band { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: .6rem; }
+  .hp-svc.band .hp-svc-body { flex: 1 1 auto; }
+  .hp-svc.band .hp-svc-links { margin-top: auto; justify-content: flex-start; }
+}
+/* Projects, tablet: third card spans the full row as a horizontal card; 16:9 keeps the crop intact */
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .hp-work-grid > li:nth-child(3) { grid-column: 1 / -1; display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; align-items: center; }
+  .hp-work-grid > li:nth-child(3) .hp-proj-img .pimg img { aspect-ratio: 16 / 9; }
+  .hp-work-grid > li:nth-child(3) .hp-proj-body { padding: 1.25rem; }
+}
+/* Typography: Barlow Condensed for display headings and buttons; Inter for card titles and navigation labels */
+.hp-svc h3, .hp-proj h3, .hp-problem h3, .hp-steps h3 { font-family: var(--font-sans); font-weight: 700; text-transform: none; letter-spacing: -.01em; }
+.nav-link { font-family: var(--font-sans); font-weight: 600; text-transform: none; letter-spacing: 0; font-size: .95rem; }
