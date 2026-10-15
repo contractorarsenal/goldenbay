@@ -75,14 +75,15 @@ for (const r of ['/', '/about/']) {
 // Revision V2: accordion (one open at a time, keyboard), tel/mailto actions, header buttons per width, no visible contact text
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
-  await page.goto(base + '/', { waitUntil: 'networkidle' });
-  const items = page.locator('.hp-acc-item summary');
+  await page.goto(base + '/faq/', { waitUntil: 'networkidle' });
+  const items = page.locator('details[name="ask"] summary');
   await items.nth(0).click(); await items.nth(1).click();
-  const open = await page.$$eval('.hp-acc-item', (d) => d.filter((x) => x.open).length);
+  const open = await page.$$eval('details[name="ask"]', (d) => d.filter((x) => x.open).length);
   if (open !== 1) fails.push(`accordion: ${open} items open, expected 1`);
   await items.nth(2).focus(); await page.keyboard.press('Enter');
-  const open2 = await page.$$eval('.hp-acc-item', (d) => d.filter((x) => x.open).length);
+  const open2 = await page.$$eval('details[name="ask"]', (d) => d.filter((x) => x.open).length);
   if (open2 !== 1) fails.push(`accordion keyboard: ${open2} open`);
+  await page.goto(base + '/', { waitUntil: 'networkidle' });
   const telHref = await page.$eval('.header-call', (a) => a.getAttribute('href'));
   if (telHref !== 'tel:+14085067184') fails.push('header Call Now href wrong: ' + telHref);
   const headerTxt = await page.$eval('.site-header', (h) => h.innerText);

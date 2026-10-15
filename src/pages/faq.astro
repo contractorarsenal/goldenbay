@@ -5,6 +5,8 @@ import Cta from '../components/Cta.astro';
 import Faq from '../components/Faq.astro';
 import { generalFaqs } from '../data/faqs';
 import { services } from '../data/services';
+import { business } from '../data/business';
+import { contractorChecks } from '../data/home';
 const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: generalFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
 ---
 <Base title="Frequently Asked Questions" description="Answers to common homeowner questions about hiring Gold Bay Builders, permits, estimates and how projects work in San Jose." path="/faq/" schema={[schema]} crumbs={[{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq/' }]}>
@@ -12,6 +14,18 @@ const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntit
   <section class="section"><div class="wrap split">
     <div class="prose"><h2 style="margin-top:0">General</h2><p>Service-specific questions are answered on each service page.</p><ul>{services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}</ul></div>
     <Faq items={generalFaqs} />
+  </div></section>
+  <section class="section" style="padding-top:0"><div class="wrap split">
+    <div>
+      <h2 style="font-size:clamp(1.6rem,2.6vw,2.2rem)">Six questions worth asking any contractor.</h2>
+      <p style="margin-top:1rem">Communication, cost changes and unclear scope cause most homeowner frustration. These questions apply to us as much as to anyone you interview.</p>
+      <p style="margin-top:1rem;font-size:.92rem">Always check a license, bond and workers’ compensation on the <a href={business.license.cslbUrl} rel="noopener">CSLB license lookup</a>.</p>
+    </div>
+    <div class="faq">
+      {contractorChecks.map((c) => (
+        <details name="ask"><summary>{c.topic}</summary><div class="ans"><p><strong>{c.ask}</strong></p><p>{c.good}</p></div></details>
+      ))}
+    </div>
   </div></section>
   <Cta />
 </Base>
