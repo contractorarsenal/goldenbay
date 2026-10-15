@@ -107,7 +107,7 @@ const steps = [
       </div>
       <ul class="hp-svc-grid">
         {services.map((s) => (
-          <li class:list={['hp-svc', s.feature ? 'wide' : 'compact']}>
+          <li class:list={['hp-svc', s.key === 'cu' ? 'band' : 'compact']}>
             {s.key === 'kb' && (
               <div class="hp-svc-media" aria-hidden="true">
                 {kitchenPhotos.map((im) => <ProjectImage file={im.file} alt="" focus={im.focus} aspect="4 / 3" mobileAspect="4 / 3" sizes="(min-width: 48rem) 22vw, 45vw" />)}

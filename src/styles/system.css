@@ -52,7 +52,7 @@
   --fs-lead: clamp(1.0625rem, 1.2vw, 1.125rem);
   --fs-body: 1rem;
   --fs-small: .875rem;
-  --fs-eyebrow: .6875rem;          /* 11 px, uppercase */
+  --fs-eyebrow: .75rem;            /* 12 px minimum, uppercase */
 
   /* Semantic tokens */
   --surface-page: var(--color-white);
@@ -203,7 +203,7 @@ p { text-wrap: pretty; }
 .hp-proj-img .pimg img { border-radius: 0; aspect-ratio: 4 / 3; transition: transform .6s ease; }
 .hp-proj-img:hover .pimg img { transform: scale(1.03); }
 .hp-proj-body { padding: 1.2rem 1.3rem 1.4rem; display: grid; gap: .35rem; }
-.hp-proj-cat { font: 700 .7rem/1 var(--font-sans); letter-spacing: .14em; text-transform: uppercase; color: var(--color-gold-text); }
+.hp-proj-cat { font: 700 .75rem/1 var(--font-sans); letter-spacing: .14em; text-transform: uppercase; color: var(--color-gold-text); }
 .hp-proj h3 { font-size: 1.35rem; }
 .hp-proj .arrow-link { margin-top: .4rem; font-size: .95rem; }
 
@@ -355,12 +355,8 @@ p { text-wrap: pretty; }
 @media (min-width: 72rem) {
   .hp-svc-grid { grid-template-columns: repeat(4, 1fr); }
   .hp-svc.compact { grid-column: span 1; }
-  .hp-svc.wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: center; padding: 1.5rem; }
-  .hp-svc.wide .hp-svc-media { margin: 0; }
-  .hp-svc.wide .hp-svc-media .pimg img { aspect-ratio: 4 / 3; }
 }
 @media (max-width: 47.99rem) { .hp-svc-grid { grid-template-columns: 1fr; } }
-@media (min-width: 48rem) and (max-width: 71.99rem) { .hp-svc-grid { grid-template-columns: repeat(2, 1fr); } .hp-svc.wide { grid-column: 1 / -1; } }
 
 .hp-svc { background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 1.4rem 1.4rem 1.5rem; display: flex; flex-direction: column; gap: .6rem; transition: border-color .2s ease; }
 .hp-svc:hover { border-color: var(--color-charcoal); }
@@ -383,3 +379,24 @@ p { text-wrap: pretty; }
 .hp-steps { grid-template-columns: 1fr; }
 @media (min-width: 48rem) and (max-width: 71.99rem) { .hp-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 72rem) { .hp-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+/* ---- Audit v5 fixes ---- */
+@media (max-width: 47.99rem) { .arrow-link { min-height: 44px; align-items: center; } }
+/* 3. sticky mobile call bar only on phones (tablet/desktop already show the header buttons) */
+@media (min-width: 48rem) { .callbar { display: none; } }
+/* 4. hero: crop higher so the light tub is the focal point; lighter wash on the right so the image reads */
+.hp-hero-bg .pimg img { object-position: 72% 42%; }
+.hp-hero::after { background: linear-gradient(90deg, rgb(23 25 29 / .84) 0%, rgb(23 25 29 / .42) 46%, rgb(23 25 29 / .06) 100%); }
+
+/* Services arrangement (chosen in the audit): four equal cards, Custom Home as a full-width band.
+   Two arrangements were rejected in the browser: five equal cards in three columns (orphaned second row),
+   and a dominant full-width feature row. */
+@media (min-width: 48rem) and (max-width: 71.99rem) { .hp-svc-grid { grid-template-columns: repeat(2, 1fr); } .hp-svc.band { grid-column: 1 / -1; } }
+@media (min-width: 72rem) {
+  .hp-svc-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .hp-svc.band { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; gap: 2rem; }
+  .hp-svc.band .hp-svc-body { flex: 1 1 auto; }
+  .hp-svc.band .hp-svc-links { margin-top: 0; justify-content: flex-end; }
+}
+@media (max-width: 47.99rem) { .hp-area-chip { min-height: 44px; } }
+.hp-cta-note a { display: inline-flex; align-items: center; min-height: 44px; }
