@@ -54,3 +54,6 @@ At 390 px the whole page is 109% of the reference (10,125 px against 9,250 px). 
 
 ## Not verified
 Safari, Firefox and real phones. Lighthouse for this pass (see the report that accompanies this file).
+
+## Lighthouse (live preview, one run, 2026-10-15)
+Performance 100 · Accessibility 100 · Best Practices 100 · SEO 69. The SEO score is low because the preview is deliberately `noindex`, which Lighthouse counts against. Indexable builds scored 100 (see the earlier QA report). LCP 1.3 s, CLS 0.001, TBT 0 ms, 181 KB transferred.
