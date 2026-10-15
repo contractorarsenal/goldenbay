@@ -11,7 +11,8 @@
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "verify": "PUBLIC_SITE_URL=https://example.com PUBLIC_ALLOW_INDEXING=true astro build && node scripts/verify-site.mjs",
     "preview:cf": "npm run build && wrangler pages deploy dist --branch preview",
-    "verify:preview": "node scripts/verify-preview.mjs"
+    "verify:preview": "node scripts/verify-preview.mjs",
+    "postinstall": "node scripts/cf-postinstall.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
