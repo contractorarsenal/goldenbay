@@ -1,0 +1,128 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { projectTypes, stages, budgets, timelines, contactMethods } from '../lib/estimate';
+import { business } from '../data/business';
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
+---
+<Base title="Request an Estimate" description="Tell Golden Bay Builders about your San Jose remodel, addition, ADU or custom home. Seven short steps, about two minutes." path="/request-estimate/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'Request an Estimate', path: '/request-estimate/' }]}>
+  <PageHero eyebrow="Request an estimate" title="Tell us about your project." lede="Seven short steps. About two minutes. No obligation." crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="section"><div class="wrap">
+    <form id="wiz" class="wiz" novalidate data-turnstile={siteKey ?? ''} aria-labelledby="wiz-title">
+      <h2 id="wiz-title" class="sr-only" style="position:absolute;left:-9999px">Estimate request form</h2>
+      <div class="progress" aria-hidden="true">{[0,1,2,3,4,5,6].map(() => <i></i>)}</div>
+      <p id="step-label" style="font-size:.85rem;color:var(--color-muted);margin-bottom:1rem" aria-live="polite"></p>
+      <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
+
+      <fieldset data-step="0"><legend>What kind of project?</legend>
+        <div class="choices cols">{projectTypes.map((v) => <label class="choice"><input type="radio" name="projectType" value={v} /><span>{v}</span></label>)}</div><p class="err field" role="alert" data-err="projectType"></p></fieldset>
+
+      <fieldset data-step="1"><legend>Where is the property?</legend>
+        <div class="field"><label for="city">City</label><input id="city" name="city" autocomplete="address-level2" value="San Jose" /><p class="err" role="alert" data-err="city"></p></div>
+        <div class="field"><label for="zip">ZIP code</label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="5" /><p class="err" role="alert" data-err="zip"></p></div>
+        <div class="field"><label for="street">Street address <span style="font-weight:400">(optional)</span></label><input id="street" name="street" autocomplete="street-address" /><p class="hint">Helps us research your lot before we call.</p></div></fieldset>
+
+      <fieldset data-step="2"><legend>Where are you in the process?</legend>
+        <div class="choices">{stages.map((v) => <label class="choice"><input type="radio" name="stage" value={v} /><span>{v}</span></label>)}</div><p class="err field" role="alert" data-err="stage"></p></fieldset>
+
+      <fieldset data-step="3"><legend>Estimated budget?</legend>
+        <div class="choices cols">{budgets.map((v) => <label class="choice"><input type="radio" name="budget" value={v} /><span>{v}</span></label>)}</div>
+        <p class="hint field" style="font-size:.85rem;color:var(--color-muted)">These ranges are for your reference only. They are not Golden Bay Builders’ project minimums or prices.</p><p class="err field" role="alert" data-err="budget"></p></fieldset>
+
+      <fieldset data-step="4"><legend>When would you like to start?</legend>
+        <div class="choices cols">{timelines.map((v) => <label class="choice"><input type="radio" name="timeline" value={v} /><span>{v}</span></label>)}</div><p class="err field" role="alert" data-err="timeline"></p></fieldset>
+
+      <fieldset data-step="5"><legend>Describe the project.</legend>
+        <div class="field"><label for="details">Project details</label><textarea id="details" name="details" maxlength="3000"></textarea><p class="hint">Rooms involved, what you want to change, anything we should know. Do not include payment information.</p><p class="err" role="alert" data-err="details"></p></div></fieldset>
+
+      <fieldset data-step="6"><legend>How can we reach you?</legend>
+        <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" /><p class="err" role="alert" data-err="name"></p></div>
+        <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" /><p class="err" role="alert" data-err="phone"></p></div>
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" /><p class="err" role="alert" data-err="email"></p></div>
+        <div class="field"><span style="font-weight:600;font-size:.9rem" id="cm">Preferred contact method</span><div class="choices cols" role="group" aria-labelledby="cm">{contactMethods.map((v) => <label class="choice"><input type="radio" name="contactMethod" value={v} /><span>{v}</span></label>)}</div><p class="err" role="alert" data-err="contactMethod"></p></div>
+        <div class="field"><label style="display:flex;gap:.75rem;font-weight:400;align-items:flex-start"><input type="checkbox" name="consent" style="width:1.4rem;min-height:1.4rem;margin-top:.2rem" /><span>I agree that {business.name} may contact me about this request. See the <a href="/privacy-policy/" target="_blank" rel="noopener">privacy policy</a>.</span></label><p class="err" role="alert" data-err="consent"></p></div>
+        {siteKey && <div class="cf-turnstile" data-sitekey={siteKey}></div>}
+      </fieldset>
+
+      <p class="form-err" id="form-err" role="alert"></p>
+      <div class="wiz-nav">
+        <button type="button" class="btn btn-line" id="back">Back</button>
+        <button type="button" class="btn btn-primary" id="next">Continue</button>
+        <button type="submit" class="btn btn-primary" id="submit" hidden>Send request</button>
+      </div>
+    </form>
+
+    <div id="success" class="prose" hidden tabindex="-1">
+      <h2>Thank you. Your request was sent.</h2>
+      <p>We’ll contact you using your preferred method. If it’s urgent, call <a href={business.phoneHref}>{business.phone}</a>.</p>
+    </div>
+    <div id="unavailable" class="prose" hidden tabindex="-1">
+      <h2>Online requests aren’t available right now.</h2>
+      <p>Your request was not sent. Please call <a href={business.phoneHref} data-track="click_to_call">{business.phone}</a> or email <a href={`mailto:${business.email}`}>{business.email}</a>.</p>
+    </div>
+  </div></section>
+  {siteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+  <script>
+    import { validateEstimate, stepFields, type EstimateInput } from '../lib/estimate';
+    const form = document.getElementById('wiz') as HTMLFormElement;
+    const bars = form.querySelectorAll<HTMLElement>('.progress i');
+    const steps = [...form.querySelectorAll<HTMLFieldSetElement>('fieldset[data-step]')];
+    const back = document.getElementById('back') as HTMLButtonElement, next = document.getElementById('next') as HTMLButtonElement, submit = document.getElementById('submit') as HTMLButtonElement;
+    const label = document.getElementById('step-label')!, formErr = document.getElementById('form-err')!;
+    const push = (event: string) => { const w = window as any; (w.dataLayer = w.dataLayer || []).push({ event }); };
+    let cur = 0, started = false, sending = false, sent = false;
+    // All steps stay in the DOM (answers persist); only the active one is shown.
+    function show(i: number) {
+      cur = i;
+      steps.forEach((s, n) => { s.hidden = n !== i; });
+      bars.forEach((b, n) => b.classList.toggle('done', n <= i));
+      label.textContent = `Step ${i + 1} of ${steps.length}`;
+      back.style.visibility = i === 0 ? 'hidden' : 'visible';
+      next.hidden = i === steps.length - 1; submit.hidden = i !== steps.length - 1;
+      formErr.textContent = '';
+      (steps[i].querySelector('legend') as HTMLElement | null)?.setAttribute('tabindex', '-1');
+      (steps[i].querySelector('legend') as HTMLElement | null)?.focus({ preventScroll: false });
+    }
+    function data(): Partial<Record<keyof EstimateInput, unknown>> {
+      const fd = new FormData(form); const o: any = {};
+      for (const k of ['projectType','city','zip','street','stage','budget','timeline','details','name','phone','email','contactMethod']) o[k] = ((fd.get(k) as string) ?? '').toString().trim();
+      o.consent = fd.get('consent') === 'on'; return o;
+    }
+    function showErrors(errs: Record<string, string>, fields: string[]) {
+      const firstBad: HTMLElement[] = [];
+      fields.forEach((f) => {
+        const el = form.querySelector<HTMLElement>(`[data-err="${f}"]`); if (el) el.textContent = errs[f] ?? '';
+        const input = form.querySelector<HTMLElement>(`[name="${f}"]`);
+        if (input) { if (errs[f]) { input.setAttribute('aria-invalid', 'true'); if (el) input.setAttribute('aria-describedby', (el.id ||= `e-${f}`)); firstBad.push(input); } else input.removeAttribute('aria-invalid'); }
+      });
+      firstBad[0]?.focus();
+      if (!firstBad.length) { const g = fields.find((f) => errs[f]); if (g) form.querySelector<HTMLElement>(`[data-err="${g}"]`)?.scrollIntoView({ block: 'center' }); }
+      return !Object.keys(errs).some((k) => fields.includes(k));
+    }
+    function validStep(i: number) { return showErrors(validateEstimate(data()) as Record<string, string>, stepFields[i] as string[]); }
+    form.addEventListener('input', () => { if (!started) { started = true; push('form_start'); } });
+    next.addEventListener('click', () => { if (validStep(cur)) show(cur + 1); });
+    back.addEventListener('click', () => show(cur - 1));
+    form.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT' && (e.target as HTMLInputElement).type !== 'checkbox') { e.preventDefault(); cur < steps.length - 1 ? next.click() : submit.click(); } });
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); if (sending || sent) return;
+      const errs = validateEstimate(data()) as Record<string, string>;
+      if (Object.keys(errs).length) { const bad = stepFields.findIndex((fs) => fs.some((f) => errs[f])); show(bad); showErrors(errs, stepFields[bad] as string[]); return; }
+      sending = true; submit.disabled = true; submit.textContent = 'Sending…'; formErr.textContent = '';
+      try {
+        const fd = new FormData(form);
+        const res = await fetch('/api/estimate', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...data(), website: fd.get('website') ?? '', turnstileToken: fd.get('cf-turnstile-response') ?? '' }) });
+        if (res.status === 503 || res.status === 404 || res.status === 405) { form.hidden = true; const u = document.getElementById('unavailable')!; u.hidden = false; u.focus(); return; }
+        const out = await res.json().catch(() => ({}));
+        if (res.ok && out.ok) {
+          sent = true; push('form_submit'); push('generate_lead'); form.hidden = true;
+          const s = document.getElementById('success')!; s.hidden = false; s.focus(); return;
+        }
+        if (res.status === 422 && out.errors) { const bad = stepFields.findIndex((fs) => fs.some((f) => out.errors[f])); show(bad); showErrors(out.errors, stepFields[bad] as string[]); return; }
+        formErr.textContent = out.error === 'spam_check_failed' ? 'We could not verify you are human. Please try again.' : 'Something went wrong and your request was not sent. Please try again or call us.';
+      } catch { formErr.textContent = 'We could not reach the server. Your answers are still here; please try again or call us.'; }
+      finally { sending = false; if (!sent) { submit.disabled = false; submit.textContent = 'Send request'; } }
+    });
+    show(0);
+  </script>
+</Base>

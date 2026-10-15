@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import { projects, type Project } from '../../data/projects';
+export function getStaticPaths() { return projects.map((p) => ({ params: { slug: p.slug }, props: { p } })); }
+const { p } = Astro.props as { p: Project };
+const path = `/projects/${p.slug}/`;
+---
+<Base title={p.title} description={p.summary} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Projects', path: '/projects/' }, { name: p.title, path }]}>
+  <PageHero eyebrow={p.category} title={p.title} lede={p.summary} crumbs={[{ name: 'Home', href: '/' }, { name: 'Projects', href: '/projects/' }]} />
+  <section class="section"><div class="wrap">
+    <img src={p.hero.src} alt={p.hero.alt} width={p.hero.width} height={p.hero.height} fetchpriority="high" style="width:100%;height:auto" />
+    <div class="split" style="margin-top:4rem">
+      <div><h2>Scope of work</h2>{p.location && <p style="margin-top:1rem">{p.location}</p>}</div>
+      <div class="prose"><ul>{p.scope.map((s) => <li>{s}</li>)}</ul>{p.challenge && <><h3>The challenge</h3><p>{p.challenge}</p></>}{p.solution && <><h3>The approach</h3><p>{p.solution}</p></>}</div>
+    </div>
+    <div style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(18rem,1fr));margin-top:4rem">{p.gallery.map((g) => <img src={g.src} alt={g.alt} width={g.width} height={g.height} loading="lazy" style="width:100%;height:auto" />)}</div>
+  </div></section>
+  <Cta />
+</Base>

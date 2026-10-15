@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from './PageHero.astro';
+const { title, description, path } = Astro.props as { title: string; description: string; path: string };
+---
+<Base title={title} description={description} path={path} noindex crumbs={[{ name: 'Home', path: '/' }, { name: title, path }]}>
+  <PageHero title={title} crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="section"><div class="wrap">
+    <p class="prose" style="background:var(--color-stone);padding:1rem 1.25rem;margin-bottom:2rem;border-left:3px solid var(--color-bronze)"><strong>Draft.</strong> This page has not yet been reviewed by an attorney and is not yet indexed.</p>
+    <div class="prose"><slot /></div>
+  </div></section>
+</Base>

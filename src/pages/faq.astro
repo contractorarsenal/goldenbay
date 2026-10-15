@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+import Faq from '../components/Faq.astro';
+import { generalFaqs } from '../data/faqs';
+import { services } from '../data/services';
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: generalFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<Base title="Frequently Asked Questions" description="Answers to common homeowner questions about hiring Golden Bay Builders, permits, estimates and how projects work in San Jose." path="/faq/" schema={[schema]} crumbs={[{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq/' }]}>
+  <PageHero eyebrow="FAQ" title="Questions homeowners ask us." crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="section"><div class="wrap split">
+    <div class="prose"><h2 style="margin-top:0">General</h2><p>Service-specific questions are answered on each service page.</p><ul>{services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}</ul></div>
+    <Faq items={generalFaqs} />
+  </div></section>
+  <Cta />
+</Base>

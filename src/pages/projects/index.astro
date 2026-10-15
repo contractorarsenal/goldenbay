@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { projects } from '../../data/projects';
+const hasProjects = projects.length > 0;
+---
+<Base title="Projects" description="Residential remodeling, addition and ADU projects by Golden Bay Builders in San Jose, CA." path="/projects/" noindex={!hasProjects} crumbs={[{ name: 'Home', path: '/' }, { name: 'Projects', path: '/projects/' }]}>
+  <PageHero eyebrow="Projects" title="Completed work, shown honestly." lede={hasProjects ? 'Selected projects with scope and photography.' : 'Our project gallery is being assembled from real, approved photography. We do not use stock images to represent our work.'} crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="section"><div class="wrap">
+    {hasProjects ? (
+      <div style="display:grid;gap:3rem;grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))">
+        {projects.map((p) => <a href={`/projects/${p.slug}/`} style="text-decoration:none"><img src={p.hero.src} alt={p.hero.alt} width={p.hero.width} height={p.hero.height} loading="lazy" style="width:100%;height:auto" /><span class="eyebrow" style="margin-top:1rem">{p.category}</span><h3>{p.title}</h3><p>{p.summary}</p></a>)}
+      </div>
+    ) : (
+      <div class="split">
+        <div class="prose"><h2 style="margin-top:0">What will appear here</h2><p>Each project page will include the scope of work, the problem it solved, a photo gallery, and before-and-after images where available.</p><p>Have a question about work similar to yours? <a href="/contact/">Contact us</a>.</p></div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem"><Placeholder label="Kitchen" ratio="4 / 5" /><Placeholder label="ADU" ratio="4 / 5" /><Placeholder label="Bathroom" ratio="4 / 5" /><Placeholder label="Addition" ratio="4 / 5" /></div>
+      </div>
+    )}
+  </div></section>
+  <Cta />
+</Base>

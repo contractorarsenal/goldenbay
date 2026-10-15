@@ -1,0 +1,12 @@
+---
+const { eyebrow, title, lede, crumbs = [] } = Astro.props as { eyebrow?: string; title: string; lede?: string; crumbs?: { name: string; href: string }[] };
+---
+<section class="bg-ink on-dark" style="padding-block:clamp(3.5rem,8vw,7rem) clamp(3rem,6vw,5rem)">
+  <div class="wrap">
+    {crumbs.length > 0 && <nav aria-label="Breadcrumb" style="font-size:.85rem;color:#cfc8bb;margin-bottom:2rem"><ol style="display:flex;flex-wrap:wrap;gap:.5rem;list-style:none">{crumbs.map((c) => <li><a href={c.href}>{c.name}</a> <span aria-hidden="true">/</span></li>)}</ol></nav>}
+    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+    <h1 style="margin-top:1.25rem;max-width:18ch">{title}</h1>
+    {lede && <p class="lede" style="margin-top:1.5rem">{lede}</p>}
+    <slot />
+  </div>
+</section>

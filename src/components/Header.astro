@@ -1,0 +1,40 @@
+---
+import { primaryNav } from '../data/nav';
+import { business } from '../data/business';
+const { path } = Astro.props;
+const cur = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="/" aria-label={`${business.name} — home`}><b>Golden Bay Builders</b><small>{business.tagline}</small></a>
+    <nav aria-label="Primary">
+      <ul class="nav-list">
+        {primaryNav.map((item) => item.children ? (
+          <li class="has-dd">
+            <button class="nav-link" aria-expanded="false" aria-controls="dd-services" aria-current={cur(item.href) ? 'true' : undefined}>{item.label} <span aria-hidden="true">▾</span></button>
+            <ul class="dropdown" id="dd-services">
+              <li><a href={item.href}>All services</a></li>
+              {item.children.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+            </ul>
+          </li>
+        ) : (
+          <li><a class="nav-link" href={item.href} aria-current={cur(item.href) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div style="display:flex;gap:.75rem;align-items:center">
+      <a class="header-cta btn btn-primary" href="/request-estimate/" data-track="request_estimate_click" style="min-height:2.9rem;padding:.6rem 1.25rem">Request an estimate</a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-panel">Menu</button>
+    </div>
+  </div>
+  <div class="mobile-panel" id="mobile-panel">
+    <nav aria-label="Mobile">
+      {primaryNav.map((item) => (<>
+        <a href={item.href}>{item.label}</a>
+        {item.children && <div class="sub">{item.children.map((c) => <a href={c.href}>{c.label}</a>)}</div>}
+      </>))}
+    </nav>
+    <a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an estimate</a>
+    <a class="btn btn-line" style="border-bottom:1px solid currentColor;margin-top:.75rem" href={business.phoneHref} data-track="click_to_call">Call {business.phone}</a>
+  </div>
+</header>

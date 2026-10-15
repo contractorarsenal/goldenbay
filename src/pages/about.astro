@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+import { business } from '../data/business';
+---
+<Base title="About Golden Bay Builders" description="Golden Bay Builders Inc. is a San Jose residential contractor led by owner David Lerma, building remodels, additions, ADUs and custom homes." path="/about/" crumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }]}>
+  <PageHero eyebrow="About" title="A San Jose builder, led by its owner." lede="Golden Bay Builders Inc. builds and remodels homes in San Jose, California." crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="section"><div class="wrap split">
+    <div><h2>Building Your Bay Home</h2></div>
+    <div class="prose">
+      <p class="lede">{business.name} is a residential general contractor owned by {business.owner}. We take on whole-home remodels, additions, accessory dwelling units, kitchens, bathrooms and custom homes.</p>
+      <p>Our approach is practical: define the scope, put it in writing, plan selections and permits before demolition, and keep the homeowner informed as the work proceeds.</p>
+      <h2>How to check a contractor</h2>
+      <p>California requires contractors working on projects of this type to be licensed by the Contractors State License Board. You can check any contractor’s license, bond and workers’ compensation status at <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/CheckLicense.aspx" rel="noopener">cslb.ca.gov</a>. We encourage you to do this for every contractor you consider.</p>
+      <p><a href="/meet-david-lerma/">Meet David Lerma</a> · <a href="/our-process/">How we work</a> · <a href="/services/">Our services</a></p>
+    </div>
+  </div></section>
+  <Cta />
+</Base>

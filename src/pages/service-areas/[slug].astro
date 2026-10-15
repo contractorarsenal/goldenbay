@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import { locations, type Location } from '../../data/locations';
+import { services } from '../../data/services';
+export function getStaticPaths() { return locations.map((l) => ({ params: { slug: l.slug }, props: { l } })); }
+const { l } = Astro.props as { l: Location };
+const path = `/service-areas/${l.slug}/`;
+---
+<Base title={`Home Remodeling & Construction in ${l.name}, CA`} description={`Residential remodeling, additions and ADUs ${l.confirmed ? 'in' : 'near'} ${l.name}, California. Local permit and planning considerations from Golden Bay Builders.`} path={path} noindex={!l.confirmed} crumbs={[{ name: 'Home', path: '/' }, { name: 'Service Areas', path: '/service-areas/' }, { name: l.name, path }]}>
+  <PageHero eyebrow="Service area" title={`Building in ${l.name}.`} lede={l.intro} crumbs={[{ name: 'Home', href: '/' }, { name: 'Service Areas', href: '/service-areas/' }]} />
+  <section class="section"><div class="wrap split">
+    <div><span class="eyebrow">Local considerations</span><h2 style="margin-top:1.25rem">What to know before building in {l.name}</h2></div>
+    <div class="prose">
+      <ul>{l.considerations.map((c) => <li>{c}</li>)}</ul>
+      <p>Permits are issued by <strong>{l.department}</strong>. Check their site for current submittal requirements, fees and review times.</p>
+      {!l.confirmed && <p><em>Golden Bay Builders’ service to {l.name} is being confirmed. Contact us to discuss your project.</em></p>}
+      {l.slug === 'san-jose' && <p>Planning an ADU? Read our <a href="/guides/san-jose-adu-guide/">San Jose ADU guide</a>. Budgeting a remodel? See the <a href="/guides/bay-area-remodeling-budget/">remodeling budget guide</a>.</p>}
+    </div>
+  </div></section>
+  <section class="section bg-stone"><div class="wrap"><span class="eyebrow">Services</span>
+    <div class="tiles three" style="margin-top:2rem">{services.map((s) => <a href={`/services/${s.slug}/`} style="text-decoration:none"><span class="num">{s.num}</span><h3>{s.name}</h3><p style="color:var(--color-muted)">{s.short}</p></a>)}</div></div></section>
+  <Cta />
+</Base>

@@ -1,0 +1,4 @@
+---
+const { label = 'Project photograph', note = 'Awaiting approved photography', ratio = '4 / 3' } = Astro.props;
+---
+<div class="placeholder" style={`aspect-ratio:${ratio}`} role="img" aria-label={`${label} placeholder: ${note}`}><div><b>Placeholder</b>{label}<br />{note}</div></div>

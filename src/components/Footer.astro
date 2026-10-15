@@ -1,0 +1,33 @@
+---
+import { business } from '../data/business';
+import { services } from '../data/services';
+import { legalNav } from '../data/nav';
+import { locations } from '../data/locations';
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p style="font:400 1.9rem/1.1 var(--font-display);color:#fff">Golden Bay Builders</p>
+        <p style="margin-top:.5rem;color:var(--color-brass)">{business.tagline}</p>
+        <p style="margin-top:1.25rem;max-width:22rem">Residential construction in San Jose, California: remodels, additions, ADUs and custom homes.</p>
+        <p style="margin-top:1.25rem"><a href={business.phoneHref} data-track="click_to_call" style="font-size:1.25rem;color:#fff">{business.phone}</a><br /><a href={`mailto:${business.email}`}>{business.email}</a></p>
+        {business.license.verified && business.license.number && (
+          <p style="margin-top:1rem">California Contractor License #{business.license.number} · <a href={business.license.cslbUrl} rel="noopener">Verify with CSLB</a></p>
+        )}
+      </div>
+      <div><h2>Services</h2><ul>{services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}</ul></div>
+      <div><h2>Company</h2><ul>
+        <li><a href="/about/">About</a></li><li><a href="/our-process/">Our process</a></li><li><a href="/projects/">Projects</a></li>
+        <li><a href="/faq/">FAQ</a></li><li><a href="/guides/san-jose-adu-guide/">San Jose ADU guide</a></li><li><a href="/guides/bay-area-remodeling-budget/">Remodeling budget guide</a></li><li><a href="/contact/">Contact</a></li></ul></div>
+      <div><h2>Service areas</h2><ul>
+        <li><a href="/service-areas/san-jose/">San Jose</a></li>
+        {locations.filter((l) => l.confirmed && l.slug !== 'san-jose').map((l) => <li><a href={`/service-areas/${l.slug}/`}>{l.name}</a></li>)}
+        <li><a href="/service-areas/">All service areas</a></li></ul></div>
+    </div>
+    <div class="legal">
+      <span>© {new Date().getFullYear()} {business.name} All rights reserved.</span>
+      <nav aria-label="Legal"><ul style="display:flex;gap:1.25rem;flex-wrap:wrap">{legalNav.map((l) => <li style="margin:0"><a href={l.href}>{l.label}</a></li>)}</ul></nav>
+    </div>
+  </div>
+</footer>

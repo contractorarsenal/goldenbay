@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import { locations } from '../../data/locations';
+---
+<Base title="Service Areas" description="Golden Bay Builders builds and remodels homes in San Jose, California. Learn how local permitting and housing shape projects here." path="/service-areas/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Service Areas', path: '/service-areas/' }]}>
+  <PageHero eyebrow="Service areas" title="Based in San Jose." lede="Rules, fees and review timelines are set city by city. We plan each project around the jurisdiction it is in." crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="section"><div class="wrap split">
+    <div class="prose"><h2 style="margin-top:0">Confirmed</h2><ul>{locations.filter((l) => l.confirmed).map((l) => <li><a href={`/service-areas/${l.slug}/`}>{l.name}, CA</a></li>)}</ul></div>
+    <div class="prose"><h2 style="margin-top:0">Nearby cities</h2><p>We are confirming which neighboring cities we will serve. If your home is outside San Jose, <a href="/contact/">contact us</a> and we will tell you whether we can take the project.</p></div>
+  </div></section>
+  <Cta />
+</Base>

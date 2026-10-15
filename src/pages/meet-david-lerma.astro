@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { business } from '../data/business';
+---
+<Base title="Meet David Lerma" description="David Lerma is the owner of Golden Bay Builders Inc., a San Jose residential contractor." path="/meet-david-lerma/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'Meet David Lerma', path: '/meet-david-lerma/' }]}>
+  <PageHero eyebrow="The owner" title="David Lerma" lede="Owner, Golden Bay Builders Inc." crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="section"><div class="wrap split rev">
+    <div class="prose"><p class="lede">David leads every Golden Bay Builders project and is the homeowner’s main point of contact.</p><p>His full story, including his background in construction, how the company started and what he cares about in a job, is being collected and will be published here after his review. We will not publish a biography he has not approved.</p><p>To speak with David directly, call <a href={business.phoneHref}>{business.phone}</a>.</p></div>
+    <Placeholder label="Portrait of David Lerma" ratio="4 / 5" />
+  </div></section>
+  <Cta />
+</Base>

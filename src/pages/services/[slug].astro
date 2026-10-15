@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Faq from '../../components/Faq.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { services, getService, type Service } from '../../data/services';
+import { serviceSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+const { s } = Astro.props as { s: Service };
+const path = `/services/${s.slug}/`;
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: s.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<Base title={s.metaTitle} description={s.metaDescription} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services/' }, { name: s.name, path }]} schema={[serviceSchema(s.name, path, s.metaDescription), faqSchema]}>
+  <PageHero eyebrow={`Service ${s.num}`} title={s.headline} lede={s.lede} crumbs={[{ name: 'Home', href: '/' }, { name: 'Services', href: '/services/' }]}>
+    <div style="margin-top:2.25rem;display:flex;flex-wrap:wrap;gap:.85rem"><a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an estimate</a><a class="btn btn-line" href="/contact/">Ask a question</a></div>
+  </PageHero>
+
+  <section class="section"><div class="wrap split">
+    <div><span class="eyebrow">Overview</span><h2 style="margin-top:1.25rem">What {s.name.toLowerCase()} involves</h2></div>
+    <div class="prose">{s.overview.map((p) => <p>{p}</p>)}</div>
+  </div></section>
+
+  {s.layout === 'editorial' && (
+    <section class="section bg-stone"><div class="wrap">
+      <span class="eyebrow">Common projects</span>
+      <div class="tiles three" style="margin-top:2rem">{s.projectTypes.map((t) => <div><h3>{t.title}</h3><p>{t.text}</p></div>)}</div>
+    </div></section>
+  )}
+  {s.layout === 'split' && (
+    <section class="section bg-stone"><div class="wrap split rev">
+      <div><span class="eyebrow">Common projects</span><ul class="rule-list" style="margin-top:1.5rem">{s.projectTypes.map((t) => <li style="grid-template-columns:1fr"><h3>{t.title}</h3><p>{t.text}</p></li>)}</ul></div>
+      <div><Placeholder label={`${s.name} project`} ratio="4 / 5" /></div>
+    </div></section>
+  )}
+  {s.layout === 'numbered' && (
+    <section class="section bg-ink on-dark"><div class="wrap">
+      <span class="eyebrow">Types and options</span>
+      <ul class="rule-list" style="margin-top:2rem">{s.projectTypes.map((t, i) => <li><span class="num">0{i + 1}</span><h3>{t.title}</h3><p>{t.text}</p></li>)}</ul>
+    </div></section>
+  )}
+
+  <section class="section"><div class="wrap split">
+    <div><span class="eyebrow">Homeowner concerns</span><h2 style="margin-top:1.25rem">{s.concernsTitle}</h2></div>
+    <ul class="rule-list">{s.concerns.map((c) => <li style="grid-template-columns:1fr"><h3>{c.title}</h3><p style="color:var(--color-ink-2)">{c.text}</p></li>)}</ul>
+  </div></section>
+
+  <section class="section bg-stone"><div class="wrap split rev">
+    <div class="prose"><h2 style="margin-top:0">{s.planningTitle}</h2><ul>{s.planning.map((p) => <li>{p}</li>)}</ul></div>
+    <div style="background:var(--color-paper);padding:2rem;border:1px solid var(--color-stone-2)">
+      <h3>What helps us give an accurate estimate</h3>
+      <ul style="margin:1rem 0 0 1.2rem;list-style:disc;display:grid;gap:.5rem">{s.beforeEstimate.map((b) => <li>{b}</li>)}</ul>
+      <p style="margin-top:1.5rem"><a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Start your request</a></p>
+    </div>
+  </div></section>
+
+  <section class="section"><div class="wrap split">
+    <div><span class="eyebrow">Local relevance</span><h2 style="margin-top:1.25rem">Built for San Jose homes and rules.</h2></div>
+    <div class="prose"><p>Permit processes, plan review and fees are set by each city. We plan {s.name.toLowerCase()} projects around the requirements of the City of San José, and discuss other jurisdictions case by case.</p><p><a href="/service-areas/san-jose/">See how we work in San Jose</a>{s.slug === 'adu-construction' && <> · <a href="/guides/san-jose-adu-guide/">Read the San Jose ADU guide</a></>}</p></div>
+  </div></section>
+
+  <section class="section" style="padding-top:0"><div class="wrap split">
+    <div><span class="eyebrow">Questions</span><h2 style="margin-top:1.25rem">{s.name}: frequently asked</h2></div>
+    <Faq items={s.faqs} />
+  </div></section>
+
+  <section class="section bg-stone"><div class="wrap">
+    <span class="eyebrow">Related services</span>
+    <div class="tiles three" style="margin-top:2rem">{s.related.map((r) => { const rs = getService(r); return <a href={`/services/${rs.slug}/`} style="text-decoration:none"><span class="num">{rs.num}</span><h3>{rs.name}</h3><p style="color:var(--color-muted)">{rs.short}</p></a>; })}</div>
+  </div></section>
+
+  <Cta />
+</Base>

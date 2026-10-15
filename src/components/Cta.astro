@@ -1,0 +1,16 @@
+---
+import { business } from '../data/business';
+const { title = 'Tell us about your project.', text = 'Share the basics online or call. We will follow up to talk through scope, timing and next steps.' } = Astro.props;
+---
+<section class="section bg-ink on-dark">
+  <div class="wrap split">
+    <div><span class="eyebrow">Start a conversation</span><h2 style="margin-top:1.25rem">{title}</h2></div>
+    <div>
+      <p class="lede">{text}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2rem">
+        <a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an estimate</a>
+        <a class="btn btn-line" href={business.phoneHref} data-track="click_to_call">Call {business.phone}</a>
+      </div>
+    </div>
+  </div>
+</section>
