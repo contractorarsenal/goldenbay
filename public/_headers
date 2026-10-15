@@ -1,3 +1,10 @@
+# Never let Cloudflare's own *.pages.dev addresses (production alias, branch aliases, per-deployment previews) be indexed.
+# This does NOT make previews private; use Cloudflare Access for that.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

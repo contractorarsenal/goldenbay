@@ -4,6 +4,9 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 // The production domain has not been supplied. Set PUBLIC_SITE_URL at build time.
+// On Cloudflare Pages previews, CF_PAGES_URL (the deployment's own URL) is used so canonicals/OG/schema are not localhost.
+// Indexing is controlled separately (PUBLIC_ALLOW_INDEXING) and is never enabled by this fallback.
+if (!process.env.PUBLIC_SITE_URL && process.env.CF_PAGES_URL) process.env.PUBLIC_SITE_URL = process.env.CF_PAGES_URL;
 const site = process.env.PUBLIC_SITE_URL || 'http://localhost:4321';
 
 export default defineConfig({

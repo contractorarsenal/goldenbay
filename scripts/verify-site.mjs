@@ -33,6 +33,8 @@ for (const f of pages) { const html = readFileSync(f, 'utf8'); const route = '/'
   for (const m of html.matchAll(/<img\b[^>]*>/g)) { if (!/\balt=/.test(m[0])) problems.push(`${route}: <img> without alt`); if (!/\bwidth=/.test(m[0]) || !/\bheight=/.test(m[0])) problems.push(`${route}: <img> without dimensions (CLS risk)`); }
   if (/https?:\/\/(?:github\.com\/user-attachments|user-images\.githubusercontent\.com)/.test(html)) problems.push(`${route}: hotlinks GitHub-hosted image`);
   if (/"@type":"(?:Review|AggregateRating|Rating)"/.test(html)) problems.push(`${route}: Review/Rating schema present (not allowed)`); }
+const robotsTxt = readFileSync(join(dist, 'robots.txt'), 'utf8');
+if (!/Allow: \//.test(robotsTxt) || !/Sitemap: https?:\/\/\S+\/sitemap-index\.xml/.test(robotsTxt) || /Disallow: \//.test(robotsTxt)) problems.push('robots.txt (indexing build) should allow crawling and list the sitemap');
 const home = readFileSync(join(dist, 'index.html'), 'utf8');
 for (const m of home.matchAll(/class="pimg-pending"[^>]*aria-label="([^"]+)"/g)) if (!m[1].startsWith('Portrait of David Lerma')) problems.push(`/: unexpected placeholder photo slot: ${m[1].slice(0, 40)}`);
 if (!/<link rel="preload"|fetchpriority="high"/.test(home)) problems.push('/: hero image is not prioritised (LCP)');

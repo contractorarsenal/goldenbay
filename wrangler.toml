@@ -1,7 +1,8 @@
-# Cloudflare Pages configuration (preview-safe). No account_id is set on purpose:
+# Cloudflare Pages configuration. Build command (dashboard): `npm run build`; output: dist (below).
+# No account_id is set on purpose:
 # authenticate with `wrangler login` (or CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID) and the owner's account.
-name = "goldenbay"
+name = "goldbay"   # matches the existing Cloudflare Pages project (seen on the GitHub check link)
 pages_build_output_dir = "./dist"
-compatibility_date = "2026-10-01"
+compatibility_date = "2025-10-01"
 # Secrets (TURNSTILE_SECRET_KEY, RESEND_API_KEY, LEAD_TO_EMAIL, LEAD_FROM_EMAIL) are set in the Pages dashboard,
 # never in this file. Leave PUBLIC_ALLOW_INDEXING unset for previews so they stay noindex.

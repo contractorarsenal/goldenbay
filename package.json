@@ -10,7 +10,8 @@
     "check": "astro check",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "verify": "PUBLIC_SITE_URL=https://example.com PUBLIC_ALLOW_INDEXING=true astro build && node scripts/verify-site.mjs",
-    "preview:cf": "npm run build && wrangler pages deploy dist --branch preview"
+    "preview:cf": "npm run build && wrangler pages deploy dist --branch preview",
+    "verify:preview": "node scripts/verify-preview.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
@@ -26,5 +27,8 @@
     "@axe-core/playwright": "^4.13.0",
     "playwright": "^1.64.1",
     "sharp": "^0.35.5"
+  },
+  "engines": {
+    "node": ">=22.12.0 <23"
   }
 }
