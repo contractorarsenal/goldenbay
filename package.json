@@ -12,7 +12,7 @@
     "verify": "PUBLIC_SITE_URL=https://example.com PUBLIC_ALLOW_INDEXING=true astro build && node scripts/verify-site.mjs",
     "preview:cf": "npm run build && wrangler pages deploy dist --project-name goldbay --branch preview",
     "verify:preview": "node scripts/verify-preview.mjs",
-    "postinstall": "node scripts/cf-postinstall.mjs"
+    "preview:branch": "node scripts/publish-preview-branch.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
