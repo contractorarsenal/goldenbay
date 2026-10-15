@@ -10,5 +10,9 @@ export interface Project {
   hero: ProjectImage; gallery: ProjectImage[]; before?: ProjectImage; after?: ProjectImage;
   services: string[];           // service slugs
   completed?: string;
+  /** Homepage featured slot. `file` = filename in src/assets/projects/ (optimized by ProjectImage). */
+  featured?: boolean;
+  file?: string;
+  aspect?: string;
 }
 export const projects: Project[] = [];

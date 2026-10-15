@@ -1,5 +1,20 @@
 # QA report
 
+## Homepage Phase 1 (latest, 2026-10-15; local preview, Chromium)
+| Check | Result |
+|---|---|
+| `npm run check` | 0 errors (53 files) |
+| `npm test` | 11 pass, 0 fail (form validation, endpoint 503, brand config: provisional name, license never published, card contact details) |
+| `npm run verify` | OK: 29 pages (16 indexable); new checks: no license number or "licensed/bonded/insured" claim anywhere, homepage uses "Gold Bay", tagline present |
+| `node scripts/qa-browser.mjs` | OK. Homepage at **375 / 768 / 1024 / 1440 / 1920 px**: no horizontal overflow, no clipped headings, exactly one H1, overlay header transparent at top and solid after scroll, 0 axe violations (WCAG 2.0-2.2 A/AA tags), every internal link in `<main>` returns 200, no console errors. Plus all earlier route/keyboard/wizard checks (keyboard test updated: Home is now tab stop 3, Services 4). |
+| Lighthouse, homepage, indexable build (lab, local) | Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.5 s, CLS 0.016, TBT 0 ms. (Default local builds are noindex, which scores SEO 66 by design.) No photos exist yet; expect lower numbers with real images. |
+| Visual inspection | Screenshots reviewed at all five widths and per section (`docs/screenshots/homepage-phase1/`). Defects found and fixed: header cramped at 1024 (mobile menu now below 75rem), hero signature wrapping at 1920, services strip clipped under photo, active nav low-contrast on dark header, cramped service-area heading, empty right half of final CTA. |
+
+Not verified: real photography rendering (none supplied; `ProjectImage` tested only in its pending state, so srcset/AVIF output is **untested with real files**); Safari/Firefox/real devices; screen reader; Cloudflare; lead delivery (unchanged; still mocked only).
+
+---
+## Earlier full-site results (before Phase 1)
+
 Latest run 2026-10-15, branch `feature/full-site-build`, Chromium (Playwright 1.64), local preview only.
 
 ## Results (actual)

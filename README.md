@@ -1,6 +1,6 @@
-# Golden Bay Builders: website
+# Gold Bay Builders: website
 
-Static-first marketing site for **Golden Bay Builders Inc.** (San Jose, CA residential construction). *Building Your Bay Home.*
+Static-first marketing site for **Gold Bay Builders Inc.** (provisional brand from the owner's business card; legal name unconfirmed) (San Jose, CA residential construction). *Building YOUR bay home.*
 
 **Status:** feature-complete build on a feature branch; **not launch-ready**. See [docs/CONTENT-REQUIREMENTS.md](docs/CONTENT-REQUIREMENTS.md) and [docs/QA-REPORT.md](docs/QA-REPORT.md).
 

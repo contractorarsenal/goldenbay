@@ -13,8 +13,10 @@ interface Props {
   crumbs?: { name: string; path: string }[];
   schema?: object[];
   ogType?: 'website' | 'article';
+  /** Transparent header over a dark hero that turns solid on scroll. */
+  overlayHeader?: boolean;
 }
-const { title, description, path, noindex = false, crumbs, schema = [], ogType = 'website' } = Astro.props;
+const { title, description, path, noindex = false, crumbs, schema = [], ogType = 'website', overlayHeader = false } = Astro.props;
 const fullTitle = path === '/' ? title : `${title} | ${business.shortName}`;
 const robots = !business.indexable || noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
 const graph = [
@@ -49,7 +51,7 @@ const graph = [
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <Header path={path} />
+    <Header path={path} overlay={overlayHeader} />
     <main id="main" tabindex="-1"><slot /></main>
     <Footer />
     <nav class="callbar" aria-label="Quick contact">
@@ -57,7 +59,9 @@ const graph = [
       <a href="/request-estimate/" data-track="request_estimate_click">Request estimate</a>
     </nav>
     <script>
-      // Menu, dropdown, reveal-on-scroll and non-PII event tracking.
+      // Menu, dropdown, header state, reveal-on-scroll and non-PII event tracking.
+      const hdr = document.querySelector<HTMLElement>('.site-header[data-overlay]');
+      if (hdr) { const upd = () => hdr.classList.toggle('solid', window.scrollY > 24); upd(); addEventListener('scroll', upd, { passive: true }); }
       const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
       const panel = document.getElementById('mobile-panel');
       toggle?.addEventListener('click', () => {

@@ -3,22 +3,27 @@ import { business } from '../data/business';
 import { services } from '../data/services';
 import { legalNav } from '../data/nav';
 import { locations } from '../data/locations';
+import Logo from './Logo.astro';
 ---
-<footer class="site-footer">
+<footer class="site-footer on-dark">
   <div class="wrap">
+    <div class="foot-top">
+      <p class="foot-tag">Building <b>YOUR</b> bay home.</p>
+      <p style="color:#cfc8bb;max-width:28rem">San Jose residential remodeling and construction.</p>
+    </div>
     <div class="footer-grid">
       <div>
-        <p style="font:400 1.9rem/1.1 var(--font-display);color:#fff">Golden Bay Builders</p>
-        <p style="margin-top:.5rem;color:var(--color-brass)">{business.tagline}</p>
-        <p style="margin-top:1.25rem;max-width:22rem">Residential construction in San Jose, California: remodels, additions, ADUs and custom homes.</p>
+        <Logo tone="dark" />
+        <p style="margin-top:1.5rem;max-width:22rem">Residential remodeling and construction in San Jose, California: full remodels, additions, ADUs, kitchens, bathrooms and custom builds.</p>
         <p style="margin-top:1.25rem"><a href={business.phoneHref} data-track="click_to_call" style="font-size:1.25rem;color:#fff">{business.phone}</a><br /><a href={`mailto:${business.email}`}>{business.email}</a></p>
+        <p style="margin-top:.75rem;color:#a9a296">{business.owner}, {business.ownerRole}</p>
         {business.license.verified && business.license.number && (
           <p style="margin-top:1rem">California Contractor License #{business.license.number} · <a href={business.license.cslbUrl} rel="noopener">Verify with CSLB</a></p>
         )}
       </div>
       <div><h2>Services</h2><ul>{services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}</ul></div>
       <div><h2>Company</h2><ul>
-        <li><a href="/about/">About</a></li><li><a href="/our-process/">Our process</a></li><li><a href="/projects/">Projects</a></li>
+        <li><a href="/about/">About Us</a></li><li><a href="/our-process/">Our process</a></li><li><a href="/projects/">Our Projects</a></li>
         <li><a href="/faq/">FAQ</a></li><li><a href="/guides/san-jose-adu-guide/">San Jose ADU guide</a></li><li><a href="/guides/bay-area-remodeling-budget/">Remodeling budget guide</a></li><li><a href="/contact/">Contact</a></li></ul></div>
       <div><h2>Service areas</h2><ul>
         <li><a href="/service-areas/san-jose/">San Jose</a></li>

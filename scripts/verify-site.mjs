@@ -22,6 +22,16 @@ for (const f of pages) {
     if (!routes.has(h) && !existsSync(join(dist, h, 'index.html'))) problems.push(`${route}: broken link ${h}`);
   }
 }
+// Brand/licence safety. No licence number may appear anywhere until verified (see src/data/business.ts).
+for (const f of pages) {
+  const html = readFileSync(f, 'utf8'); const route = '/' + relative(dist, f).replace(/index\.html$/, '');
+  if (/115776|1157776/.test(html.replace(/<script[^>]*>[\s\S]*?<\/script>/g, ''))) problems.push(`${route}: licence number published`);
+  if (/\bI(?:'|’)?m (?:licensed|bonded)|licensed,? bonded|licensed (?:&|and) (?:insured|bonded)|insured (?:&|and) bonded/i.test(html)) problems.push(`${route}: unverified licensed/bonded/insured claim`);
+}
+const home = readFileSync(join(dist, 'index.html'), 'utf8');
+if (/Golden Bay/.test(home)) problems.push('/: still uses the old name "Golden Bay"');
+if (!/Gold Bay Builders/.test(home)) problems.push('/: provisional brand missing');
+if (!/Building <b>YOUR<\/b> bay home|Building YOUR bay home/.test(home)) problems.push('/: tagline missing');
 for (const [k, v] of titles) if (v.length > 1) problems.push(`duplicate title "${k}": ${v.join(', ')}`);
 for (const v of descs.values()) if (v.length > 1) problems.push(`duplicate description: ${v.join(', ')}`);
 const sm = walk(dist).filter((f) => /sitemap-\d+\.xml$/.test(f)).map((f) => readFileSync(f, 'utf8')).join('');

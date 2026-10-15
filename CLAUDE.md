@@ -1,9 +1,10 @@
 # CLAUDE.md: Golden Bay Builders
 
 ## Business context
-Golden Bay Builders Inc., owner David Lerma, 408-506-7184, goldbaybuilderinc@gmail.com, San Jose CA. Six services: full home remodeling, additions, ADUs, kitchens, bathrooms, custom homes. Tagline "Building Your Bay Home".
+Gold Bay Builders Inc. (provisional brand from the owner's business card; legal name unconfirmed), owner David Lerma, 408-506-7184, goldbaybuilderinc@gmail.com, San Jose CA. Six services: full home remodeling, additions, ADUs, kitchens, bathrooms, custom homes. Tagline "Building Your Bay Home".
 
 ## Hard content rules
+- **Brand/licence (updated):** public brand = "Gold Bay Builders Inc." from `src/data/business.ts` only. Card shows licence 1157776 (earlier brief: 115776); neither may be published until verified on CSLB. `npm run verify` enforces this. Homepage is redesigned and awaiting approval; do not redesign other pages without instruction (see docs/HOMEPAGE-PHASE-1.md).
 - **Entity:** the legal name may be "Goldbay Builders Inc." (see docs/RESEARCH-RECONCILIATION.md §0). Do not launch, publish a license or a legal-entity claim until confirmed. Do not imply affiliation with goldenbaybuildersinc.com (#1137377).
 - **Research-suggested promises** (fixed price, guaranteed timelines/updates, PM, "premier") are NOT approved; do not publish.
 - **License:** `115776` was supplied but a CSLB search found no matching record. Do NOT publish any license number, "licensed/bonded/insured" claim or CSLB badge until David confirms the legal entity and the CSLB record is checked. Gate in `business.license.verified`.

@@ -1,0 +1,8 @@
+---
+import { business } from '../data/business';
+// Typographic stand-in. The owner's real logo (crossed hammers + roofline) must be supplied as a vector/high-res file; see docs/HOMEPAGE-PHASE-1.md.
+const { tone = 'light' } = Astro.props as { tone?: 'light' | 'dark' };
+---
+<a class:list={['logo', `logo-${tone}`]} href="/" aria-label={`${business.name}: ${business.tagline}. Home`}>
+  <span class="logo-mark"><span class="logo-gold">GOLD BAY</span><span class="logo-sub">BUILDERS INC.</span></span>
+</a>

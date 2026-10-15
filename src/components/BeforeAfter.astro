@@ -1,0 +1,15 @@
+---
+import ProjectImage from './ProjectImage.astro';
+/** Accessible before/after comparison (native range input; works without JS as stacked images). Not used until real photos exist. */
+const { before, after, alt, aspect = '3 / 2', id = `ba-${Math.random().toString(36).slice(2, 8)}` } = Astro.props as { before: string; after: string; alt: string; aspect?: string; id?: string };
+---
+<div class="ba" id={id} style="--pos:50%">
+  <div class="ba-stack"><ProjectImage file={after} alt={`After: ${alt}`} aspect={aspect} slot="After" /><div class="ba-before"><ProjectImage file={before} alt={`Before: ${alt}`} aspect={aspect} slot="Before" /></div></div>
+  <label class="ba-label">Compare before and after <input type="range" min="0" max="100" value="50" aria-label="Before and after comparison position" /></label>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('.ba').forEach((el) => {
+    const r = el.querySelector<HTMLInputElement>('input')!;
+    r.addEventListener('input', () => el.style.setProperty('--pos', `${r.value}%`));
+  });
+</script>

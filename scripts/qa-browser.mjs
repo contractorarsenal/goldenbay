@@ -22,6 +22,24 @@ for (const [name, vp] of Object.entries(sizes)) {
   const real = errs.filter((e) => !/404/.test(e)); if (real.length) fails.push(`${name}: console errors: ${[...new Set(real)].join(' | ')}`);
   await ctx.close();
 }
+// Homepage: five widths: overflow, clipped headings, axe, overlay header turns solid on scroll, CTAs resolve
+for (const w of [375, 768, 1024, 1440, 1920]) {
+  const ctx = await browser.newContext({ viewport: { width: w, height: w < 800 ? 900 : 1000 } }); const page = await ctx.newPage();
+  const errs = []; page.on('console', (m) => m.type() === 'error' && errs.push(m.text())); page.on('pageerror', (e) => errs.push(String(e)));
+  await page.goto(base + '/', { waitUntil: 'networkidle' });
+  const o = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); if (o > 1) fails.push(`home@${w}: overflow ${o}px`);
+  const clipped = await page.evaluate(() => [...document.querySelectorAll('h1,h2,h3')].filter((e) => e.scrollWidth > e.clientWidth + 1).map((e) => e.textContent.slice(0, 30))); if (clipped.length) fails.push(`home@${w}: clipped headings ${clipped.join('|')}`);
+  const h1 = await page.locator('h1').count(); if (h1 !== 1) fails.push(`home@${w}: ${h1} h1`);
+  if ((await page.getAttribute('.site-header', 'class')).includes('solid')) fails.push(`home@${w}: header solid at top`);
+  await page.evaluate(() => window.scrollTo({ top: 600, behavior: 'instant' })); await page.waitForTimeout(400);
+  if (!(await page.getAttribute('.site-header', 'class')).includes('solid')) fails.push(`home@${w}: header did not turn solid on scroll`);
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' })); await page.waitForTimeout(800);
+  const ax = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze(); for (const v of ax.violations) fails.push(`home@${w}: axe ${v.id} (${v.impact}) x${v.nodes.length}`);
+  const hrefs = await page.$$eval('main a[href^="/"]', (as) => [...new Set(as.map((a) => a.getAttribute('href')))]);
+  for (const h of hrefs) { const r = await page.request.get(base + h); if (r.status() !== 200) fails.push(`home@${w}: link ${h} -> ${r.status()}`); }
+  if (errs.filter((e) => !/404/.test(e)).length) fails.push(`home@${w}: console errors`);
+  await ctx.close();
+}
 // Mobile menu + keyboard
 {
   const ctx = await browser.newContext({ viewport: sizes.mobile }); const page = await ctx.newPage(); await page.goto(base + '/', { waitUntil: 'networkidle' });
@@ -34,9 +52,9 @@ for (const [name, vp] of Object.entries(sizes)) {
 {
   const ctx = await browser.newContext({ viewport: sizes.desktop }); const page = await ctx.newPage(); await page.goto(base + '/', { waitUntil: 'networkidle' });
   await page.keyboard.press('Tab'); if (!(await page.evaluate(() => document.activeElement?.className === 'skip'))) fails.push('keyboard: skip link is not first tab stop');
-  for (let i = 0; i < 2; i++) await page.keyboard.press("Tab");
+  for (let i = 0; i < 3; i++) await page.keyboard.press("Tab");
   const onBtn = await page.evaluate(() => document.activeElement?.textContent?.trim().startsWith('Services'));
-  if (!onBtn) fails.push('keyboard: Services button not the 3rd tab stop');
+  if (!onBtn) fails.push('keyboard: Services button not the 4th tab stop (skip, logo, Home, Services)');
   await page.keyboard.press('Enter'); await page.waitForTimeout(300);
   if (!(await page.isVisible('#dd-services a[href="/services/adu-construction/"]'))) fails.push('keyboard: dropdown did not open on Enter');
   await page.keyboard.press('Escape'); await page.waitForTimeout(300); if (await page.isVisible('#dd-services')) fails.push('keyboard: Escape did not close dropdown');
