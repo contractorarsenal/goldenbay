@@ -6,7 +6,7 @@ Latest run 2026-10-15, branch `feature/full-site-build`, Chromium (Playwright 1.
 | Check | Command | Result |
 |---|---|---|
 | Types/diagnostics | `npm run check` | 0 errors, 0 warnings (48 files) |
-| Unit tests | `npm test` | 7 pass, 0 fail: form validation ×6; endpoint returns 503 and never success when delivery is unconfigured |
+| Unit tests | `npm test` | 8 pass, 0 fail: form validation ×7 (incl. property status); endpoint returns 503 and never success when delivery is unconfigured |
 | Build + route/link/SEO/sitemap verification | `npm run verify` | OK: 29 pages (16 indexable, 13 noindex); unique titles and descriptions, canonical, exactly one H1, JSON-LD parses, 0 broken internal links, sitemap == indexable set |
 | Browser QA | `node scripts/qa-browser.mjs` | OK: 12 routes × 375/820/1440 px: no horizontal overflow, no console errors, **0 axe violations** (WCAG 2.0/2.1/2.2 A/AA tags), 404 page, mobile menu open/Escape-close |
 | Keyboard-only | same script | OK: skip link is first tab stop; Services dropdown opens on Enter and closes on Escape; estimate wizard options selectable with Space, Continue via Enter, focus moves to the next step heading |

@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import { projectTypes, stages, budgets, timelines, contactMethods } from '../lib/estimate';
+import { projectTypes, propertyStatuses, stages, budgets, timelines, contactMethods } from '../lib/estimate';
 import { business } from '../data/business';
 const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
 ---
@@ -17,7 +17,8 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
       <fieldset data-step="0"><legend>What kind of project?</legend>
         <div class="choices cols">{projectTypes.map((v) => <label class="choice"><input type="radio" name="projectType" value={v} /><span>{v}</span></label>)}</div><p class="err field" role="alert" data-err="projectType"></p></fieldset>
 
-      <fieldset data-step="1"><legend>Where is the property?</legend>
+      <fieldset data-step="1"><legend>Tell us about the property.</legend>
+        <div class="field"><span style="font-weight:600;font-size:.9rem" id="ps">Your relationship to the property</span><div class="choices" role="group" aria-labelledby="ps">{propertyStatuses.map((v) => <label class="choice"><input type="radio" name="propertyStatus" value={v} /><span>{v}</span></label>)}</div><p class="err" role="alert" data-err="propertyStatus"></p></div>
         <div class="field"><label for="city">City</label><input id="city" name="city" autocomplete="address-level2" value="San Jose" /><p class="err" role="alert" data-err="city"></p></div>
         <div class="field"><label for="zip">ZIP code</label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="5" /><p class="err" role="alert" data-err="zip"></p></div>
         <div class="field"><label for="street">Street address <span style="font-weight:400">(optional)</span></label><input id="street" name="street" autocomplete="street-address" /><p class="hint">Helps us research your lot before we call.</p></div></fieldset>
@@ -95,7 +96,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
     }
     function data(): Partial<Record<keyof EstimateInput, unknown>> {
       const fd = new FormData(form); const o: any = {};
-      for (const k of ['projectType','city','zip','street','stage','budget','timeline','details','name','phone','email','contactMethod']) o[k] = ((fd.get(k) as string) ?? '').toString().trim();
+      for (const k of ['projectType','propertyStatus','city','zip','street','stage','budget','timeline','details','name','phone','email','contactMethod']) o[k] = ((fd.get(k) as string) ?? '').toString().trim();
       o.consent = fd.get('consent') === 'on'; return o;
     }
     function showErrors(errs: Record<string, string>, fields: string[]) {

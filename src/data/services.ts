@@ -133,6 +133,7 @@ export const services: Service[] = [
       { q: 'What is the difference between an ADU and a JADU?', a: 'An ADU is a separate dwelling on the lot. A junior ADU is a smaller unit carved out of the existing home, with a size cap set by state law and its own requirements.' },
       { q: 'Can I convert my garage into an ADU?', a: 'Often yes, but the garage must be structurally suitable and meet code for living space. We evaluate it before quoting.' },
       { q: 'How long does the City take to review an ADU?', a: 'State law sets a review deadline for complete ADU applications. Actual timing depends on how complete the submittal is and on corrections. See our San José ADU guide for the sources.' },
+      { q: 'Can I add an ADU and split my lot under SB 9?', a: 'They are separate laws. SB 9 allows duplexes and lot splits on many single-family lots under specific conditions, and it can interact with ADU rules. Eligibility depends on zoning, overlays, tenant history and, for lot splits, an owner-occupancy affidavit. The City determines whether your lot qualifies; see our San José ADU guide for sources.' },
       { q: 'Are ADUs exempt from impact fees?', a: 'The City of San José states that park and school impact fees do not apply to ADUs under 750 square feet. Larger units are treated differently, and rules are changing, so confirm with the City.' },
     ],
     related: ['home-additions', 'custom-home-construction', 'full-home-remodeling'],

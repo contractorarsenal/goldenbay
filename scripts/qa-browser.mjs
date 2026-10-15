@@ -53,7 +53,8 @@ async function fill(page) {
   const next = () => page.click('#next');
   await next(); if (!(await page.textContent('[data-err="projectType"]')).trim()) fails.push('wizard: step1 no error');
   await page.check('input[value="ADU"]'); await next();
-  await page.fill('#zip', '95112'); await next();
+  await next(); if (!(await page.textContent('[data-err="propertyStatus"]')).trim()) fails.push('wizard: property status not required');
+  await page.check('input[value="I own the home"]'); await page.fill('#zip', '95112'); await next();
   await page.check('input[value="Planning"]'); await next();
   await page.check('input[value="Not sure yet"]'); await next();
   await page.check('input[value="Flexible"]'); await next();

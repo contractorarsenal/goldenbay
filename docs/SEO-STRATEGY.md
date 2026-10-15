@@ -30,3 +30,6 @@ Direct "Short answer" blocks on guides; comparison tables; explicit entity descr
 
 ## Local SEO
 San José is the sole confirmed market. City pages carry only verifiable, non-fabricated content (the issuing department, jurisdictional differences). They must gain genuine local material (real projects, local rules) before indexing, or be removed to avoid doorway pages. No NAP address published (none supplied).
+
+## Research-informed keyword mapping (from Gemini report; volumes unvalidated)
+Home: general contractor San Jose, home remodeling San Jose · ADU: ADU builder San Jose, backyard ADU contractor, San Jose ADU cost, 749 sq ft ADU, SB 9 · Additions: home additions San Jose, second story addition · Kitchen/Bath: kitchen remodeling San Jose, bathroom remodel San Jose, tub to shower · Custom: custom home builder San Jose · Guides: San Jose ADU fee exemption, utility connection cost (qualitative only), remodeling budget. Content gap exploited: regulatory/financial transparency without unverified numbers.

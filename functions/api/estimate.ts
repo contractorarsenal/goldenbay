@@ -31,7 +31,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
   if (!tsJson.success) return json({ ok: false, error: 'spam_check_failed' }, 400);
 
   const f = (k: string) => esc(String(body[k] ?? '—'));
-  const rows = [['Project', 'projectType'], ['City', 'city'], ['ZIP', 'zip'], ['Street', 'street'], ['Stage', 'stage'], ['Budget', 'budget'], ['Timeline', 'timeline'], ['Name', 'name'], ['Phone', 'phone'], ['Email', 'email'], ['Preferred contact', 'contactMethod'], ['Details', 'details']];
+  const rows = [['Project', 'projectType'], ['Property status', 'propertyStatus'], ['City', 'city'], ['ZIP', 'zip'], ['Street', 'street'], ['Stage', 'stage'], ['Budget', 'budget'], ['Timeline', 'timeline'], ['Name', 'name'], ['Phone', 'phone'], ['Email', 'email'], ['Preferred contact', 'contactMethod'], ['Details', 'details']];
   const html = `<h2>New estimate request</h2><table cellpadding="6">${rows.map(([l, k]) => `<tr><td><b>${l}</b></td><td>${f(k)}</td></tr>`).join('')}</table>`;
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
