@@ -41,8 +41,8 @@
   --header-h: 80px;                /* reference header: 80 px */
   --sec-pad: 80px;                 /* reference section padding: 80-96 px */
   --sec-pad-m: 56px;               /* phone section padding */
-  --radius-btn: 4px;               /* reference buttons: 4 px */
-  --radius-card: 4px;
+  --radius-btn: 12px;              /* client preference: slightly rounded action buttons */
+  --radius-card: 4px;              /* cards stay close to the reference */
   --radius-media: 0px;             /* reference images: square corners */
 
   /* Measured type (reference) */
@@ -323,3 +323,53 @@ p { text-wrap: pretty; }
 @media (min-width: 60rem) { .hp-prob-wrap .hp-problem-grid { grid-template-columns: 1fr 1fr; } }
 .hp-process .eyebrow { color: var(--color-gold-light); }
 .hp-process .eyebrow::before { background: var(--color-gold-light); }
+
+/* ---- Refinement pass (client review) ---- */
+.hp-trust { background: var(--color-white); border-bottom: 1px solid var(--color-border); }
+.hp-trust-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .4rem 2rem; padding-block: 22px; }
+.hp-trust-row p { font-size: var(--fs-small); color: var(--color-body); margin: 0; }
+.hp-trust-row b { font: 800 1rem/1.2 var(--font-display); text-transform: uppercase; letter-spacing: .03em; color: var(--color-charcoal); }
+
+.hp-problems { background: var(--color-light); }
+.hp-problem-grid { gap: 1rem; margin-top: 1.75rem; }
+@media (min-width: 40rem) { .hp-problem-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 64rem) { .hp-problem-grid { grid-template-columns: 1fr 1fr; } }
+.hp-problem { border-top: 0; border-left: 4px solid var(--color-gold); padding: 1.25rem 1.4rem; gap: .35rem; }
+.hp-problem h3 { font-size: 1.3rem; }
+.hp-prob-wrap { gap: 1.5rem 3rem; }
+@media (min-width: 60rem) { .hp-prob-wrap { grid-template-columns: 1fr 1.4fr; } }
+
+.hp-work-head { align-items: end; }
+.hp-work-grid { gap: 1.25rem; margin-top: 1.75rem; }
+.hp-proj-body { padding: 1rem 1.15rem 1.15rem; gap: .25rem; }
+.hp-proj h3 { font-size: 1.2rem; }
+.hp-proj .arrow-link { margin-top: .25rem; font-size: .9rem; }
+.hp-work-foot { margin-top: 1.75rem; }
+
+.hp-review-grid { margin-top: 1.75rem; gap: 1.5rem; }
+.hp-review-main { padding: 1.5rem 1.75rem; }
+.hp-review-main blockquote p { font-size: clamp(1.15rem, 1.6vw, 1.3rem); }
+.hp-reviews-foot { margin-top: 1.5rem; }
+.hp-review-side > div { padding-block: .9rem; }
+
+.hp-cta { background: var(--color-charcoal); color: var(--color-white); }
+.hp-cta .eyebrow { color: var(--color-gold-light); }
+.hp-cta .eyebrow::before { background: var(--color-gold-light); }
+.hp-cta h2 { color: var(--color-white); }
+.hp-cta p { color: var(--color-on-dark); opacity: 1; }
+.hp-cta .hp-cta-note { color: var(--color-on-dark-muted); }
+.hp-cta .btn-gold { background: var(--color-gold); color: var(--color-charcoal); border-color: var(--color-gold); }
+.hp-cta .btn-gold:hover { background: #C29A62; border-color: #C29A62; }
+.hp-cta .btn-outline-light { color: var(--color-white); border-color: rgb(255 255 255 / .8); }
+.hp-cta .btn-outline-light:hover { background: var(--color-white); color: var(--color-charcoal); }
+
+/* Services: one full-width feature (photos + text), four compact cards in one row (no empty space) */
+.hp-svc-body { display: flex; flex-direction: column; gap: .6rem; flex: 1; }
+@media (min-width: 48rem) {
+  .hp-svc-grid { grid-template-columns: repeat(4, 1fr); }
+  .hp-svc.compact { grid-column: span 1; }
+  .hp-svc.wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: center; padding: 1.5rem; }
+  .hp-svc.wide .hp-svc-media { margin: 0; }
+  .hp-svc.wide .hp-svc-media .pimg img { aspect-ratio: 4 / 3; }
+}
+@media (max-width: 47.99rem) { .hp-svc-grid { grid-template-columns: 1fr; } }

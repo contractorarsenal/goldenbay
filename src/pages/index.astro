@@ -11,17 +11,17 @@ const hero = getProject(heroPhoto.slug).images[heroPhoto.i];
 
 // Homeowner problems: concerns with one practical question each. No guarantees.
 const problems = [
-  { title: 'Unclear scope', text: 'Projects drift when the scope is only discussed, not written down.', ask: 'Ask for a written scope that lists what is and is not included.' },
-  { title: 'Budget changes', text: 'Costs climb when allowances are vague and changes are priced later.', ask: 'Ask how changes are priced and approved before work happens.' },
-  { title: 'Communication', text: 'Long silences between visits leave homeowners guessing what happens next.', ask: 'Ask who your contact is and how often you will get updates.' },
-  { title: 'Jobsite cleanliness', text: 'Dust and debris spread through a home when the work area is not contained.', ask: 'Ask how the work area is protected and left at the end of each day.' },
+  { title: 'Unclear scope', text: 'Projects drift when the scope is only discussed, not written down.' },
+  { title: 'Budget surprises', text: 'Costs climb when allowances are vague and changes are priced later.' },
+  { title: 'Poor communication', text: 'Long silences between visits leave homeowners guessing what happens next.' },
+  { title: 'Messy job sites', text: 'Dust and debris spread through a home when the work area is not contained.' },
 ];
 
 // Services. The two feature cards use real photographs; the rest are text cards (no empty image frames).
 const kitchenPhotos = [getProject('kitchen-remodel').images[0], getProject('bathroom-stone-shower-terracotta-floor').images[0]];
 const services = [
   { key: 'kb', feature: true, title: 'Kitchen & Bathroom Remodeling', text: 'Rooms rebuilt around daily use, with the planning, waterproofing and trades behind the finish.', scope: ['Layout, storage and lighting', 'Waterproofing and ventilation', 'Cabinetry, tile and fixtures'], links: [{ label: 'Kitchen remodeling', href: '/services/kitchen-remodeling/' }, { label: 'Bathroom remodeling', href: '/services/bathroom-remodeling/' }] },
-  { key: 'fh', feature: true, title: 'Full Home Remodeling', text: 'Whole-house renovations that rework layout, systems and finishes under one scope.', scope: ['Opening and reconfiguring floor plans', 'Updating older electrical and plumbing', 'Coordinated finishes, room to room'], links: [{ label: 'Full home remodeling', href: '/services/full-home-remodeling/' }] },
+  { key: 'fh', feature: false, title: 'Full Home Remodeling', text: 'Whole-house renovations that rework layout, systems and finishes under one scope.', scope: ['Opening and reconfiguring floor plans', 'Updating older electrical and plumbing', 'Coordinated finishes, room to room'], links: [{ label: 'Full home remodeling', href: '/services/full-home-remodeling/' }] },
   { key: 'ad', feature: false, title: 'Home Additions', text: 'Added rooms and second stories that tie into the structure and style of the house you have.', scope: ['Primary suites and family rooms', 'Second-story additions', 'Roof, framing and systems tie-ins'], links: [{ label: 'Home additions', href: '/services/home-additions/' }] },
   { key: 'adu', feature: false, title: 'ADU Construction', text: 'Detached, attached and garage-conversion accessory dwelling units.', scope: ['Detached and attached units', 'Garage conversions', 'San José permitting context'], links: [{ label: 'ADU construction', href: '/services/adu-construction/' }, { label: 'San Jose ADU guide', href: '/guides/san-jose-adu-guide/' }] },
   { key: 'cu', feature: false, title: 'Custom Home Building', text: 'New homes planned from the site up, built from your architect’s or designer’s plans.', scope: ['Site and feasibility review', 'Builder input before plans are final', 'Staged inspections to final'], links: [{ label: 'Custom home building', href: '/services/custom-home-construction/' }] },
@@ -70,16 +70,11 @@ const steps = [
     </div>
   </section>
 
-  <!-- 3 · TRUST + INTRODUCTION -->
+  <!-- 3 · TRUST STRIP (factual only: no badges, ratings or certifications) -->
   <section class="hp-trust" aria-label="About Gold Bay Builders">
-    <div class="wrap hp-trust-grid">
-      <div>
-        <span class="eyebrow">Who we are</span>
-        <h2>A San Jose residential contractor.</h2>
-        <p>Remodels, additions, ADUs, kitchens, bathrooms and custom homes for San Jose homeowners.</p>
-      </div>
-      <div class="hp-trust-item"><b>Five residential services</b><span>From full home remodels to new custom builds.</span></div>
-      <div class="hp-trust-item"><b>Built for San Jose homes</b><span>Planned around city permit rules and the house you already have.</span></div>
+    <div class="wrap hp-trust-row">
+      <p><b>Remodels · Additions · ADUs · Kitchens &amp; bathrooms · Custom homes</b></p>
+      <p>Serving San Jose, California · Owned by {business.owner}</p>
     </div>
   </section>
 
@@ -95,7 +90,6 @@ const steps = [
           <li class="hp-problem">
             <h3>{p.title}</h3>
             <p>{p.text}</p>
-            <p class="ask">{p.ask}</p>
           </li>
         ))}
       </ul>
@@ -113,16 +107,18 @@ const steps = [
       </div>
       <ul class="hp-svc-grid">
         {services.map((s) => (
-          <li class:list={['hp-svc', !s.feature && 'compact']}>
+          <li class:list={['hp-svc', s.feature ? 'wide' : 'compact']}>
             {s.key === 'kb' && (
               <div class="hp-svc-media" aria-hidden="true">
                 {kitchenPhotos.map((im) => <ProjectImage file={im.file} alt="" focus={im.focus} aspect="4 / 3" mobileAspect="4 / 3" sizes="(min-width: 48rem) 22vw, 45vw" />)}
               </div>
             )}
-            <h3>{s.title}</h3>
-            <p>{s.text}</p>
-            <div class="hp-svc-links">
-              {s.links.map((l) => <a class="arrow-link" href={l.href}>{l.label} <span aria-hidden="true">→</span></a>)}
+            <div class="hp-svc-body">
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <div class="hp-svc-links">
+                {s.links.map((l) => <a class="arrow-link" href={l.href}>{l.label} <span aria-hidden="true">→</span></a>)}
+              </div>
             </div>
           </li>
         ))}
@@ -135,7 +131,7 @@ const steps = [
   </section>
 
   <!-- 6 · RECENT PROJECTS -->
-  <section class="section sec-96 hp-work" aria-labelledby="work-title">
+  <section class="section hp-work" aria-labelledby="work-title">
     <div class="wrap">
       <div class="hp-work-head">
         <div>
@@ -180,7 +176,7 @@ const steps = [
   </section>
 
   <!-- 8 · TESTIMONIALS -->
-  <section class="section sec-112 hp-reviews" aria-labelledby="proof-title">
+  <section class="section hp-reviews" aria-labelledby="proof-title">
     <div class="wrap">
       <div class="hp-head">
         <span class="eyebrow">What homeowners say</span>
@@ -191,7 +187,7 @@ const steps = [
           <Testimonial review={lead} mode="excerpt" size="lg" />
         </div>
         <div class="hp-review-side">
-          <div><Testimonial review={pairA} /></div>
+          <div><Testimonial review={pairA} mode="excerpt" /></div>
           <div><Testimonial review={pairB} mode="excerpt" /></div>
         </div>
       </div>
@@ -215,7 +211,7 @@ const steps = [
   </section>
 
   <!-- 10 · FINAL CTA -->
-  <section class="section sec-128 hp-cta" aria-labelledby="cta-title">
+  <section class="section sec-128 hp-cta on-dark" aria-labelledby="cta-title">
     <div class="wrap hp-cta-grid hp-center">
       <div>
         <span class="eyebrow">Get started</span>
@@ -224,10 +220,10 @@ const steps = [
       </div>
       <div>
         <div class="hp-cta-btns">
-          <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
-          <a class="btn btn-line" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+          <a class="btn btn-gold" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+          <a class="btn btn-outline-light" href={business.phoneHref} data-track="click_to_call">Call Now</a>
         </div>
-        <p class="hp-cta-note">Estimate requests take about two minutes. Prefer email? <a href={`mailto:${business.email}`} data-track="email_us">Email Us</a>.</p>
+        <p class="hp-cta-note">Estimate requests take about two minutes. Prefer email? <a href={`mailto:${business.email}`} data-track="email_us" style="color:var(--color-white);text-decoration:underline">Email Us</a>.</p>
       </div>
     </div>
   </section>

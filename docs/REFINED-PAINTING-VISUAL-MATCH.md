@@ -57,3 +57,18 @@ Safari, Firefox and real phones. Lighthouse for this pass (see the report that a
 
 ## Lighthouse (live preview, one run, 2026-10-15)
 Performance 100 · Accessibility 100 · Best Practices 100 · SEO 69. The SEO score is low because the preview is deliberately `noindex`, which Lighthouse counts against. Indexable builds scored 100 (see the earlier QA report). LCP 1.3 s, CLS 0.001, TBT 0 ms, 181 KB transferred.
+
+## Pass 3 (client refinements), measured 2026-10-15
+| Section (1440 px) | Reference | Gold Bay pass 2 | Gold Bay pass 3 |
+|---|---|---|---|
+| Trust strip | 169 px | 225 px | 67 px (no badges; factual line only) |
+| Problems | 436 px | 610 px | 475 px (2×2, no per-item questions) |
+| Services | 849 px | 980 px | 942 px (feature row + one row of four; no empty cards) |
+| Recent projects | 701 px | 817 px | 756 px |
+| Reviews | 705 px | 869 px | 775 px |
+| Final CTA | 658 px | 657 px | 657 px (charcoal, white type, gold primary) |
+| Whole page, 1440 | 5944 px | 6601 px | 6116 px (103%) |
+| Whole page, 390 | 9250 px | 10125 px | 9446 px (102%) |
+
+Buttons use a 12 px radius; cards and comparison frames keep 4 px. Problem questions were removed from the homepage; the contractor-questions guidance remains on `/faq/`.
+Contact sheet: `docs/screenshots/refined-match/pass3/`.
