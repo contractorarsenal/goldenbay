@@ -5,7 +5,7 @@ import { legalNav, primaryNav } from '../data/nav';
 import { locations } from '../data/locations';
 import Logo from './Logo.astro';
 ---
-<footer class="site-footer on-dark">
+<footer class="site-footer">
   <div class="wrap">
     <div class="foot-top">
       <div>
@@ -13,7 +13,7 @@ import Logo from './Logo.astro';
         <p class="foot-lede">Residential remodeling and construction in San Jose, California.</p>
       </div>
       <div class="foot-actions">
-        <a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+        <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
         <a class="btn btn-line" href={business.phoneHref} data-track="click_to_call">Call Now</a>
         <a class="btn btn-line" href={`mailto:${business.email}`} data-track="email_us">Email Us</a>
       </div>

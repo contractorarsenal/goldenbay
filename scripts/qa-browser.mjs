@@ -76,12 +76,12 @@ for (const r of ['/', '/about/']) {
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
   await page.goto(base + '/', { waitUntil: 'networkidle' });
-  const items = page.locator('.h2-acc-item summary');
+  const items = page.locator('.h3-acc-item summary');
   await items.nth(0).click(); await items.nth(1).click();
-  const open = await page.$$eval('.h2-acc-item', (d) => d.filter((x) => x.open).length);
+  const open = await page.$$eval('.h3-acc-item', (d) => d.filter((x) => x.open).length);
   if (open !== 1) fails.push(`accordion: ${open} items open, expected 1`);
   await items.nth(2).focus(); await page.keyboard.press('Enter');
-  const open2 = await page.$$eval('.h2-acc-item', (d) => d.filter((x) => x.open).length);
+  const open2 = await page.$$eval('.h3-acc-item', (d) => d.filter((x) => x.open).length);
   if (open2 !== 1) fails.push(`accordion keyboard: ${open2} open`);
   const telHref = await page.$eval('.header-call', (a) => a.getAttribute('href'));
   if (telHref !== 'tel:+14085067184') fails.push('header Call Now href wrong: ' + telHref);
