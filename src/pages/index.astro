@@ -12,7 +12,7 @@ import { business } from '../data/business';
 const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: generalFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
 ---
 <Base title="Golden Bay Builders | Home Remodeling, ADUs & Additions in San Jose, CA" description="Golden Bay Builders is a San Jose residential contractor for full home remodeling, additions, ADUs, kitchens, bathrooms and custom homes. Request an estimate." path="/" schema={[faqSchema]}>
-  <section class="hero on-dark">
+  <section class="hero on-dark blueprint">
     <div class="wrap hero-grid">
       <div>
         <span class="eyebrow">Residential construction · San Jose, CA</span>
@@ -104,6 +104,17 @@ const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEn
         <ol class="rule-list" style="list-style:none">
           {processSteps.map((p) => <li class="reveal" style="grid-template-columns:3rem 1fr"><span class="num">{p.n}</span><div><h3 style="font-size:1.35rem">{p.title}</h3><p style="color:var(--color-muted);margin-top:.25rem">{p.text}</p></div></li>)}
         </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-ink on-dark">
+    <div class="wrap">
+      <div class="reveal" style="margin-bottom:3rem;display:grid;gap:1rem"><span class="eyebrow">Before you hire anyone</span><h2 style="max-width:20ch">Straight answers to the questions that decide a project.</h2></div>
+      <div style="display:grid;gap:1px;background:rgb(255 255 255 / .18);border:1px solid rgb(255 255 255 / .18)" class="tiles three reveal">
+        <a class="guide-card" style="background:var(--color-ink)" href="/guides/san-jose-adu-guide/"><span class="num">Guide</span><h3 style="margin:.5rem 0">Can I build an ADU on my San Jose lot?</h3><p style="color:#cfc8bb">Detached, attached and garage conversions, state rules, impact fees and the permit steps, with sources.</p><p style="margin-top:1rem;color:var(--color-brass)">Read the ADU guide →</p></a>
+        <a class="guide-card" style="background:var(--color-ink)" href="/guides/bay-area-remodeling-budget/"><span class="num">Guide</span><h3 style="margin:.5rem 0">What actually drives remodeling cost?</h3><p style="color:#cfc8bb">Scope, layout changes, home age and selections, plus costs outside the construction contract.</p><p style="margin-top:1rem;color:var(--color-brass)">Read the budget guide →</p></a>
+        <a class="guide-card" style="background:var(--color-ink)" href="/our-process/"><span class="num">Process</span><h3 style="margin:.5rem 0">What happens after I call?</h3><p style="color:#cfc8bb">Six stages from the first conversation to the final walkthrough, and where decisions fall on your side.</p><p style="margin-top:1rem;color:var(--color-brass)">See the process →</p></a>
       </div>
     </div>
   </section>

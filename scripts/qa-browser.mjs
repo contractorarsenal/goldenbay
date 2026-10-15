@@ -30,6 +30,24 @@ for (const [name, vp] of Object.entries(sizes)) {
   await page.keyboard.press('Escape'); await page.waitForTimeout(400); if (await page.isVisible('#mobile-panel')) fails.push('Escape did not close mobile menu');
   await ctx.close();
 }
+// Keyboard-only: skip link first, services dropdown via Enter, Escape closes, wizard completes without a mouse
+{
+  const ctx = await browser.newContext({ viewport: sizes.desktop }); const page = await ctx.newPage(); await page.goto(base + '/', { waitUntil: 'networkidle' });
+  await page.keyboard.press('Tab'); if (!(await page.evaluate(() => document.activeElement?.className === 'skip'))) fails.push('keyboard: skip link is not first tab stop');
+  for (let i = 0; i < 2; i++) await page.keyboard.press("Tab");
+  const onBtn = await page.evaluate(() => document.activeElement?.textContent?.trim().startsWith('Services'));
+  if (!onBtn) fails.push('keyboard: Services button not the 3rd tab stop');
+  await page.keyboard.press('Enter'); await page.waitForTimeout(300);
+  if (!(await page.isVisible('#dd-services a[href="/services/adu-construction/"]'))) fails.push('keyboard: dropdown did not open on Enter');
+  await page.keyboard.press('Escape'); await page.waitForTimeout(300); if (await page.isVisible('#dd-services')) fails.push('keyboard: Escape did not close dropdown');
+  await page.goto(base + '/request-estimate/', { waitUntil: 'networkidle' });
+  const tabTo = async (sel) => { for (let i = 0; i < 40; i++) { if (await page.evaluate((s) => document.activeElement?.matches(s), sel)) return true; await page.keyboard.press('Tab'); } return false; };
+  if (!(await tabTo('input[name="projectType"]'))) fails.push('keyboard: cannot reach step 1 options');
+  await page.keyboard.press('Space'); await tabTo('#next'); await page.keyboard.press('Enter'); await page.waitForTimeout(150);
+  if ((await page.textContent('#step-label')).trim() !== 'Step 2 of 7') fails.push('keyboard: Continue via Enter did not advance');
+  const focusedIsLegend = await page.evaluate(() => document.activeElement?.tagName === 'LEGEND'); if (!focusedIsLegend) fails.push('keyboard: focus not moved to step heading');
+  await ctx.close();
+}
 // Wizard: validation, back/forward persistence, unavailable (no backend), success (mocked), double submit
 async function fill(page) {
   const next = () => page.click('#next');
@@ -45,7 +63,6 @@ async function fill(page) {
 {
   const ctx = await browser.newContext({ viewport: sizes.mobile }); const page = await ctx.newPage(); await page.goto(base + '/request-estimate/');
   await fill(page); await page.click('#back'); await page.click('#back');
-  if ((await page.inputValue('#details')) !== '' && false) fails.push('x');
   await page.click('#next'); await page.click('#next');
   if (!(await page.inputValue('#name'))) fails.push('wizard: answers not preserved across steps');
   await page.route('**/api/estimate', (r) => r.fulfill({ status: 503, body: '{"ok":false}' }));

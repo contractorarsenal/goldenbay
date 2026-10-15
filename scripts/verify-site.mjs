@@ -23,7 +23,7 @@ for (const f of pages) {
   }
 }
 for (const [k, v] of titles) if (v.length > 1) problems.push(`duplicate title "${k}": ${v.join(', ')}`);
-for (const [k, v] of descs) if (v.length > 1) problems.push(`duplicate description: ${v.join(', ')}`);
+for (const v of descs.values()) if (v.length > 1) problems.push(`duplicate description: ${v.join(', ')}`);
 const sm = walk(dist).filter((f) => /sitemap-\d+\.xml$/.test(f)).map((f) => readFileSync(f, 'utf8')).join('');
 for (const r of noindexRoutes) if (sm.includes(`${r}</loc>`)) problems.push(`${r}: noindex but in sitemap`);
 const indexable = [...routes].filter((r) => !noindexRoutes.has(r));

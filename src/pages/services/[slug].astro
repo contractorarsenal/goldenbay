@@ -1,9 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
-import PageHero from '../../components/PageHero.astro';
 import Cta from '../../components/Cta.astro';
 import Faq from '../../components/Faq.astro';
 import Placeholder from '../../components/Placeholder.astro';
+import ArchPlate from '../../components/ArchPlate.astro';
+import { extras } from '../../data/service-extras';
 import { services, getService, type Service } from '../../data/services';
 import { serviceSchema } from '../../lib/schema';
 
@@ -12,6 +13,8 @@ export function getStaticPaths() {
 }
 const { s } = Astro.props as { s: Service };
 const path = `/services/${s.slug}/`;
+const x = extras[s.slug];
+const kind = ({ 'full-home-remodeling': 'remodel', 'home-additions': 'addition', 'adu-construction': 'adu', 'kitchen-remodeling': 'kitchen', 'bathroom-remodeling': 'bath', 'custom-home-construction': 'custom' } as const)[s.slug as keyof typeof extras] ?? 'remodel';
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -19,12 +22,26 @@ const faqSchema = {
 };
 ---
 <Base title={s.metaTitle} description={s.metaDescription} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services/' }, { name: s.name, path }]} schema={[serviceSchema(s.name, path, s.metaDescription), faqSchema]}>
-  <PageHero eyebrow={`Service ${s.num}`} title={s.headline} lede={s.lede} crumbs={[{ name: 'Home', href: '/' }, { name: 'Services', href: '/services/' }]}>
-    <div style="margin-top:2.25rem;display:flex;flex-wrap:wrap;gap:.85rem"><a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an estimate</a><a class="btn btn-line" href="/contact/">Ask a question</a></div>
-  </PageHero>
+  <section class="bg-ink on-dark blueprint" style="padding-block:clamp(2.5rem,6vw,5rem)">
+    <div class="wrap">
+      <nav aria-label="Breadcrumb" style="font-size:.85rem;color:#cfc8bb;margin-bottom:2rem"><ol style="display:flex;flex-wrap:wrap;gap:.5rem;list-style:none"><li><a href="/">Home</a> <span aria-hidden="true">/</span></li><li><a href="/services/">Services</a> <span aria-hidden="true">/</span></li></ol></nav>
+      <div class="svc-hero-grid">
+        <div>
+          <span class="eyebrow">Service {s.num} of 06</span>
+          <h1 style="margin-top:1.25rem">{s.headline}</h1>
+          <p class="lede" style="margin-top:1.5rem">{s.lede}</p>
+          <div style="margin-top:2.25rem;display:flex;flex-wrap:wrap;gap:.85rem"><a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an estimate</a><a class="btn btn-line" href="/contact/">Ask a question</a></div>
+        </div>
+        <ArchPlate kind={kind} />
+      </div>
+      <dl class="glance">{x.glance.map((g) => <div><dt>{g.label}</dt><dd>{g.value}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <section class="section" style="padding-bottom:0"><div class="wrap"><p class="eyebrow" style="margin-bottom:1.25rem">The short answer</p><p class="answer-box">{x.quickAnswer}</p></div></section>
 
   <section class="section"><div class="wrap split">
-    <div><span class="eyebrow">Overview</span><h2 style="margin-top:1.25rem">What {s.name.toLowerCase()} involves</h2></div>
+    <div><span class="eyebrow">Overview</span><h2 style="margin-top:1.25rem">{x.title}</h2></div>
     <div class="prose">{s.overview.map((p) => <p>{p}</p>)}</div>
   </div></section>
 
@@ -63,7 +80,7 @@ const faqSchema = {
 
   <section class="section"><div class="wrap split">
     <div><span class="eyebrow">Local relevance</span><h2 style="margin-top:1.25rem">Built for San Jose homes and rules.</h2></div>
-    <div class="prose"><p>Permit processes, plan review and fees are set by each city. We plan {s.name.toLowerCase()} projects around the requirements of the City of San José, and discuss other jurisdictions case by case.</p><p><a href="/service-areas/san-jose/">See how we work in San Jose</a>{s.slug === 'adu-construction' && <> · <a href="/guides/san-jose-adu-guide/">Read the San Jose ADU guide</a></>}</p></div>
+    <div class="prose"><p>Permit processes, plan review and fees are set by each city. We plan {s.name.toLowerCase()} projects around the requirements of the City of San José, and discuss other jurisdictions case by case.</p><p><a href="/service-areas/san-jose/">See how we work in San Jose</a></p><p>Keep reading: {x.guides.map((g, i) => <>{i > 0 && ' · '}<a href={g.href}>{g.label}</a></>)}</p></div>
   </div></section>
 
   <section class="section" style="padding-top:0"><div class="wrap split">

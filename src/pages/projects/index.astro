@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Cta from '../../components/Cta.astro';
-import Placeholder from '../../components/Placeholder.astro';
+import { services } from '../../data/services';
 import { projects } from '../../data/projects';
 const hasProjects = projects.length > 0;
 ---
@@ -14,9 +14,14 @@ const hasProjects = projects.length > 0;
         {projects.map((p) => <a href={`/projects/${p.slug}/`} style="text-decoration:none"><img src={p.hero.src} alt={p.hero.alt} width={p.hero.width} height={p.hero.height} loading="lazy" style="width:100%;height:auto" /><span class="eyebrow" style="margin-top:1rem">{p.category}</span><h3>{p.title}</h3><p>{p.summary}</p></a>)}
       </div>
     ) : (
-      <div class="split">
-        <div class="prose"><h2 style="margin-top:0">What will appear here</h2><p>Each project page will include the scope of work, the problem it solved, a photo gallery, and before-and-after images where available.</p><p>Have a question about work similar to yours? <a href="/contact/">Contact us</a>.</p></div>
-        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem"><Placeholder label="Kitchen" ratio="4 / 5" /><Placeholder label="ADU" ratio="4 / 5" /><Placeholder label="Bathroom" ratio="4 / 5" /><Placeholder label="Addition" ratio="4 / 5" /></div>
+      <div class="split rev">
+        <div>
+          <span class="eyebrow">Every case study will include</span>
+          <ol class="rule-list" style="margin-top:1.5rem;list-style:none">
+            {[['Scope of work', 'What was built or changed, in plain terms.'], ['The challenge', 'Site, structure or planning problems and how they were solved.'], ['Photography', 'Real photos of the finished work, with before-and-after where available.'], ['Related services', 'Links to the service and guides most relevant to the project.']].map(([t, d], i) => <li style="grid-template-columns:3rem 1fr"><span class="num">0{i + 1}</span><div><h3 style="font-size:1.3rem">{t}</h3><p style="color:var(--color-muted)">{d}</p></div></li>)}
+          </ol>
+        </div>
+        <div class="prose"><h2 style="margin-top:0">Planning something similar?</h2><p>Projects will be added as photography and homeowner approvals come in. Until then, the service pages explain how each kind of project works.</p><ul>{services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}</ul><p><a href="/contact/">Ask about work similar to yours</a></p></div>
       </div>
     )}
   </div></section>
