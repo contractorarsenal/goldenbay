@@ -16,9 +16,36 @@ Do not merge to `main` or promote to production without approval from the owner.
 - **Needed:** owner's Cloudflare account access (login or scoped API token with Pages:Edit + account id), a Pages project name decision, and the Pages secrets listed above. Preview deployments should not set `PUBLIC_ALLOW_INDEXING`.
 - `functions/api/estimate.ts` has only been unit-tested by direct invocation; verify under `wrangler pages dev` once authenticated.
 
-## Discovered: a Cloudflare Pages project is already connected to this repo (2026-10-15)
-While preparing to merge PR #1, GitHub check runs showed a **"Cloudflare Pages" check from the "Cloudflare Workers and Pages" GitHub app**, linking to a Pages project named **`goldbay`** (details link on the check run). Nobody on the development side connected it; Cloudflare was kept out of scope.
-- It builds on pushes. `main` (the empty baseline commit) shows a **successful** Cloudflare Pages build, so pushes to `main` very likely run the project's **production** build/deploy. The latest feature-branch commit (`9133c22`) shows a **failed** build (no logs available without Cloudflare access).
-- **Merge was therefore NOT performed**: it could publish an unfinished, unreviewed site (unconfirmed license/entity, reviews pending permission, placeholder portrait) to a public production URL and any attached custom domain.
-- Our side is clean: a fresh clone of the feature branch builds with `npm ci && npm run build` (36 pages, Node 22.23). **Most likely cause of the Cloudflare failure:** Astro 7 requires **Node >= 22.12**, and the repo pins no Node version, so Cloudflare's default build image may be older. Fix when ready: set `NODE_VERSION=22` in the Pages project (or add `.node-version`), and confirm build command `npm run build` / output `dist`. Not applied yet, because a passing build would start publishing previews/production.
-- Safe ways to proceed (owner's choice): (a) in Cloudflare, pause automatic production deploys or change the production branch away from `main`, then merge; (b) require manual approval/"build watch paths" first; (c) accept that merging publishes to the project's production URL. Built output is `noindex, nofollow` unless `PUBLIC_ALLOW_INDEXING=true` is set, but still publicly viewable.
+## Cloudflare Pages: what is confirmed, inferred and unknown (2026-10-15)
+
+**Setup observed:** a Pages project named `goldbay` (subdomain `goldbay-1oh.pages.dev`) is connected to this repo via the "Cloudflare Workers and Pages" GitHub app. No credentials are available to development, so **nothing in the dashboard was read or changed**; everything below comes from GitHub check runs and public HTTP probes.
+
+### Confirmed (observed)
+- Every pushed branch builds and deploys; each gets a per-deployment URL `https://<hash>.goldbay-1oh.pages.dev` and a branch alias `https://<branch-slug>.goldbay-1oh.pages.dev`. The empty `main` baseline deployed successfully and a production-style alias `goldbay-1oh.pages.dev` returns an empty 404.
+- The project **runs no build**: a deployment of the feature branch served the **repository root as-is** (README, package.json, docs, `src/*.ts`, `assets-src/`...) with no `dist/`. `functions/` was compiled and live (`GET /api/estimate` -> 405).
+- Consequence: a root **`wrangler.toml` with `pages_build_output_dir = "./dist"` makes every build fail within ~8 seconds** (the output directory never exists). Removing it flipped builds from failure to "success", proven by A/B pushes (`9133c22`, `1e0f1ac`, `c6d4d64`, `4e5eba4` failed; `9ba900c` succeeded). It is why earlier "Node version" fixes made no difference.
+- Preview deployments are **publicly reachable with no Cloudflare Access login** (the hash URL and branch alias both returned 200 to an anonymous client).
+- Not a Node problem: Node 22.12.0 (Astro 7's minimum) and 22.23.3 both do a clean `npm ci` + build + 20/20 tests + verify locally. Node is pinned anyway in `.node-version`, `.nvmrc` and `package.json` `engines` (22.12.0).
+
+### Inferred (not confirmed; dashboard not viewed)
+- The dashboard build command is empty and the output directory is the repo root, so **`main` is almost certainly the production branch** (its empty baseline deploy produced the production alias). Not verified.
+
+### Unknown
+- Production branch setting, custom domains, environment variables/secrets, whether Cloudflare Access is enabled for previews, and the real build logs (the check links require a Cloudflare login).
+
+### Current interim preview (works today, needs no dashboard changes)
+`npm run preview:branch` builds the **noindex** preview (canonicals use the preview URL) and pushes only the built output plus `functions/` to the `cf-preview` branch (normal, non-force push). Cloudflare serves that branch's root. URL: **https://cf-preview.goldbay-1oh.pages.dev**. Verified by `npm run verify:remote` (see QA-REPORT.md). The raw-root deployments of other branches are hardened with a root `_headers` (X-Robots-Tag noindex) and `robots.txt` (Disallow).
+
+Noindex layers on the preview: `X-Robots-Tag: noindex, nofollow` header (`_headers` rule for `*.pages.dev`), `<meta name="robots" content="noindex, nofollow">` on every page, and `robots.txt` = `Disallow: /`. **None of this makes it private**; anyone with the URL can open it. Use Cloudflare Access for that.
+
+### The proper fix (owner/dashboard, ~2 minutes) then retire the workaround
+In Cloudflare: Workers & Pages -> `goldbay` -> Settings:
+1. **Build configuration:** build command `npm run build`, build output directory `dist`, root directory blank. Framework preset: Astro.
+2. **Environment variables (Production and Preview):** leave `PUBLIC_ALLOW_INDEXING` **unset** until launch. Do not set `PUBLIC_SITE_URL` for previews (the build uses `CF_PAGES_URL`). `NODE_VERSION` is not needed (`.node-version` is read).
+3. **Protect previews:** Settings -> General -> **Enable Access policy** for preview deployments (Cloudflare Access), allowing only the team's emails.
+4. **Secrets for the lead form (when ready):** `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `LEAD_TO_EMAIL`, `LEAD_FROM_EMAIL`, and `PUBLIC_TURNSTILE_SITE_KEY` at build time.
+5. Then remove `scripts/publish-preview-branch.mjs` and the `cf-preview` branch, and (optionally) copy `docs/wrangler.toml.example` to the repo root (a root `wrangler.toml` is only safe once a build produces `dist/`).
+6. **Before merging PR #1:** decide the production branch. Merging to `main` publishes to the production URL (`goldbay-1oh.pages.dev` and any custom domain). Production builds stay `noindex` until `PUBLIC_ALLOW_INDEXING=true` is set.
+
+### Launch checklist (unchanged)
+License verified and shown, legal pages reviewed, real photos and review permissions, a real end-to-end form test, social image, Search Console + GA4, re-run `verify`, `verify:remote` and the QA script against the final URL.

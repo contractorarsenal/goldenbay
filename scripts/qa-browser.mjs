@@ -63,6 +63,15 @@ for (const w of [375, 768, 1024, 1440, 1920]) {
   await page.focus('.pf-chip[data-filter="kitchens"]'); await page.keyboard.press('Enter'); if ((await visible()) !== 1) fails.push('projects: Kitchens via keyboard should show 1');
   await ctx.close();
 }
+// Mobile menu geometry: the open panel must fill the viewport below the header, on an overlay page after scrolling and on a normal page after scrolling
+for (const r of ['/', '/about/']) {
+  const ctx = await browser.newContext({ viewport: sizes.mobile }); const page = await ctx.newPage(); await page.goto(base + r, { waitUntil: 'networkidle' });
+  await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' })); await page.waitForTimeout(500);
+  await page.click('.menu-toggle'); await page.waitForTimeout(500);
+  const g = await page.evaluate(() => { const p = document.getElementById('mobile-panel').getBoundingClientRect(); const h = document.querySelector('.site-header').getBoundingClientRect(); return { top: Math.round(p.top), bottom: Math.round(p.bottom), vh: innerHeight, hb: Math.round(h.bottom) }; });
+  if (g.bottom < g.vh - 2 || g.top > g.hb + 2) fails.push(`mobile menu panel on ${r} does not fill the viewport after scroll: ${JSON.stringify(g)}`);
+  await ctx.close();
+}
 // Mobile menu + keyboard
 {
   const ctx = await browser.newContext({ viewport: sizes.mobile }); const page = await ctx.newPage(); await page.goto(base + '/', { waitUntil: 'networkidle' });

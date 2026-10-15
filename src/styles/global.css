@@ -62,7 +62,10 @@ a { color: inherit; }
 .arrow-link:hover { color: var(--color-bronze); }
 
 /* Header */
-.site-header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--color-paper) 94%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--color-stone-2); }
+.site-header { position: sticky; top: 0; z-index: 50; isolation: isolate; border-bottom: 1px solid var(--color-stone-2); }
+/* The blurred background lives on a pseudo-element: `backdrop-filter` on the header itself would make it the containing block
+   for the position:fixed mobile menu panel, shrinking the panel to the header's height. */
+.site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; background: color-mix(in srgb, var(--color-paper) 94%, transparent); backdrop-filter: blur(10px); transition: background-color .3s; }
 .site-header .bar { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
 .logo { display: flex; flex-direction: column; text-decoration: none; line-height: 1; }
 .logo b { font: 500 1.4rem/1 var(--font-display); letter-spacing: -.01em; }
@@ -213,12 +216,14 @@ a { color: inherit; }
 @media (min-width: 80rem) { .header-phone { display: inline; } }
 .site-header .header-cta { min-height: 2.9rem; padding: .6rem 1.25rem; }
 .site-header { transition: background-color .3s, border-color .3s, color .3s; }
-.site-header.overlay { position: fixed; inset: 0 0 auto 0; background: transparent; border-bottom-color: transparent; backdrop-filter: none; color: var(--color-paper); }
+.site-header.overlay { position: fixed; inset: 0 0 auto 0; border-bottom-color: transparent; color: var(--color-paper); }
+.site-header.overlay::before { background: transparent; backdrop-filter: none; }
 .site-header.overlay .nav-link:hover { color: var(--color-brass); }
 .site-header.overlay .menu-toggle { border-color: rgb(255 255 255 / .6); color: var(--color-paper); background: transparent; }
 .site-header.overlay .header-cta { background: var(--color-brass); color: var(--color-ink); }
 .site-header.overlay .header-cta:hover { background: #dbb961; }
-.site-header.overlay.solid { background: color-mix(in srgb, var(--color-paper) 96%, transparent); backdrop-filter: blur(10px); border-bottom-color: var(--color-stone-2); color: var(--color-ink); }
+.site-header.overlay.solid { border-bottom-color: var(--color-stone-2); color: var(--color-ink); }
+.site-header.overlay.solid::before { background: color-mix(in srgb, var(--color-paper) 96%, transparent); backdrop-filter: blur(10px); }
 .site-header.overlay.solid .menu-toggle { border-color: var(--color-ink); color: var(--color-ink); }
 .site-header.overlay.solid .header-cta { background: var(--color-ink); color: var(--color-paper); }
 .site-header.overlay.solid .nav-link:hover { color: var(--color-bronze); }
@@ -464,3 +469,6 @@ html:not(.js) .pf-bar { display: none; }
 }
 .h-gallery .g-cap { text-transform: none; letter-spacing: 0; font-size: 1rem; color: inherit; }
 .h-tile-media .pimg img { aspect-ratio: 3 / 2; }
+/* Mobile menu buttons: the generic `.mobile-panel a` link style must not flatten the button layout */
+.mobile-panel a.btn { display: flex; justify-content: center; align-items: center; text-align: center; padding: .85rem 1.75rem; min-height: 3.25rem; border: 1px solid transparent; font: 600 .95rem/1 var(--font-sans); letter-spacing: .02em; }
+.mobile-panel a.btn-line { border-color: var(--color-paper); color: var(--color-paper); }

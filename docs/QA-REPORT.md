@@ -1,5 +1,23 @@
 # QA report
 
+## Cloudflare preview verification (2026-10-15)
+Live URL checked: **https://cf-preview.goldbay-1oh.pages.dev** (branch `cf-preview`; hash URLs change per deployment).
+| Check | Result |
+|---|---|
+| Local, pinned Node 22.12.0, clean clone | `npm ci`, `astro check` (0 errors), `npm test` (20/20), `npm run build`, `verify`, `verify:preview` all pass |
+| `npm run verify:preview` (builds like a Cloudflare preview) | 36 pages, all noindex; robots.txt = full Disallow; `_headers` has `*.pages.dev` noindex rules; canonical uses the preview host |
+| `npm run verify:remote` against the live URL | 35 routes crawled: all HTTP 200; `X-Robots-Tag: noindex, nofollow` on every page; meta robots noindex; canonical host = preview host; 0 console errors; 31 images, none broken; unknown route -> 404; robots.txt Disallow; raw repo files NOT served (README, package.json, CLAUDE.md, src, assets-src, .env.example -> 404) |
+| `node scripts/qa-browser.mjs` with `BASE` = live URL | OK (overflow, axe, keyboard, homepage x5 widths, image loading, projects filters, wizard) |
+| Estimate endpoint on the live site | `POST /api/estimate {}` -> **503 `not_configured`** (12/12 requests); `GET` -> 405. The **unmocked** wizard run showed the "online requests aren't available" state and never claimed success. No valid lead was sent. |
+| Access protection | None: previews are publicly reachable (anonymous 200). noindex only; see DEPLOYMENT.md |
+| Mobile rendering | Hero crop, featured-work, menu inspected on a 390 px device emulation of the live URL |
+
+Defects found during live review and fixed: **mobile menu panel was clipped to the header height after scrolling** (backdrop-filter on the header created a containing block for the fixed panel; now a pseudo-element, with a geometry assertion in QA); menu buttons had left-aligned labels; first Cloudflare "success" deployed the raw repo (no build) rather than the site, so success was **not** accepted until the content was opened and checked.
+
+Not verified: Safari/Firefox/real devices (Chromium emulation only), Cloudflare logs (no access), production behavior (nothing merged or deployed to production).
+
+---
+
 ## Real photography + reviews integration (latest, 2026-10-15; local preview, Chromium)
 | Check | Result |
 |---|---|
