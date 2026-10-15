@@ -2,7 +2,7 @@
 import Legal from '../components/Legal.astro';
 import { business } from '../data/business';
 ---
-<Legal title="Privacy Policy" description="How Golden Bay Builders collects, uses and protects information submitted through this website." path="/privacy-policy/">
+<Legal title="Privacy Policy" description="How Gold Bay Builders collects, uses and protects information submitted through this website." path="/privacy-policy/">
   <p>Last updated: October 15, 2026.</p>
   <h2>Information we collect</h2>
   <p>When you submit an estimate request, we collect the details you provide: project type, location (city, ZIP and optional street address), project stage, budget range, timeline, project description, and your name, phone number, email and preferred contact method.</p>
@@ -15,5 +15,5 @@ import { business } from '../data/business';
   <h2>Your choices</h2>
   <p>You can ask us to access or delete information you submitted. California residents may have additional rights under California law.</p>
   <h2>Contact</h2>
-  <p>{business.name} · <a href={`mailto:${business.email}`}>{business.email}</a> · {business.phone}</p>
+  <p>{business.name}. Use the <a href={`mailto:${business.email}`}>Email Us</a> or <a href={business.phoneHref}>Call Now</a> links on this site.</p>
 </Legal>

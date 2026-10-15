@@ -28,15 +28,24 @@ for (const f of pages) {
   if (/115776|1157776/.test(html.replace(/<script[^>]*>[\s\S]*?<\/script>/g, ''))) problems.push(`${route}: licence number published`);
   if (/\bI(?:'|’)?m (?:licensed|bonded)|licensed,? bonded|licensed (?:&|and) (?:insured|bonded)|insured (?:&|and) bonded/i.test(html)) problems.push(`${route}: unverified licensed/bonded/insured claim`);
 }
+// Public contact rule: the phone number and email must never appear as VISIBLE text (href/JSON-LD are fine).
+for (const f of pages) {
+  const html = readFileSync(f, 'utf8'); const route = '/' + relative(dist, f).replace(/index\.html$/, '');
+  const visible = html.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ');
+  if (/\(?408\)?[\s.-]?506[\s.-]?7184/.test(visible)) problems.push(`${route}: phone number visible as text`);
+  if (/goldbaybuilderinc@gmail\.com/i.test(visible)) problems.push(`${route}: email address visible as text`);
+  if (/Golden Bay Builders/.test(visible)) problems.push(`${route}: old name "Golden Bay" visible`);
+}
 // Images: every <img> needs an alt attribute; no placeholder text may ship on pages with real photos.
 for (const f of pages) { const html = readFileSync(f, 'utf8'); const route = '/' + relative(dist, f).replace(/index\.html$/, '');
-  for (const m of html.matchAll(/<img\b[^>]*>/g)) { if (!/\balt=/.test(m[0])) problems.push(`${route}: <img> without alt`); if (!/\bwidth=/.test(m[0]) || !/\bheight=/.test(m[0])) problems.push(`${route}: <img> without dimensions (CLS risk)`); }
+  for (const m of html.matchAll(/<img\b[^>]*>/g)) { if (!/\balt(=|\s|>|\/)/.test(m[0])) problems.push(`${route}: <img> without alt`); /* bare alt = alt="" (decorative) */
+    if (!/\bwidth=/.test(m[0]) || !/\bheight=/.test(m[0])) problems.push(`${route}: <img> without dimensions (CLS risk)`); }
   if (/https?:\/\/(?:github\.com\/user-attachments|user-images\.githubusercontent\.com)/.test(html)) problems.push(`${route}: hotlinks GitHub-hosted image`);
   if (/"@type":"(?:Review|AggregateRating|Rating)"/.test(html)) problems.push(`${route}: Review/Rating schema present (not allowed)`); }
 const robotsTxt = readFileSync(join(dist, 'robots.txt'), 'utf8');
 if (!/Allow: \//.test(robotsTxt) || !/Sitemap: https?:\/\/\S+\/sitemap-index\.xml/.test(robotsTxt) || /Disallow: \//.test(robotsTxt)) problems.push('robots.txt (indexing build) should allow crawling and list the sitemap');
 const home = readFileSync(join(dist, 'index.html'), 'utf8');
-for (const m of home.matchAll(/class="pimg-pending"[^>]*aria-label="([^"]+)"/g)) if (!m[1].startsWith('Portrait of David Lerma')) problems.push(`/: unexpected placeholder photo slot: ${m[1].slice(0, 40)}`);
+if (/class="pimg-pending"/.test(home)) problems.push('/: placeholder photo slot still on the homepage');
 if (!/<link rel="preload"|fetchpriority="high"/.test(home)) problems.push('/: hero image is not prioritised (LCP)');
 if (/Golden Bay/.test(home)) problems.push('/: still uses the old name "Golden Bay"');
 if (!/Gold Bay Builders/.test(home)) problems.push('/: provisional brand missing');

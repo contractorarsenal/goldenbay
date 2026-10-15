@@ -2,11 +2,11 @@ export interface Location {
   slug: string; name: string; confirmed: boolean; intro: string;
   department: string; considerations: string[];
 }
-/** `confirmed` = David has confirmed Golden Bay Builders serves the city. Only confirmed cities are indexed. */
+/** `confirmed` = David has confirmed Gold Bay Builders serves the city. Only confirmed cities are indexed. */
 export const locations: Location[] = [
   {
     slug: 'san-jose', name: 'San Jose', confirmed: true,
-    intro: 'San Jose is Golden Bay Builders’ home market. Homes here range from mid-century ranch houses and Eichler-style neighborhoods to older Willow Glen bungalows and newer suburban tracts, and each calls for a different approach to remodeling.',
+    intro: 'San Jose is Gold Bay Builders’ home market. Homes here range from mid-century ranch houses and Eichler-style neighborhoods to older Willow Glen bungalows and newer suburban tracts, and each calls for a different approach to remodeling.',
     department: 'City of San José Planning, Building and Code Enforcement',
     considerations: [
       'San José publishes its own ADU guidance, fee schedule and permit-center process; project scope and lot conditions determine which permits apply.',

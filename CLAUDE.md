@@ -18,6 +18,9 @@ Gold Bay Builders Inc. (provisional brand from the owner's business card; legal 
 - Never describe photos beyond what is visible; do not invent locations, materials, budgets or dates; in-progress photos stay labelled. Patios/pavers/pool work is portfolio-only, not a core service, until approved.
 - Review claims ("on schedule", "in budget", "onsite everyday") are customer statements, never company promises.
 
+## Public contact rule (mandatory)
+Never render the business phone number or email address as visible text on the public site. Use labelled actions instead: **Call Now** (`tel:`), **Email Us** (`mailto:`), **Request an Estimate**. Values stay in `src/data/business.ts`, in href attributes and in structured data. `npm run verify` fails if a visible phone number or email appears. Brand text must read "Gold Bay" (never "Golden Bay").
+
 ## Design principles
 Charcoal / warm white / limestone / bronze accent; Fraunces display + Inter body; editorial, asymmetric, varied section compositions; no repeated card grids; motion subtle and `prefers-reduced-motion` safe; content visible without JS animation.
 

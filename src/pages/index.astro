@@ -2,18 +2,38 @@
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
 import ProjectImage from '../components/ProjectImage.astro';
+import Testimonial from '../components/Testimonial.astro';
 import { business } from '../data/business';
 import { generalFaqs } from '../data/faqs';
-import { heroLinks, serviceTiles, contractorChecks, projectStages, homeFaqKeys, heroPhoto, featuredWork } from '../data/home';
+import { serviceTiles, contractorChecks, projectStages, homeFaqKeys, heroPhoto } from '../data/home';
 import { getProject } from '../data/projects';
 import { getReview } from '../data/reviews';
-import Testimonial from '../components/Testimonial.astro';
 
 const faqs = homeFaqKeys.map((q) => generalFaqs.find((f) => f.q === q)!).filter(Boolean);
 const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+
 const hero = getProject(heroPhoto.slug).images[heroPhoto.i];
-const work = featuredWork.map((f) => { const p = getProject(f.slug); return { ...f, p, img: p.images[f.i] }; });
-const img = (slug: string, i: number) => getProject(slug).images[i];
+// Six featured projects, three per row on desktop. One photo per project; no bathroom appears twice.
+const featured = [
+  { slug: 'kitchen-remodel', focus: '50% 55%' },
+  { slug: 'bathroom-stone-shower-terracotta-floor', focus: '50% 45%' },
+  { slug: 'patio-construction', focus: '50% 70%' },
+  { slug: 'bathroom-blue-tile-soaking-tub', focus: '50% 40%' },
+  { slug: 'pool-house-outdoor-living-area', focus: '50% 60%' },
+  { slug: 'paver-installation', focus: '50% 65%' },
+].map((f) => { const p = getProject(f.slug); return { ...f, p, img: p.images[0] }; });
+// Testimonials: communication, workmanship, cleanliness, professionalism, follow-through (exact supplied text).
+const lead = getReview('terri-m');
+const second = getReview('andrea-j');
+const third = getReview('kevin-j');
+const tileLinks: Record<string, { label: string; href: string }[]> = {
+  '01': [{ label: 'Full home remodeling', href: '/services/full-home-remodeling/' }],
+  '02': [{ label: 'Home additions', href: '/services/home-additions/' }],
+  '03': [{ label: 'ADU construction', href: '/services/adu-construction/' }, { label: 'San Jose ADU guide', href: '/guides/san-jose-adu-guide/' }],
+  '04': [{ label: 'Kitchen remodeling', href: '/services/kitchen-remodeling/' }, { label: 'Bathroom remodeling', href: '/services/bathroom-remodeling/' }],
+  '05': [{ label: 'Custom home building', href: '/services/custom-home-construction/' }],
+};
+const ctaWord: Record<string, string> = { '01': 'Explore remodels', '02': 'Explore additions', '03': 'Explore ADUs', '04': 'Explore kitchens & baths', '05': 'Explore custom homes' };
 ---
 <Base
   title="Gold Bay Builders | Home Remodeling & Construction in San Jose, CA"
@@ -22,160 +42,158 @@ const img = (slug: string, i: number) => getProject(slug).images[i];
   overlayHeader
   schema={[faqSchema]}
 >
-  <!-- 1. HERO: photography-first; the image slot bleeds to the viewport edge -->
-  <section class="h-hero on-dark" aria-labelledby="hero-title">
-    <div class="h-hero-text">
+  <!-- 1. HERO: photograph is the background; copy sits over it -->
+  <section class="h2-hero on-dark" aria-labelledby="hero-title">
+    <div class="h2-hero-bg">
+      <ProjectImage file={hero.file} alt="" focus={hero.focus} aspect="4 / 5" mobileAspect="4 / 5" mobileFocus="50% 60%" sizes="100vw" priority />
+    </div>
+    <div class="wrap h2-hero-inner">
       <span class="eyebrow">San Jose home remodeling &amp; construction</span>
       <h1 id="hero-title">Built for the way you live.</h1>
       <p class="lede">From full home remodels to additions, ADUs, kitchens, bathrooms and custom builds, {business.shortName} helps San Jose homeowners create spaces that work for their lives.</p>
-      <div class="h-hero-actions">
-        <a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Discuss your project</a>
-        <a class="btn btn-line" href="/services/">Explore our services</a>
+      <div class="h2-hero-actions">
+        <a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+        <a class="btn btn-glass" href="/projects/">Our Projects</a>
       </div>
     </div>
-    <div class="h-hero-media">
-      <ProjectImage file={hero.file} alt={hero.alt} focus={hero.focus} aspect="4 / 5" mobileAspect="4 / 5" mobileFocus="50% 58%" sizes="(min-width: 64rem) 48vw, 100vw" priority />
-      <p class="h-hero-cap"><span>{heroPhoto.label}</span> Completed work by {business.shortName}</p>
-    </div>
-    <div class="h-hero-strip">
-      <p class="h-sig">Building <b>YOUR</b> bay home</p>
-      <ul>{heroLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
-    </div>
+    <p class="h2-hero-cap">{heroPhoto.label}</p>
   </section>
 
-  <!-- 2. INTRODUCTION: one large statement, no columns -->
-  <section class="section h-intro">
+  <!-- 2. WHO WE ARE -->
+  <section class="section h2-intro" aria-labelledby="intro-title">
     <div class="wrap">
       <span class="eyebrow reveal">The company</span>
-      <p class="h-statement reveal">{business.shortName} is a residential construction company serving San Jose homeowners: remodels, additions, ADUs and new custom homes.</p>
-      <div class="h-intro-grid">
+      <h2 id="intro-title" class="h2-statement reveal">Gold Bay Builders is a residential construction company serving San Jose homeowners: remodels, additions, ADUs and new custom homes.</h2>
+      <div class="h2-intro-grid">
         <p class="reveal">Projects range from a single kitchen or bathroom to a whole-house remodel, a backyard ADU or a ground-up build. Each one begins with how you live in the house, what the property allows and what you want to spend.</p>
-        <ul class="h-serve reveal">
-          <li><span class="num">i.</span>Homeowners reworking a house they plan to stay in</li>
-          <li><span class="num">ii.</span>Families who need more space, through an addition or an ADU</li>
-          <li><span class="num">iii.</span>Owners planning a new custom home on their lot</li>
+        <ul class="h2-serve reveal">
+          <li>Homeowners reworking a house they plan to stay in</li>
+          <li>Families who need more space, through an addition or an ADU</li>
+          <li>Owners planning a new custom home on their lot</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <!-- 3. SERVICES: mixed-fill editorial grid -->
-  <section class="section h-services" aria-labelledby="svc-title">
+  <!-- 3. WHAT WE DO -->
+  <section class="section h2-services" aria-labelledby="svc-title">
     <div class="wrap">
       <div class="h-head reveal"><span class="eyebrow">What we build</span><h2 id="svc-title">Five ways we work on your home.</h2></div>
       <div class="h-tiles">
         {serviceTiles.map((t) => (
           <article class={`h-tile tone-${t.tone} t-${t.span} reveal`}>
-            {t.media && <div class="h-tile-media">{t.media.map((m) => { const im = img(m.slug, m.i); return <ProjectImage file={im.file} alt={im.alt} focus={im.focus} aspect="3 / 2" mobileAspect="3 / 2" sizes="(min-width: 56rem) 16vw, 40vw" />; })}</div>}
+            {t.media && <div class="h-tile-media">{t.media.map((m) => { const im = getProject(m.slug).images[m.i]; return <ProjectImage file={im.file} alt={im.alt} focus={im.focus} aspect="3 / 2" mobileAspect="3 / 2" sizes="(min-width: 56rem) 16vw, 40vw" />; })}</div>}
             <span class="num">{t.num}</span>
             <h3>{t.title}</h3>
-            <p>{t.text}</p>
-            <ul>{t.scope.map((s) => <li>{s}</li>)}</ul>
-            <p class="h-tile-links">{t.links.map((l) => <a class="arrow-link" href={l.href}>{l.label} <span aria-hidden="true">→</span></a>)}</p>
+            <p class="h-tile-text">{t.text}</p>
+            <ul class="h-tile-scope">{t.scope.map((s) => <li>{s}</li>)}</ul>
+            <div class="h-tile-cta">
+              {tileLinks[t.num].map((l, i) => (
+                <a class={i === 0 ? 'btn btn-tile' : 'arrow-link'} href={l.href}>{i === 0 ? `${ctaWord[t.num]} →` : l.label}</a>
+              ))}
+            </div>
           </article>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- 4. FEATURED WORK: asymmetric gallery driven by projects data -->
-  <section class="section h-work on-dark" aria-labelledby="work-title">
-    <div class="wrap">
-      <div class="h-work-head reveal">
-        <div><span class="eyebrow">Featured work</span><h2 id="work-title">Recent work, in the photos.</h2></div>
-        <p class="lede">Kitchens, bathrooms, patios, pavers and outdoor living areas. A selection of recent work, with more to come as each project is documented.</p>
-      </div>
-      <div class="h-gallery">
-        {work.map((w) => (
-          <a class={`g ${w.area} reveal`} href={`/projects/${w.p.slug}/`} aria-label={`${w.p.title}: view project photos`}>
-            <ProjectImage file={w.img.file} alt={w.img.alt} focus={w.img.focus} aspect={w.aspect} mobileAspect={w.aspect} sizes="(min-width: 56rem) 40vw, 100vw" fill />
-            <span class="g-cap"><span>{w.p.category}</span><b>{w.p.title}</b></span>
-          </a>
-        ))}
-      </div>
-      <p class="reveal" style="margin-top:2.5rem"><a class="arrow-link" href="/projects/">Our projects <span aria-hidden="true">→</span></a></p>
-    </div>
-  </section>
-
-  <!-- 4b. PROOF: exact customer quotes -->
-  <section class="section h-proof" aria-labelledby="proof-title">
-    <div class="wrap">
-      <span class="eyebrow reveal">What homeowners say</span>
-      <h2 id="proof-title" class="reveal">Quality work. Clear communication. <em>A home built around you.</em></h2>
-      <div class="h-proof-grid">
-        <div class="h-proof-main reveal"><Testimonial review={getReview('terri-m')} mode="excerpt" size="lg" /></div>
-        <div class="h-proof-side">
-          <div class="reveal"><Testimonial review={getReview('andrea-j')} /></div>
-          <div class="reveal"><Testimonial review={getReview('kevin-j')} mode="excerpt" /></div>
-        </div>
-      </div>
-      <p class="reveal" style="margin-top:2.5rem"><a class="arrow-link" href="/reviews/">Read all customer reviews <span aria-hidden="true">→</span></a></p>
-    </div>
-  </section>
-
-  <!-- 5. WHAT TO LOOK FOR: education, no operating promises -->
-  <section class="section h-look h-look-paper" aria-labelledby="look-title">
-    <div class="wrap">
-      <div class="h-head reveal"><span class="eyebrow">Choosing a contractor</span><h2 id="look-title">Six things worth asking any contractor.</h2><p class="lede">Homeowners most often struggle with communication, cost changes and unclear scope. These questions apply to us as much as to anyone you interview.</p></div>
-      <div class="h-table reveal" role="table" aria-label="Questions to ask a contractor">
-        <div class="h-tr h-th" role="row"><span role="columnheader">Topic</span><span role="columnheader">Ask</span><span role="columnheader">What a good answer looks like</span></div>
-        {contractorChecks.map((c) => (
-          <div class="h-tr" role="row"><h3 role="rowheader">{c.topic}</h3><p role="cell" class="ask">{c.ask}</p><p role="cell">{c.good}</p></div>
-        ))}
-      </div>
-      <p class="reveal" style="margin-top:2rem;max-width:44rem">Always check a contractor’s license, bond and workers’ compensation on the <a class="arrow-link" href={business.license.cslbUrl} rel="noopener">CSLB license lookup</a>. For cost drivers and a contract checklist, read the <a class="arrow-link" href="/guides/bay-area-remodeling-budget/">remodeling budget guide</a>.</p>
-    </div>
-  </section>
-
-  <!-- 6. OWNER: portrait-ready feature -->
-  <section class="section h-owner" aria-labelledby="owner-title">
-    <div class="wrap h-owner-grid">
-      <div class="h-portrait reveal">
-        <ProjectImage file="david-lerma-portrait.jpg" alt={`${business.owner}, ${business.ownerRole} of ${business.shortName}`} aspect="4 / 5" mobileAspect="4 / 5" focus="50% 25%" sizes="(min-width: 64rem) 34vw, 80vw" slot="Portrait of David Lerma" note="Awaiting approved portrait" />
-      </div>
-      <div class="h-owner-text reveal">
-        <span class="eyebrow">Meet the owner</span>
-        <h2 id="owner-title">{business.owner}</h2>
-        <p class="h-role">{business.ownerRole}, {business.name}</p>
-        <p class="lede">{business.shortName} is owned by David Lerma. To talk through your project, call him at <a href={business.phoneHref} data-track="click_to_call" style="text-decoration:underline">{business.phone}</a>.</p>
-        <p>A fuller introduction, including David’s background in construction and what he cares about in a project, will be added here once he has approved it.</p>
-        <p><a class="arrow-link" href="/about/">About {business.shortName} <span aria-hidden="true">→</span></a></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 7. PROCESS: horizontal timeline -->
-  <section class="section h-process" aria-labelledby="proc-title">
+  <!-- 4. HOW WE DO IT -->
+  <section class="section h2-process" aria-labelledby="proc-title">
     <div class="wrap">
       <div class="h-head reveal"><span class="eyebrow">How a project unfolds</span><h2 id="proc-title">The stages most residential projects pass through.</h2><p class="lede">A general guide for homeowners. The scope, sequence and schedule for your own project are set in your estimate and contract.</p></div>
       <ol class="h-timeline">
         {projectStages.map((p) => (<li class="reveal"><span class="num">{p.n}</span><h3>{p.title}</h3><p>{p.text}</p></li>))}
       </ol>
-      <p class="reveal" style="margin-top:2.5rem"><a class="arrow-link" href="/our-process/">Our process <span aria-hidden="true">→</span></a></p>
+      <p class="reveal h2-process-cta"><a class="btn btn-line" href="/our-process/">See our full process</a></p>
     </div>
   </section>
 
-  <!-- 8. SERVICE AREA: typographic band -->
-  <section class="section h-area on-dark" aria-labelledby="area-title">
+  <!-- 5. OUR WORK -->
+  <section class="section h2-work on-dark" aria-labelledby="work-title">
     <div class="wrap">
-      <div class="h-area-word" aria-hidden="true"></div>
+      <div class="h2-work-head reveal">
+        <div><span class="eyebrow">Featured work</span><h2 id="work-title">Recent work, in the photos.</h2></div>
+        <p class="lede">Kitchens, bathrooms, patios, pavers and outdoor living areas. Each project page shows the photos we have for that job.</p>
+      </div>
+      <div class="h2-grid">
+        {featured.map((f) => (
+          <article class="h2-card reveal">
+            <a class="h2-card-img" href={`/projects/${f.p.slug}/`} tabindex="-1" aria-hidden="true">
+              <ProjectImage file={f.img.file} alt={f.img.alt} focus={f.focus} aspect="4 / 5" mobileAspect="4 / 5" sizes="(min-width: 64rem) 31vw, (min-width: 40rem) 46vw, 100vw" />
+            </a>
+            <div class="h2-card-body">
+              <span class="h2-card-cat">{f.p.category}</span>
+              <h3>{f.p.title}</h3>
+              <a class="btn btn-glass-sm" href={`/projects/${f.p.slug}/`} aria-label={`View project: ${f.p.title}`}>View Project →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="reveal h2-work-all"><a class="btn btn-glass" href="/projects/">All projects</a></p>
+    </div>
+  </section>
+
+  <!-- 6. TESTIMONIALS -->
+  <section class="section h2-proof" aria-labelledby="proof-title">
+    <div class="wrap">
+      <span class="eyebrow reveal">What homeowners say</span>
+      <div class="h2-proof-lead reveal">
+        <Testimonial review={lead} mode="excerpt" size="lg" />
+      </div>
+      <div class="h2-proof-row">
+        <div class="reveal"><Testimonial review={second} /></div>
+        <div class="reveal"><Testimonial review={third} mode="excerpt" /></div>
+      </div>
+      <p class="reveal h2-proof-cta"><a class="btn btn-line" href="/reviews/">View all reviews</a></p>
+      <h2 id="proof-title" class="sr-only">Customer reviews</h2>
+    </div>
+  </section>
+
+  <!-- 7. SAN JOSE -->
+  <section class="section h2-area on-dark" aria-labelledby="area-title">
+    <div class="wrap">
+      <p class="h-area-word" aria-hidden="true"></p>
       <div class="h-area-body">
         <div class="reveal"><span class="eyebrow">Service area</span><h2 id="area-title">Based in San Jose, California.</h2></div>
         <div class="reveal">
           <p class="lede">San Jose is our home market. Permit rules, ADU requirements and review times are set city by city, so every project is planned around the jurisdiction it sits in.</p>
-          <p style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:1.5rem"><a class="arrow-link" href="/service-areas/san-jose/">Building in San Jose <span aria-hidden="true">→</span></a><a class="arrow-link" href="/service-areas/">All service areas <span aria-hidden="true">→</span></a></p>
+          <p class="h2-area-links"><a class="btn btn-glass-sm" href="/service-areas/san-jose/">Building in San Jose</a><a class="arrow-link" href="/service-areas/">All service areas <span aria-hidden="true">→</span></a></p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 9. FAQ -->
-  <section class="section h-faq" aria-labelledby="faq-title">
+  <!-- 8. QUESTIONS TO ASK A CONTRACTOR (accordion) -->
+  <section class="section h2-ask" aria-labelledby="ask-title">
+    <div class="wrap h2-ask-grid">
+      <div class="reveal">
+        <span class="eyebrow">Choosing a contractor</span>
+        <h2 id="ask-title">Six things worth asking any contractor.</h2>
+        <p class="h2-ask-lede">Homeowners most often struggle with communication, cost changes and unclear scope. These questions apply to us as much as to anyone you interview.</p>
+        <p class="h2-ask-note">Always check a license, bond and workers’ compensation on the <a class="arrow-link" href={business.license.cslbUrl} rel="noopener">CSLB license lookup</a>.</p>
+      </div>
+      <div class="h2-acc reveal">
+        {contractorChecks.map((c) => (
+          <details class="h2-acc-item" name="ask">
+            <summary><span>{c.topic}</span><span class="h2-acc-icon" aria-hidden="true"></span></summary>
+            <div class="h2-acc-body">
+              <p class="h2-acc-q">{c.ask}</p>
+              <p>{c.good}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. COMMON QUESTIONS -->
+  <section class="section h2-faq" aria-labelledby="faq-title">
     <div class="wrap h-faq-grid">
       <div class="reveal">
         <span class="eyebrow">Common questions</span>
         <h2 id="faq-title">Before you call.</h2>
-        <p style="margin-top:1.25rem;max-width:26rem;color:var(--color-ink-2)">Short answers to what homeowners ask first. For more depth, start with the guides.</p>
+        <p class="h2-faq-lede">Short answers to what homeowners ask first. For more depth, start with the guides.</p>
         <ul class="h-links"><li><a class="arrow-link" href="/guides/san-jose-adu-guide/">San Jose ADU guide</a></li><li><a class="arrow-link" href="/guides/bay-area-remodeling-budget/">Remodeling budget guide</a></li><li><a class="arrow-link" href="/faq/">All FAQs</a></li></ul>
       </div>
       <div class="reveal"><Faq items={faqs} /></div>
@@ -183,22 +201,18 @@ const img = (slug: string, i: number) => getProject(slug).images[i];
   </section>
 
   <!-- 10. FINAL CTA -->
-  <section class="h-cta" aria-labelledby="cta-title">
-    <div class="wrap h-cta-grid">
+  <section class="h2-cta" aria-labelledby="cta-title">
+    <div class="wrap h2-cta-grid">
       <div>
         <span class="eyebrow">Start a conversation</span>
         <h2 id="cta-title">Have a project in mind? <em>Let’s talk.</em></h2>
-        <div class="h-cta-row">
-          <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
-          <a class="btn btn-line" href={business.phoneHref} data-track="click_to_call">Call {business.phone}</a>
-        </div>
-        <p class="h-cta-note">The estimate request takes about two minutes.</p>
       </div>
-      <div class="h-cta-side">
-        <b>Prefer to talk first?</b>
-        <a class="big" href={business.phoneHref} data-track="click_to_call">{business.phone}</a>
-        <a href={`mailto:${business.email}`}>{business.email}</a>
-        <span>{business.owner}, {business.ownerRole} · Serving San Jose, California</span>
+      <div class="h2-cta-side">
+        <div class="h2-cta-btns">
+          <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+          <a class="btn btn-line" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+        </div>
+        <p>The estimate request takes about two minutes. Prefer email? <a class="arrow-link" href={`mailto:${business.email}`} data-track="email_us">Email Us</a></p>
       </div>
     </div>
   </section>

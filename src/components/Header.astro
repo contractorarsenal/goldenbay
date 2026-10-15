@@ -4,28 +4,22 @@ import { business } from '../data/business';
 import Logo from './Logo.astro';
 const { path, overlay = false } = Astro.props as { path: string; overlay?: boolean };
 const cur = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+// Desktop bar shows the five primary destinations. Services stays reachable from the mobile menu, service cards and footer.
+const desktopNav = primaryNav.filter((i) => i.desktop !== false);
 ---
 <header class:list={['site-header', overlay && 'overlay']} data-overlay={overlay ? 'true' : undefined}>
   <div class="wrap bar">
     <Logo tone={overlay ? 'dark' : 'light'} />
-    <nav aria-label="Primary">
+    <nav aria-label="Primary" class="desk-nav">
       <ul class="nav-list">
-        {primaryNav.map((item) => item.children ? (
-          <li class="has-dd">
-            <button class="nav-link" aria-expanded="false" aria-controls="dd-services" aria-current={cur(item.href) ? 'true' : undefined}>{item.label} <span aria-hidden="true">▾</span></button>
-            <ul class="dropdown" id="dd-services">
-              <li><a href={item.href}>All services</a></li>
-              {item.children.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
-            </ul>
-          </li>
-        ) : (
+        {desktopNav.map((item) => (
           <li><a class="nav-link" href={item.href} aria-current={cur(item.href) ? 'page' : undefined}>{item.label}</a></li>
         ))}
       </ul>
     </nav>
     <div class="header-actions">
-      <a class="header-phone" href={business.phoneHref} data-track="click_to_call">{business.phone}</a>
-      <a class="header-cta btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+      <a class="btn btn-ghost-sm header-call" href={business.phoneHref} data-track="click_to_call" aria-label="Call Now: call Gold Bay Builders">Call Now</a>
+      <a class="btn btn-primary btn-sm header-cta" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
       <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-panel">Menu</button>
     </div>
   </div>
@@ -36,7 +30,9 @@ const cur = (href: string) => (href === '/' ? path === '/' : path.startsWith(hre
         {item.children && <div class="sub">{item.children.map((c) => <a href={c.href}>{c.label}</a>)}</div>}
       </>))}
     </nav>
-    <a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
-    <a class="btn btn-line" style="margin-top:.75rem" href={business.phoneHref} data-track="click_to_call">Call {business.phone}</a>
+    <div class="mobile-ctas">
+      <a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+      <a class="btn btn-line" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+    </div>
   </div>
 </header>

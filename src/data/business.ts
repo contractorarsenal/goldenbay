@@ -3,7 +3,7 @@
  *
  * BRAND IS PROVISIONAL. The public name below comes from the owner's business card ("GOLD BAY BUILDERS INC.").
  * The legal registered name and CSLB status are NOT confirmed. Public records and the Gemini report show
- * "Goldbay Builders Inc." and unrelated "Golden Bay Builders" entities. See docs/RESEARCH-RECONCILIATION.md.
+ * "Goldbay Builders Inc." and unrelated "Gold Bay Builders" entities. See docs/RESEARCH-RECONCILIATION.md.
  */
 export const business = {
   name: 'Gold Bay Builders Inc.',

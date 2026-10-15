@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Cta from '../components/Cta.astro';
 import { processSteps } from '../data/process';
 ---
-<Base title="Our Construction Process" description="How a Golden Bay Builders project runs: first conversation, site visit, written estimate, planning and permits, construction and final walkthrough." path="/our-process/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Process', path: '/our-process/' }]}>
+<Base title="Our Construction Process" description="How a Gold Bay Builders project runs: first conversation, site visit, written estimate, planning and permits, construction and final walkthrough." path="/our-process/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Process', path: '/our-process/' }]}>
   <PageHero eyebrow="Process" title="How a project runs, start to finish." lede="Six stages, each with a clear purpose. Timelines vary with scope and with city review, which we do not control." crumbs={[{ name: 'Home', href: '/' }]} />
   <section class="section"><div class="wrap">
     <ol class="rule-list" style="list-style:none">{processSteps.map((p) => <li><span class="num">{p.n}</span><h2 style="font-size:1.9rem">{p.title}</h2><p style="color:var(--color-ink-2)">{p.text}</p></li>)}</ol>

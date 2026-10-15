@@ -3,14 +3,18 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { business } from '../data/business';
 ---
-<Base title="Contact Golden Bay Builders" description="Call or email Golden Bay Builders in San Jose, CA, or request an estimate for your remodel, addition, ADU or custom home." path="/contact/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }]}>
+<Base title="Contact Gold Bay Builders" description="Call or email Gold Bay Builders in San Jose, CA, or request an estimate for your remodel, addition, ADU or custom home." path="/contact/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }]}>
   <PageHero eyebrow="Contact" title="Let’s talk about your project." crumbs={[{ name: 'Home', href: '/' }]} />
   <section class="section"><div class="wrap split">
-    <div>
-      <h2 style="font-size:1.6rem">Call</h2><p><a href={business.phoneHref} data-track="click_to_call" style="font:400 2rem var(--font-display)">{business.phone}</a></p>
-      <h2 style="font-size:1.6rem;margin-top:2rem">Email</h2><p><a href={`mailto:${business.email}`}>{business.email}</a></p>
-      <h2 style="font-size:1.6rem;margin-top:2rem">Serving</h2><p>San Jose, California</p>
+    <div class="contact-actions">
+      <h2 style="font-size:1.6rem">Talk to us</h2>
+      <p>Call or email the owner’s office directly, or send an estimate request. Contact details are one tap away on this page.</p>
+      <div class="contact-btns">
+        <a class="btn btn-primary" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+        <a class="btn btn-line" href={`mailto:${business.email}`} data-track="email_us">Email Us</a>
+      </div>
+      <p class="serving">Serving San Jose, California</p>
     </div>
-    <div class="prose"><p class="lede">The fastest way to start is the estimate request. It takes about two minutes and helps us come to the first conversation prepared.</p><p><a class="btn btn-primary" style="color:#fff;text-decoration:none" href="/request-estimate/" data-track="request_estimate_click">Request an estimate</a></p><p>Prefer to talk first? Call and ask for David Lerma.</p></div>
+    <div class="prose"><p class="lede">The fastest way to start is the estimate request. It takes about two minutes and helps us come to the first conversation prepared.</p><p><a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a></p><p>Prefer to talk first? Use Call Now and ask for David Lerma.</p></div>
   </div></section>
 </Base>

@@ -5,7 +5,7 @@ import { projectTypes, propertyStatuses, stages, budgets, timelines, contactMeth
 import { business } from '../data/business';
 const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
 ---
-<Base title="Request an Estimate" description="Tell Golden Bay Builders about your San Jose remodel, addition, ADU or custom home. Seven short steps, about two minutes." path="/request-estimate/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'Request an Estimate', path: '/request-estimate/' }]}>
+<Base title="Request an Estimate" description="Tell Gold Bay Builders about your San Jose remodel, addition, ADU or custom home. Seven short steps, about two minutes." path="/request-estimate/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'Request an Estimate', path: '/request-estimate/' }]}>
   <PageHero eyebrow="Request an estimate" title="Tell us about your project." lede="Seven short steps. About two minutes. No obligation." crumbs={[{ name: 'Home', href: '/' }]} />
   <section class="section"><div class="wrap">
     <div class="split rev" id="wizrow" style="align-items:start"><div><form id="wiz" class="wiz" novalidate data-turnstile={siteKey ?? ''} aria-labelledby="wiz-title">
@@ -28,7 +28,7 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
 
       <fieldset data-step="3"><legend>Estimated budget?</legend>
         <div class="choices cols">{budgets.map((v) => <label class="choice"><input type="radio" name="budget" value={v} /><span>{v}</span></label>)}</div>
-        <p class="hint field" style="font-size:.85rem;color:var(--color-muted)">These ranges are for your reference only. They are not Golden Bay Builders’ project minimums or prices.</p><p class="err field" role="alert" data-err="budget"></p></fieldset>
+        <p class="hint field" style="font-size:.85rem;color:var(--color-muted)">These ranges are for your reference only. They are not Gold Bay Builders’ project minimums or prices.</p><p class="err field" role="alert" data-err="budget"></p></fieldset>
 
       <fieldset data-step="4"><legend>When would you like to start?</legend>
         <div class="choices cols">{timelines.map((v) => <label class="choice"><input type="radio" name="timeline" value={v} /><span>{v}</span></label>)}</div><p class="err field" role="alert" data-err="timeline"></p></fieldset>
@@ -60,16 +60,16 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
         <li style="grid-template-columns:2rem 1fr;padding-block:1rem"><span class="num">2</span><p>We contact you by your preferred method to talk through scope and timing.</p></li>
         <li style="grid-template-columns:2rem 1fr;padding-block:1rem"><span class="num">3</span><p>If it makes sense to proceed, we arrange a site visit.</p></li>
       </ol>
-      <p style="margin-top:1.25rem;font-size:.95rem;color:#cfc8bb">Prefer to talk? Call <a href={business.phoneHref} data-track="click_to_call" style="color:#fff;text-decoration:underline">{business.phone}</a>.</p>
+      <p style="margin-top:1.25rem;font-size:.95rem;color:#cfc8bb">Prefer to talk? <a href={business.phoneHref} data-track="click_to_call" style="color:#fff;text-decoration:underline">Call Now</a>.</p>
       <p style="margin-top:1rem;font-size:.85rem;color:#a9a296">Your details are used only to respond to your request. See the <a href="/privacy-policy/" style="text-decoration:underline">privacy policy</a>.</p>
     </aside></div>
     <div id="success" class="prose" hidden tabindex="-1">
       <h2>Thank you. Your request was sent.</h2>
-      <p>We’ll contact you using your preferred method. If it’s urgent, call <a href={business.phoneHref}>{business.phone}</a>.</p>
+      <p>We’ll contact you using your preferred method. If it’s urgent, <a href={business.phoneHref}>Call Now</a>.</p>
     </div>
     <div id="unavailable" class="prose" hidden tabindex="-1">
       <h2>Online requests aren’t available right now.</h2>
-      <p>Your request was not sent. Please call <a href={business.phoneHref} data-track="click_to_call">{business.phone}</a> or email <a href={`mailto:${business.email}`}>{business.email}</a>.</p>
+      <p>Your request was not sent. Please <a href={business.phoneHref} data-track="click_to_call">Call Now</a> or <a href={`mailto:${business.email}`}>Email Us</a>.</p>
     </div>
   </div></section>
   {siteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}

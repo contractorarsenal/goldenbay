@@ -22,12 +22,12 @@ export const services: Service[] = [
     slug: 'full-home-remodeling', name: 'Full Home Remodeling', num: '01', layout: 'editorial', category: 'Remodel',
     short: 'Whole-house renovations that rework layout, systems and finishes together under one plan.',
     metaTitle: 'Full Home Remodeling in San Jose, CA',
-    metaDescription: 'Whole-house remodeling in San Jose from Golden Bay Builders: layout changes, updated systems and finishes coordinated under a single scope and schedule.',
+    metaDescription: 'Whole-house remodeling in San Jose from Gold Bay Builders: layout changes, updated systems and finishes coordinated under a single scope and schedule.',
     headline: 'Whole-house remodeling, planned as one project.',
     lede: 'When several rooms need work, doing them together usually costs less in disruption and rework than doing them one at a time. We scope the whole house first, then sequence the work.',
     overview: [
       'A full home remodel touches more than finishes. Walls move, kitchens and baths are rebuilt, and electrical, plumbing and mechanical systems are often brought up to date at the same time. Because those trades overlap, the order of work matters as much as the design.',
-      'Golden Bay Builders approaches a full remodel as a single coordinated scope: a defined set of rooms and systems, a written sequence, and clear decision points for you along the way.',
+      'Gold Bay Builders approaches a full remodel as a single coordinated scope: a defined set of rooms and systems, a written sequence, and clear decision points for you along the way.',
     ],
     projectTypes: [
       { title: 'Open the floor plan', text: 'Remove or reframe walls to connect kitchen, dining and living areas, including the structural work that requires.' },
@@ -61,7 +61,7 @@ export const services: Service[] = [
     slug: 'home-additions', name: 'Home Additions', num: '02', layout: 'split', category: 'Addition',
     short: 'Added rooms and second stories built to integrate with the structure and style of your existing home.',
     metaTitle: 'Home Additions in San Jose, CA',
-    metaDescription: 'Room additions and second-story additions in San Jose. Golden Bay Builders builds added living space that ties cleanly into your existing home.',
+    metaDescription: 'Room additions and second-story additions in San Jose. Gold Bay Builders builds added living space that ties cleanly into your existing home.',
     headline: 'More room, built into the house you have.',
     lede: 'A good addition does not look added. It matches roof lines, window proportions and finishes, and it connects to existing structure and systems correctly.',
     overview: [
@@ -142,7 +142,7 @@ export const services: Service[] = [
     slug: 'kitchen-remodeling', name: 'Kitchen Remodeling', num: '04', layout: 'split', category: 'Kitchen',
     short: 'Kitchens rebuilt around how you cook, store and gather, with cabinetry, surfaces and utilities done right.',
     metaTitle: 'Kitchen Remodeling in San Jose, CA',
-    metaDescription: 'Kitchen remodeling in San Jose. Layout, cabinetry, countertops, lighting and utilities handled in one coordinated project by Golden Bay Builders.',
+    metaDescription: 'Kitchen remodeling in San Jose. Layout, cabinetry, countertops, lighting and utilities handled in one coordinated project by Gold Bay Builders.',
     headline: 'A kitchen built around the way you actually cook.',
     lede: 'Good kitchens are decided by layout and storage long before finishes. We start with how you use the room, then build it with clean detailing.',
     overview: [
@@ -181,7 +181,7 @@ export const services: Service[] = [
     slug: 'bathroom-remodeling', name: 'Bathroom Remodeling', num: '05', layout: 'editorial', category: 'Bathroom',
     short: 'Bathrooms rebuilt with correct waterproofing, ventilation and layouts that are comfortable to use.',
     metaTitle: 'Bathroom Remodeling in San Jose, CA',
-    metaDescription: 'Bathroom remodeling in San Jose: waterproofing, tile, fixtures and layout planning from Golden Bay Builders, including accessibility-minded options.',
+    metaDescription: 'Bathroom remodeling in San Jose: waterproofing, tile, fixtures and layout planning from Gold Bay Builders, including accessibility-minded options.',
     headline: 'Bathrooms that are built to stay dry.',
     lede: 'The finish you see is a small part of a bathroom. What lasts is the waterproofing, the framing and the ventilation behind it.',
     overview: [
@@ -220,12 +220,12 @@ export const services: Service[] = [
     slug: 'custom-home-construction', name: 'Custom Home Construction', num: '06', layout: 'numbered', category: 'Custom Home',
     short: 'New homes built from the ground up, from site planning and permitting through final inspection.',
     metaTitle: 'Custom Home Construction in San Jose, CA',
-    metaDescription: 'Custom home construction in the San Jose area. Golden Bay Builders guides site evaluation, planning, permitting and building of new single-family homes.',
+    metaDescription: 'Custom home construction in the San Jose area. Gold Bay Builders guides site evaluation, planning, permitting and building of new single-family homes.',
     headline: 'A new home, planned before the first shovel.',
     lede: 'Custom construction is decided early: the site, the design team, the budget and the permit path. We get involved at that stage, not after plans are finished.',
     overview: [
       'Building a custom home is the most complex project a homeowner undertakes. It starts with the site: soil, grading, utilities, setbacks and approvals. It continues through design, engineering, permitting and construction, each with its own timeline and decision points.',
-      'Golden Bay Builders can collaborate with your architect or help you understand what to look for before you hire one. Early builder input on constructability and cost often prevents redesign later.',
+      'Gold Bay Builders can collaborate with your architect or help you understand what to look for before you hire one. Early builder input on constructability and cost often prevents redesign later.',
     ],
     projectTypes: [
       { title: 'Teardown and rebuild', text: 'Replacing an existing home on an established lot.' },
@@ -250,7 +250,7 @@ export const services: Service[] = [
     ],
     beforeEstimate: ['Whether you own the lot and its address', 'Any existing plans, surveys or soils reports', 'Approximate size and number of bedrooms', 'Who your design team is, if chosen', 'Budget range and target move-in window'],
     faqs: [
-      { q: 'Do you design homes or build from other designers’ plans?', a: 'Golden Bay Builders is a construction company. We build from plans prepared by your architect or designer and can provide input on constructability and cost.' },
+      { q: 'Do you design homes or build from other designers’ plans?', a: 'Gold Bay Builders is a construction company. We build from plans prepared by your architect or designer and can provide input on constructability and cost.' },
       { q: 'When should I involve a builder?', a: 'Before plans are finalized. Early cost feedback helps avoid redesigns.' },
       { q: 'Can you give a fixed price?', a: 'Pricing structure depends on plan completeness and contract type. We explain options once plans are defined and do not promise a price before then.' },
       { q: 'How long does a custom home take?', a: 'Design, permitting and construction are separate phases, and timelines vary with size, site and city review. We provide a schedule after scope is set.' },

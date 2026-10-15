@@ -1,5 +1,19 @@
 # QA report
 
+## Homepage revision V2 (2026-10-15, local)
+| Check | Result |
+|---|---|
+| `npm run check` | 0 errors |
+| `npm test` | 20/20 |
+| `npm run verify` | OK. New check: no visible phone number, email or "Golden Bay" anywhere on any public page (JSON-LD and hrefs excluded) |
+| `npm run verify:preview` | OK (36 pages noindex) |
+| `node scripts/qa-browser.mjs` | OK: adds accordion (one open at a time, Enter key), Call Now is `tel:+14085067184`, desktop nav is exactly Home / Our Projects / About Us / Service Areas / Contact, header buttons visible at 768 and 1024 without overflow, Tab order reaches all five links |
+| Visual | Folds at 375, 768, 1024, 1440, 1920 and full pages at 375 and 1440 reviewed (`docs/screenshots/homepage-v2/`). Defects found and fixed: headline invisible on the photo (dark ink), "Recent work" heading and "All service areas" link invisible on dark sections, a sticky-header artifact in the element screenshot is not a site defect |
+
+Not verified: Safari/Firefox, screen readers, and whether the exclusive accordion (`name=` on details) works in browsers older than Chrome 120 / Safari 17.2 / Firefox 130; those fall back to independent toggles.
+
+---
+
 ## Cloudflare preview verification (2026-10-15)
 Live URL checked: **https://cf-preview.goldbay-1oh.pages.dev** (branch `cf-preview`; hash URLs change per deployment).
 | Check | Result |

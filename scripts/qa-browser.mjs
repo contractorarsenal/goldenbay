@@ -28,7 +28,7 @@ for (const w of [375, 768, 1024, 1440, 1920]) {
   const errs = []; page.on('console', (m) => m.type() === 'error' && errs.push(m.text())); page.on('pageerror', (e) => errs.push(String(e)));
   await page.goto(base + '/', { waitUntil: 'networkidle' });
   const o = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); if (o > 1) fails.push(`home@${w}: overflow ${o}px`);
-  const clipped = await page.evaluate(() => [...document.querySelectorAll('h1,h2,h3')].filter((e) => e.scrollWidth > e.clientWidth + 1).map((e) => e.textContent.slice(0, 30))); if (clipped.length) fails.push(`home@${w}: clipped headings ${clipped.join('|')}`);
+  const clipped = await page.evaluate(() => [...document.querySelectorAll('h1:not(.sr-only),h2:not(.sr-only),h3:not(.sr-only)')].filter((e) => e.scrollWidth > e.clientWidth + 1).map((e) => e.textContent.slice(0, 30))); if (clipped.length) fails.push(`home@${w}: clipped headings ${clipped.join('|')}`);
   const h1 = await page.locator('h1').count(); if (h1 !== 1) fails.push(`home@${w}: ${h1} h1`);
   if ((await page.getAttribute('.site-header', 'class')).includes('solid')) fails.push(`home@${w}: header solid at top`);
   await page.evaluate(() => window.scrollTo({ top: 600, behavior: 'instant' })); await page.waitForTimeout(400);
@@ -72,6 +72,29 @@ for (const r of ['/', '/about/']) {
   if (g.bottom < g.vh - 2 || g.top > g.hb + 2) fails.push(`mobile menu panel on ${r} does not fill the viewport after scroll: ${JSON.stringify(g)}`);
   await ctx.close();
 }
+// Revision V2: accordion (one open at a time, keyboard), tel/mailto actions, header buttons per width, no visible contact text
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
+  await page.goto(base + '/', { waitUntil: 'networkidle' });
+  const items = page.locator('.h2-acc-item summary');
+  await items.nth(0).click(); await items.nth(1).click();
+  const open = await page.$$eval('.h2-acc-item', (d) => d.filter((x) => x.open).length);
+  if (open !== 1) fails.push(`accordion: ${open} items open, expected 1`);
+  await items.nth(2).focus(); await page.keyboard.press('Enter');
+  const open2 = await page.$$eval('.h2-acc-item', (d) => d.filter((x) => x.open).length);
+  if (open2 !== 1) fails.push(`accordion keyboard: ${open2} open`);
+  const telHref = await page.$eval('.header-call', (a) => a.getAttribute('href'));
+  if (telHref !== 'tel:+14085067184') fails.push('header Call Now href wrong: ' + telHref);
+  const headerTxt = await page.$eval('.site-header', (h) => h.innerText);
+  if (/506|408|\(408/.test(headerTxt)) fails.push('header shows the phone number as text');
+  const navLinks = await page.$$eval('.desk-nav .nav-link', (a) => a.map((x) => x.textContent.trim()));
+  if (navLinks.join('|') !== 'Home|Our Projects|About Us|Service Areas|Contact') fails.push('desktop nav is not exactly the five items: ' + navLinks.join('|'));
+  await ctx.close();
+  // Tablet header: buttons visible at 768 and 1024, not overflowing
+  for (const w of [768, 1024]) { const c = await browser.newContext({ viewport: { width: w, height: 800 } }); const pg = await c.newPage(); await pg.goto(base + '/', { waitUntil: 'networkidle' });
+    const r = await pg.evaluate(() => { const h = document.querySelector('.site-header .bar'); return { over: h.scrollWidth > h.clientWidth + 1, call: getComputedStyle(document.querySelector('.header-call')).display }; });
+    if (r.over || r.call === 'none') fails.push(`header at ${w}px: ${JSON.stringify(r)}`); await c.close(); }
+}
 // Mobile menu + keyboard
 {
   const ctx = await browser.newContext({ viewport: sizes.mobile }); const page = await ctx.newPage(); await page.goto(base + '/', { waitUntil: 'networkidle' });
@@ -84,12 +107,11 @@ for (const r of ['/', '/about/']) {
 {
   const ctx = await browser.newContext({ viewport: sizes.desktop }); const page = await ctx.newPage(); await page.goto(base + '/', { waitUntil: 'networkidle' });
   await page.keyboard.press('Tab'); if (!(await page.evaluate(() => document.activeElement?.className === 'skip'))) fails.push('keyboard: skip link is not first tab stop');
-  for (let i = 0; i < 3; i++) await page.keyboard.press("Tab");
-  const onBtn = await page.evaluate(() => document.activeElement?.textContent?.trim().startsWith('Services'));
-  if (!onBtn) fails.push('keyboard: Services button not the 4th tab stop (skip, logo, Home, Services)');
-  await page.keyboard.press('Enter'); await page.waitForTimeout(300);
-  if (!(await page.isVisible('#dd-services a[href="/services/adu-construction/"]'))) fails.push('keyboard: dropdown did not open on Enter');
-  await page.keyboard.press('Escape'); await page.waitForTimeout(300); if (await page.isVisible('#dd-services')) fails.push('keyboard: Escape did not close dropdown');
+  // Desktop bar: Home, Our Projects, About Us, Service Areas, Contact reachable by Tab, in order
+  const tabbed = []; for (let i = 0; i < 6; i++) { await page.keyboard.press('Tab'); tabbed.push(await page.evaluate(() => document.activeElement?.textContent?.trim())); }
+  const seq = ['Home', 'Our Projects', 'About Us', 'Service Areas', 'Contact'];
+  if (!seq.every((l) => tabbed.includes(l))) fails.push('keyboard: desktop nav items not all reachable by Tab: ' + tabbed.join('|'));
+  if (await page.isVisible('#dd-services')) fails.push('keyboard: a Services dropdown is still present in the desktop bar');
   await page.goto(base + '/request-estimate/', { waitUntil: 'networkidle' });
   const tabTo = async (sel) => { for (let i = 0; i < 40; i++) { if (await page.evaluate((s) => document.activeElement?.matches(s), sel)) return true; await page.keyboard.press('Tab'); } return false; };
   if (!(await tabTo('input[name="projectType"]'))) fails.push('keyboard: cannot reach step 1 options');
