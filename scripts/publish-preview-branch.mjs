@@ -20,11 +20,13 @@ const sha = sh('git', ['rev-parse', '--short', 'HEAD'], { cwd: ROOT });
 const srcBranch = sh('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: ROOT });
 const origin = sh('git', ['remote', 'get-url', 'origin'], { cwd: ROOT });
 const tmp = mkdtempSync(join(tmpdir(), 'gb-preview-'));
-const site = join(tmp, 'site'), work = join(tmp, 'branch');
+// Build inside the project: Astro moves assets with rename(), which fails across filesystems (e.g. external volume vs OS temp).
+const site = join(ROOT, '.preview-site'), work = join(tmp, 'branch');
+rmSync(site, { recursive: true, force: true });
 
 console.log(`Building ${srcBranch}@${sha} for ${SITE} (noindex)...`);
 const env = { ...process.env, PUBLIC_SITE_URL: SITE }; delete env.PUBLIC_ALLOW_INDEXING;
-execFileSync('npx', ['astro', 'build', '--outDir', site], { cwd: ROOT, env, stdio: 'ignore' });
+execFileSync('npx', ['astro', 'build', '--outDir', site], { cwd: ROOT, env, stdio: ['ignore', 'ignore', 'inherit'] });
 
 const exists = sh('git', ['ls-remote', '--heads', origin, BRANCH]).length > 0;
 if (exists) sh('git', ['clone', '--quiet', '--depth', '1', '--branch', BRANCH, origin, work]);
@@ -32,6 +34,7 @@ else { mkdirSync(work); sh('git', ['init', '-q', '-b', BRANCH], { cwd: work }); 
 
 for (const f of readdirSync(work)) if (f !== '.git') rmSync(join(work, f), { recursive: true, force: true });
 cpSync(site, work, { recursive: true });                                   // the built site (incl. _headers, robots.txt)
+rmSync(site, { recursive: true, force: true });
 cpSync(join(ROOT, 'functions'), join(work, 'functions'), { recursive: true }); // Pages Functions (lead endpoint)
 mkdirSync(join(work, 'src/lib'), { recursive: true });                      // functions import ../../src/lib/estimate.ts
 cpSync(join(ROOT, 'src/lib/estimate.ts'), join(work, 'src/lib/estimate.ts'));
