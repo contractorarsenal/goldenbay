@@ -1,5 +1,31 @@
 # QA report
 
+## Real photography + reviews integration (latest, 2026-10-15; local preview, Chromium)
+| Check | Result |
+|---|---|
+| `npm run check` | 0 errors (57 files) |
+| `npm test` | 20 pass, 0 fail (adds: reviews verbatim/excerpts-are-substrings/no ratings, project data integrity: all 16 files exist, alt text present, each file used once, requested titles exist, no invented location/dates) |
+| `npm run build` + `npm run verify` | OK: 36 pages (17 indexable, 19 noindex). New checks: every `<img>` has alt + width/height, no GitHub-hosted image URLs, no Review/AggregateRating schema, no stray placeholder slot on the homepage (only the owner portrait, which has no photo yet), hero image is `fetchpriority=high` |
+| `node scripts/qa-browser.mjs` | OK: 16 routes x 375/820/1440 (adds `/reviews/`, 2 project pages, bathroom service page): no overflow, no console errors, 0 axe violations; homepage at 375/768/1024/1440/1920; every image loads (`naturalWidth > 0`); Projects filters show exactly All/Bathrooms/Kitchens/Outdoor Living/Patios & Pavers with correct counts (7/3/1/1/2), announce results, and work by keyboard; estimate wizard unchanged and passing |
+| Visual inspection | Hero, services, mosaic, testimonials, projects, project detail, reviews inspected at desktop and mobile. Defects found and fixed: hero stretched to natural image height (1,243 px), uppercase gallery captions from a stale CSS rule, tall empty tile after adding images, hero mobile crop cutting the tub |
+
+### Lighthouse, homepage, indexable build, local preview, 3 runs each (identical conditions)
+| | Before (`f0fc61b`, placeholders) | After (real photos) |
+|---|---|---|
+| Performance (median) | 100 | **99** (runs: 100 / 99 / 99) |
+| Accessibility / Best Practices / SEO | 100 / 100 / 100 | 100 / 100 / 100 |
+| LCP (median) | 1.50 s | **1.66 s** (1.51 / 1.73 / 1.66) |
+| FCP | 1.50 s | 1.06-1.51 s |
+| CLS | 0.016 | 0.016 |
+| TBT | 0 ms | 0 ms |
+| Transfer at load | ~100 KB | ~190 KB |
+The hero is now the LCP image (AVIF: 27 KB at 480 w, 91 KB at the native 1320 px width). Lab numbers on a local server with Lighthouse's default mobile throttling; **no field data exists**. Real-network results will differ. `dist/` is 32 MB because every image has AVIF, WebP and JPEG derivatives at several widths.
+
+Not verified: Safari/Firefox/real devices; screen readers; Cloudflare; lead delivery (still mocked only); image quality beyond what the soft, compressed source stills allow.
+
+---
+## Earlier results (before real photos)
+
 ## Homepage Phase 1 (latest, 2026-10-15; local preview, Chromium)
 | Check | Result |
 |---|---|

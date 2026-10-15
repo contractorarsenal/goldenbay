@@ -2,20 +2,40 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Cta from '../../components/Cta.astro';
+import ProjectImage from '../../components/ProjectImage.astro';
 import { projects, type Project } from '../../data/projects';
+import { getService } from '../../data/services';
 export function getStaticPaths() { return projects.map((p) => ({ params: { slug: p.slug }, props: { p } })); }
 const { p } = Astro.props as { p: Project };
 const path = `/projects/${p.slug}/`;
+// Thin pages (photos only) stay noindex until real details exist.
+const thin = !p.detailed;
 ---
-<Base title={p.title} description={p.summary} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Projects', path: '/projects/' }, { name: p.title, path }]}>
-  <PageHero eyebrow={p.category} title={p.title} lede={p.summary} crumbs={[{ name: 'Home', href: '/' }, { name: 'Projects', href: '/projects/' }]} />
-  <section class="section"><div class="wrap">
-    <img src={p.hero.src} alt={p.hero.alt} width={p.hero.width} height={p.hero.height} fetchpriority="high" style="width:100%;height:auto" />
-    <div class="split" style="margin-top:4rem">
-      <div><h2>Scope of work</h2>{p.location && <p style="margin-top:1rem">{p.location}</p>}</div>
-      <div class="prose"><ul>{p.scope.map((s) => <li>{s}</li>)}</ul>{p.challenge && <><h3>The challenge</h3><p>{p.challenge}</p></>}{p.solution && <><h3>The approach</h3><p>{p.solution}</p></>}</div>
+<Base title={p.title} description={`${p.summary} Gold Bay Builders, San Jose, CA.`} path={path} noindex={thin} crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Projects', path: '/projects/' }, { name: p.title, path }]}>
+  <PageHero eyebrow={p.category} title={p.title} lede={p.summary} crumbs={[{ name: 'Home', href: '/' }, { name: 'Our Projects', href: '/projects/' }]} />
+  <section class="section">
+    <div class="wrap pd">
+      <div class="pd-gallery">
+        {p.images.map((im, i) => (
+          <figure class="pd-fig">
+            <ProjectImage file={im.file} alt={im.alt} focus={im.focus} aspect="natural" sizes="(min-width: 48rem) 45vw, 100vw" priority={i === 0} />
+            {im.state === 'in-progress' && <figcaption>Photo taken during installation</figcaption>}
+          </figure>
+        ))}
+      </div>
+      <aside class="pd-side">
+        <h2>About this project</h2>
+        <dl>
+          <dt>Category</dt><dd>{p.category}</dd>
+          {p.location && <><dt>Location</dt><dd>{p.location}</dd></>}
+          {p.scope && p.scope.length > 0 && <><dt>Scope</dt><dd><ul>{p.scope.map((s) => <li>{s}</li>)}</ul></dd></>}
+        </dl>
+        {thin && <p class="pd-note">Scope, location and timeline will be added once they are confirmed with the homeowner.</p>}
+        {p.services.length > 0 && <p class="pd-links">{p.services.map((s) => <a class="arrow-link" href={`/services/${s}/`}>{getService(s).name} <span aria-hidden="true">→</span></a>)}</p>}
+        <p style="margin-top:1.5rem"><a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a></p>
+        <p style="margin-top:1rem"><a class="arrow-link" href="/projects/">All projects <span aria-hidden="true">←</span></a></p>
+      </aside>
     </div>
-    <div style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(18rem,1fr));margin-top:4rem">{p.gallery.map((g) => <img src={g.src} alt={g.alt} width={g.width} height={g.height} loading="lazy" style="width:100%;height:auto" />)}</div>
-  </div></section>
+  </section>
   <Cta />
 </Base>

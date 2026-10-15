@@ -4,13 +4,16 @@ import Faq from '../components/Faq.astro';
 import ProjectImage from '../components/ProjectImage.astro';
 import { business } from '../data/business';
 import { generalFaqs } from '../data/faqs';
-import { heroLinks, serviceTiles, contractorChecks, projectStages, homeFaqKeys } from '../data/home';
-import { projects } from '../data/projects';
+import { heroLinks, serviceTiles, contractorChecks, projectStages, homeFaqKeys, heroPhoto, featuredWork } from '../data/home';
+import { getProject } from '../data/projects';
+import { getReview } from '../data/reviews';
+import Testimonial from '../components/Testimonial.astro';
 
 const faqs = homeFaqKeys.map((q) => generalFaqs.find((f) => f.q === q)!).filter(Boolean);
 const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
-const featured = projects.filter((p) => p.featured).slice(0, 3);
-const slot = (i: number) => featured[i];
+const hero = getProject(heroPhoto.slug).images[heroPhoto.i];
+const work = featuredWork.map((f) => { const p = getProject(f.slug); return { ...f, p, img: p.images[f.i] }; });
+const img = (slug: string, i: number) => getProject(slug).images[i];
 ---
 <Base
   title="Gold Bay Builders | Home Remodeling & Construction in San Jose, CA"
@@ -31,7 +34,8 @@ const slot = (i: number) => featured[i];
       </div>
     </div>
     <div class="h-hero-media">
-      <ProjectImage file="hero-exterior-01.jpg" mobileFile="hero-exterior-01-mobile.jpg" alt="" aspect="4 / 5" mobileAspect="4 / 3" sizes="(min-width: 64rem) 48vw, 100vw" priority slot="Hero: finished exterior or signature interior" note="Awaiting approved project photography" />
+      <ProjectImage file={hero.file} alt={hero.alt} focus={hero.focus} aspect="4 / 5" mobileAspect="4 / 5" mobileFocus="50% 58%" sizes="(min-width: 64rem) 48vw, 100vw" priority />
+      <p class="h-hero-cap"><span>{heroPhoto.label}</span> Completed work by {business.shortName}</p>
     </div>
     <div class="h-hero-strip">
       <p class="h-sig">Building <b>YOUR</b> bay home</p>
@@ -62,6 +66,7 @@ const slot = (i: number) => featured[i];
       <div class="h-tiles">
         {serviceTiles.map((t) => (
           <article class={`h-tile tone-${t.tone} t-${t.span} reveal`}>
+            {t.media && <div class="h-tile-media">{t.media.map((m) => { const im = img(m.slug, m.i); return <ProjectImage file={im.file} alt={im.alt} focus={im.focus} aspect="3 / 2" mobileAspect="3 / 2" sizes="(min-width: 56rem) 16vw, 40vw" />; })}</div>}
             <span class="num">{t.num}</span>
             <h3>{t.title}</h3>
             <p>{t.text}</p>
@@ -77,29 +82,39 @@ const slot = (i: number) => featured[i];
   <section class="section h-work on-dark" aria-labelledby="work-title">
     <div class="wrap">
       <div class="h-work-head reveal">
-        <div><span class="eyebrow">Featured work</span><h2 id="work-title">Craftsmanship, shown in finished homes.</h2></div>
-        <p class="lede">{featured.length ? 'Selected completed projects.' : 'Completed projects will appear here with real photography, scope and location, each shared with the homeowner’s approval.'}</p>
+        <div><span class="eyebrow">Featured work</span><h2 id="work-title">Recent work, in the photos.</h2></div>
+        <p class="lede">Kitchens, bathrooms, patios, pavers and outdoor living areas. A selection of recent work, with more to come as each project is documented.</p>
       </div>
       <div class="h-gallery">
-        <div class="g1 reveal">
-          <ProjectImage file={slot(0)?.file} alt={slot(0)?.hero.alt ?? ''} aspect={slot(0)?.aspect ?? '4 / 3'} mobileAspect="4 / 3" sizes="(min-width: 64rem) 58vw, 100vw" slot={slot(0) ? slot(0)!.category : 'Featured project 01'} />
-          {slot(0) && <p class="g-cap"><span>{slot(0)!.category}{slot(0)!.location ? ` · ${slot(0)!.location}` : ''}</span><a href={`/projects/${slot(0)!.slug}/`}>{slot(0)!.title}</a></p>}
-        </div>
-        <div class="g2 reveal">
-          <ProjectImage file={slot(1)?.file} alt={slot(1)?.hero.alt ?? ''} aspect={slot(1)?.aspect ?? '3 / 2'} sizes="(min-width: 64rem) 36vw, 100vw" slot={slot(1) ? slot(1)!.category : 'Featured project 02'} />
-          {slot(1) && <p class="g-cap"><span>{slot(1)!.category}{slot(1)!.location ? ` · ${slot(1)!.location}` : ''}</span><a href={`/projects/${slot(1)!.slug}/`}>{slot(1)!.title}</a></p>}
-        </div>
-        <div class="g3 reveal">
-          <ProjectImage file={slot(2)?.file} alt={slot(2)?.hero.alt ?? ''} aspect={slot(2)?.aspect ?? '3 / 2'} sizes="(min-width: 64rem) 36vw, 100vw" slot={slot(2) ? slot(2)!.category : 'Featured project 03'} />
-          {slot(2) && <p class="g-cap"><span>{slot(2)!.category}{slot(2)!.location ? ` · ${slot(2)!.location}` : ''}</span><a href={`/projects/${slot(2)!.slug}/`}>{slot(2)!.title}</a></p>}
-        </div>
+        {work.map((w) => (
+          <a class={`g ${w.area} reveal`} href={`/projects/${w.p.slug}/`} aria-label={`${w.p.title}: view project photos`}>
+            <ProjectImage file={w.img.file} alt={w.img.alt} focus={w.img.focus} aspect={w.aspect} mobileAspect={w.aspect} sizes="(min-width: 56rem) 40vw, 100vw" fill />
+            <span class="g-cap"><span>{w.p.category}</span><b>{w.p.title}</b></span>
+          </a>
+        ))}
       </div>
       <p class="reveal" style="margin-top:2.5rem"><a class="arrow-link" href="/projects/">Our projects <span aria-hidden="true">→</span></a></p>
     </div>
   </section>
 
+  <!-- 4b. PROOF: exact customer quotes -->
+  <section class="section h-proof" aria-labelledby="proof-title">
+    <div class="wrap">
+      <span class="eyebrow reveal">What homeowners say</span>
+      <h2 id="proof-title" class="reveal">Quality work. Clear communication. <em>A home built around you.</em></h2>
+      <div class="h-proof-grid">
+        <div class="h-proof-main reveal"><Testimonial review={getReview('terri-m')} mode="excerpt" size="lg" /></div>
+        <div class="h-proof-side">
+          <div class="reveal"><Testimonial review={getReview('andrea-j')} /></div>
+          <div class="reveal"><Testimonial review={getReview('kevin-j')} mode="excerpt" /></div>
+        </div>
+      </div>
+      <p class="reveal" style="margin-top:2.5rem"><a class="arrow-link" href="/reviews/">Read all customer reviews <span aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
   <!-- 5. WHAT TO LOOK FOR: education, no operating promises -->
-  <section class="section h-look" aria-labelledby="look-title">
+  <section class="section h-look h-look-paper" aria-labelledby="look-title">
     <div class="wrap">
       <div class="h-head reveal"><span class="eyebrow">Choosing a contractor</span><h2 id="look-title">Six things worth asking any contractor.</h2><p class="lede">Homeowners most often struggle with communication, cost changes and unclear scope. These questions apply to us as much as to anyone you interview.</p></div>
       <div class="h-table reveal" role="table" aria-label="Questions to ask a contractor">

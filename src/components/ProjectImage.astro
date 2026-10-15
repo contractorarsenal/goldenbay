@@ -11,15 +11,16 @@ interface Props {
   aspect?: string; mobileAspect?: string; focus?: string; mobileFocus?: string;
   sizes?: string; priority?: boolean; caption?: string; credit?: string; class?: string;
   slot?: string; note?: string;                          // pending-state copy
+  fill?: boolean;                                        // fill a fixed-height parent (mosaic tiles)
 }
-const { file, mobileFile, alt = '', aspect = '3 / 2', mobileAspect, focus = '50% 50%', mobileFocus, sizes = '100vw', priority = false, caption, credit, class: cls = '', slot: slotLabel = 'Project photograph', note = 'Awaiting approved project photography' } = Astro.props;
+const { file, mobileFile, alt = '', aspect = '3 / 2', mobileAspect, focus = '50% 50%', mobileFocus, sizes = '100vw', priority = false, caption, credit, class: cls = '', fill = false, slot: slotLabel = 'Project photograph', note = 'Awaiting approved project photography' } = Astro.props;
 
 const modules = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.{jpg,jpeg,png,webp,avif}', { eager: true });
 const find = (f?: string) => (f ? modules[`../assets/projects/${f}`]?.default : undefined);
 const WIDTHS = [480, 768, 1100, 1600, 2200];
 async function set(img: ImageMetadata, format: 'avif' | 'webp' | 'jpeg') {
-  const ws = WIDTHS.filter((w) => w <= img.width);
-  const use = ws.length ? ws : [img.width];
+  const ws = WIDTHS.filter((w) => w < img.width);
+  const use = [...ws, img.width];            // never upscale; include the native width
   const out = await Promise.all(use.map(async (w) => { const g = await getImage({ src: img, width: w, format }); return `${g.src} ${w}w`; }));
   return out.join(', ');
 }
@@ -29,9 +30,12 @@ const mob = find(mobileFile);
 const mainS = main ? await sources(main) : null;
 const mobS = mob ? await sources(mob) : null;
 const fallback = main ? (await getImage({ src: main, width: Math.min(1100, main.width), format: 'jpeg' })) : null;
-const ar = `--ar:${aspect};--ar-m:${mobileAspect ?? aspect};--fp:${focus};--fp-m:${mobileFocus ?? focus};`;
+const natural = main ? `${main.width} / ${main.height}` : '3 / 4';
+const A = aspect === 'natural' ? natural : aspect;
+const AM = (mobileAspect ?? aspect) === 'natural' ? natural : (mobileAspect ?? aspect);
+const ar = `--ar:${A};--ar-m:${AM};--fp:${focus};--fp-m:${mobileFocus ?? focus};`;
 ---
-<figure class:list={['pimg', cls]} style={ar}>
+<figure class:list={['pimg', cls, fill && 'fill']} style={ar}>
   {main && mainS && fallback ? (
     <picture>
       {mob && mobS && (<>
@@ -45,7 +49,7 @@ const ar = `--ar:${aspect};--ar-m:${mobileAspect ?? aspect};--fp:${focus};--fp-m
   ) : (
     <div class="pimg-pending" role="img" aria-label={`${slotLabel}: ${note}`}>
       <span class="crop tl"></span><span class="crop tr"></span><span class="crop bl"></span><span class="crop br"></span>
-      <div><b>Photo slot</b><span>{slotLabel}</span><small>{aspect}{mobileAspect && mobileAspect !== aspect ? ` · mobile ${mobileAspect}` : ''} · {note}</small></div>
+      <div><b>Photo slot</b><span>{slotLabel}</span><small>{A}{mobileAspect && mobileAspect !== aspect ? ` · mobile ${mobileAspect}` : ''} · {note}</small></div>
     </div>
   )}
   {(caption || credit) && <figcaption>{caption}{credit && <span> · Photo: {credit}</span>}</figcaption>}

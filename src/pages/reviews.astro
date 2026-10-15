@@ -2,9 +2,17 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Cta from '../components/Cta.astro';
+import Testimonial from '../components/Testimonial.astro';
+import { reviews } from '../data/reviews';
+// Stays noindex and out of the sitemap until the review source, republishing permission and platform terms are confirmed (docs/REVIEWS.md).
 ---
-<Base title="Reviews" description="Homeowner reviews of Golden Bay Builders in San Jose, CA." path="/reviews/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'Reviews', path: '/reviews/' }]}>
-  <PageHero eyebrow="Reviews" title="Homeowner reviews." lede="Reviews will be published here with each client’s permission and accurate attribution." crumbs={[{ name: 'Home', href: '/' }]} />
-  <section class="section"><div class="wrap prose"><p>We are collecting permissioned testimonials and links to independent review profiles. We do not publish unattributed or invented reviews.</p><p>If you have worked with us and want to share your experience, please <a href="/contact/">get in touch</a>.</p></div></section>
+<Base title="Customer Reviews" description="Customer reviews of Gold Bay Builders, reproduced in the customers’ own words." path="/reviews/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'Reviews', path: '/reviews/' }]}>
+  <PageHero eyebrow="Reviews" title="In the customers’ own words." lede="Seven customer reviews, reproduced exactly as written." crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="section"><div class="wrap">
+    <div class="rv-grid">
+      {reviews.map((r) => <div class="rv-item reveal"><Testimonial review={r} /></div>)}
+    </div>
+    <p class="prose" style="margin-top:3rem">Want to talk about your own project? <a href="/request-estimate/">Request an estimate</a> or <a href="/contact/">contact us</a>.</p>
+  </div></section>
   <Cta />
 </Base>

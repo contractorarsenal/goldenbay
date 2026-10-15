@@ -7,12 +7,12 @@ export const heroLinks = [
   { label: 'Custom Builds', href: '/services/custom-home-construction/' },
 ];
 
-export interface Tile { num: string; title: string; text: string; scope: string[]; links: { label: string; href: string }[]; tone: 'ink' | 'stone' | 'paper' | 'gold'; span: string }
+export interface Tile { media?: { slug: string; i: number }[]; num: string; title: string; text: string; scope: string[]; links: { label: string; href: string }[]; tone: 'ink' | 'stone' | 'paper' | 'gold'; span: string }
 export const serviceTiles: Tile[] = [
   { num: '01', title: 'Full Home Remodeling', tone: 'ink', span: 'a', text: 'Whole-house renovations that rework layout, systems and finishes under one scope.', scope: ['Opening and reconfiguring floor plans', 'Updating older electrical and plumbing', 'Coordinated finishes, room to room'], links: [{ label: 'Full home remodeling', href: '/services/full-home-remodeling/' }] },
   { num: '02', title: 'Home Additions', tone: 'stone', span: 'b', text: 'Added rooms and second stories that tie into the structure and style of the house you have.', scope: ['Primary suites and family rooms', 'Second-story additions', 'Roof, framing and systems tie-ins'], links: [{ label: 'Home additions', href: '/services/home-additions/' }] },
   { num: '03', title: 'ADU Construction', tone: 'paper', span: 'c', text: 'Detached, attached and garage-conversion accessory dwelling units.', scope: ['Detached and attached units', 'Garage conversions', 'San José permitting context'], links: [{ label: 'ADU construction', href: '/services/adu-construction/' }, { label: 'San Jose ADU guide', href: '/guides/san-jose-adu-guide/' }] },
-  { num: '04', title: 'Kitchen & Bathroom Remodeling', tone: 'gold', span: 'd', text: 'Rooms rebuilt around daily use, with the planning, waterproofing and trades behind the finish.', scope: ['Layout, storage and lighting', 'Waterproofing and ventilation', 'Cabinetry, tile and fixtures'], links: [{ label: 'Kitchen remodeling', href: '/services/kitchen-remodeling/' }, { label: 'Bathroom remodeling', href: '/services/bathroom-remodeling/' }] },
+  { num: '04', title: 'Kitchen & Bathroom Remodeling', tone: 'gold', span: 'd', media: [{ slug: 'kitchen-remodel', i: 0 }, { slug: 'bathroom-stone-shower-terracotta-floor', i: 0 }], text: 'Rooms rebuilt around daily use, with the planning, waterproofing and trades behind the finish.', scope: ['Layout, storage and lighting', 'Waterproofing and ventilation', 'Cabinetry, tile and fixtures'], links: [{ label: 'Kitchen remodeling', href: '/services/kitchen-remodeling/' }, { label: 'Bathroom remodeling', href: '/services/bathroom-remodeling/' }] },
   { num: '05', title: 'Custom Home Building', tone: 'ink', span: 'e', text: 'New homes planned from the site up, built from your architect’s or designer’s plans.', scope: ['Site and feasibility review', 'Builder input before plans are final', 'Staged inspections to final'], links: [{ label: 'Custom home building', href: '/services/custom-home-construction/' }] },
 ];
 
@@ -36,3 +36,15 @@ export const projectStages = [
 
 /** Image slots needed. Mirrors docs/HOMEPAGE-PHASE-1.md. */
 export const homeFaqKeys = ['Where does Gold Bay Builders work?', 'How do I start a project?', 'Do you handle permits?', 'How are change orders handled?', 'Can you build from my architect’s plans?', 'How should I verify a contractor’s license?'];
+
+/** Homepage hero photo: strongest real image. Chosen for visible tile craftsmanship, rich color that sits well with the black/gold palette, and a portrait frame that fits the right-hand panel. */
+export const heroPhoto = { slug: 'bathroom-blue-tile-soaking-tub', i: 0, label: 'Bathroom remodel' };
+
+/** Featured-work mosaic: five different project types. `area` positions the tile in the desktop grid. */
+export const featuredWork = [
+  { slug: 'kitchen-remodel', i: 0, area: 'g1', aspect: '4 / 5', service: '/services/kitchen-remodeling/' },
+  { slug: 'bathroom-stone-shower-terracotta-floor', i: 0, area: 'g2', aspect: '4 / 5', service: '/services/bathroom-remodeling/' },
+  { slug: 'patio-construction', i: 0, area: 'g3', aspect: '3 / 4', service: '' },
+  { slug: 'pool-house-outdoor-living-area', i: 0, area: 'g4', aspect: '4 / 3', service: '' },
+  { slug: 'paver-installation', i: 0, area: 'g5', aspect: '4 / 3', service: '' },
+];

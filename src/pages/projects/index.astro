@@ -2,28 +2,52 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Cta from '../../components/Cta.astro';
-import { services } from '../../data/services';
-import { projects } from '../../data/projects';
-const hasProjects = projects.length > 0;
+import ProjectImage from '../../components/ProjectImage.astro';
+import { projects, activeFilterGroups, groupOf } from '../../data/projects';
+import { getService } from '../../data/services';
+const groups = activeFilterGroups();
+const count = (key: string) => projects.filter((p) => groupOf(p) === key).length;
+// Mixed crop ratios keep the masonry rhythm varied (source photos are portrait).
+const crops = ['4 / 5', '1 / 1', '3 / 4', '4 / 3', '4 / 5', '1 / 1', '3 / 4'];
 ---
-<Base title="Projects" description="Residential remodeling, addition and ADU projects by Golden Bay Builders in San Jose, CA." path="/projects/" noindex={!hasProjects} crumbs={[{ name: 'Home', path: '/' }, { name: 'Projects', path: '/projects/' }]}>
-  <PageHero eyebrow="Projects" title="Completed work, shown honestly." lede={hasProjects ? 'Selected projects with scope and photography.' : 'Our project gallery is being assembled from real, approved photography. We do not use stock images to represent our work.'} crumbs={[{ name: 'Home', href: '/' }]} />
-  <section class="section"><div class="wrap">
-    {hasProjects ? (
-      <div style="display:grid;gap:3rem;grid-template-columns:repeat(auto-fill,minmax(20rem,1fr))">
-        {projects.map((p) => <a href={`/projects/${p.slug}/`} style="text-decoration:none"><img src={p.hero.src} alt={p.hero.alt} width={p.hero.width} height={p.hero.height} loading="lazy" style="width:100%;height:auto" /><span class="eyebrow" style="margin-top:1rem">{p.category}</span><h3>{p.title}</h3><p>{p.summary}</p></a>)}
+<Base title="Our Projects: Bathrooms, Kitchens, Patios & Outdoor Living" description="Recent Gold Bay Builders work in the San Jose area: bathroom and kitchen remodels, patios, pavers and outdoor living areas." path="/projects/" noindex={projects.length === 0} crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Projects', path: '/projects/' }]}>
+  <PageHero eyebrow="Our projects" title="Recent work, in the photos." lede="Bathrooms, kitchens, patios, pavers and outdoor living areas. Details such as scope and location are added project by project as they are confirmed with each homeowner." crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="section pf" aria-label="Project gallery">
+    <div class="wrap">
+      <div class="pf-bar" role="group" aria-label="Filter projects">
+        <button type="button" class="pf-chip" data-filter="all" aria-pressed="true">All Projects <span>{projects.length}</span></button>
+        {groups.map((g) => <button type="button" class="pf-chip" data-filter={g.key} aria-pressed="false">{g.label} <span>{count(g.key)}</span></button>)}
       </div>
-    ) : (
-      <div class="split rev">
-        <div>
-          <span class="eyebrow">Every case study will include</span>
-          <ol class="rule-list" style="margin-top:1.5rem;list-style:none">
-            {[['Scope of work', 'What was built or changed, in plain terms.'], ['The challenge', 'Site, structure or planning problems and how they were solved.'], ['Photography', 'Real photos of the finished work, with before-and-after where available.'], ['Related services', 'Links to the service and guides most relevant to the project.']].map(([t, d], i) => <li style="grid-template-columns:3rem 1fr"><span class="num">0{i + 1}</span><div><h3 style="font-size:1.3rem">{t}</h3><p style="color:var(--color-muted)">{d}</p></div></li>)}
-          </ol>
-        </div>
-        <div class="prose"><h2 style="margin-top:0">Planning something similar?</h2><p>Projects will be added as photography and homeowner approvals come in. Until then, the service pages explain how each kind of project works.</p><ul>{services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}</ul><p><a href="/contact/">Ask about work similar to yours</a></p></div>
+      <p class="pf-status" id="pf-status" role="status" aria-live="polite"></p>
+      <div class="pf-grid">
+        {projects.map((p, i) => (
+          <article class="pf-card reveal" data-group={groupOf(p)}>
+            <a class="pf-img" href={`/projects/${p.slug}/`} aria-label={`${p.title}: view ${p.images.length} ${p.images.length === 1 ? 'photo' : 'photos'}`}>
+              <ProjectImage file={p.images[0].file} alt={p.images[0].alt} focus={p.images[0].focus} aspect={crops[i % crops.length]} mobileAspect="4 / 5" sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 45vw, 100vw" />
+              {p.images.length > 1 && <span class="pf-count">{p.images.length} photos</span>}
+            </a>
+            <div class="pf-meta">
+              <span class="eyebrow">{p.category}</span>
+              <h2><a href={`/projects/${p.slug}/`}>{p.title}</a></h2>
+              <p>{p.summary}</p>
+              {p.images.some((im) => im.state === 'in-progress') && <p class="pf-flag">Includes photos taken during installation</p>}
+              {p.services.length > 0 && <p class="pf-links">{p.services.map((s) => <a class="arrow-link" href={`/services/${s}/`}>{getService(s).name} <span aria-hidden="true">→</span></a>)}</p>}
+            </div>
+          </article>
+        ))}
       </div>
-    )}
-  </div></section>
-  <Cta />
+    </div>
+  </section>
+  <Cta title="Planning something similar?" text="Tell us about your project and we’ll talk through scope, timing and next steps." />
+  <script>
+    const chips = document.querySelectorAll<HTMLButtonElement>('.pf-chip');
+    const cards = document.querySelectorAll<HTMLElement>('.pf-card');
+    const status = document.getElementById('pf-status')!;
+    chips.forEach((c) => c.addEventListener('click', () => {
+      const f = c.dataset.filter!; let n = 0;
+      chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+      cards.forEach((card) => { const show = f === 'all' || card.dataset.group === f; card.hidden = !show; if (show) n++; });
+      status.textContent = `Showing ${n} ${n === 1 ? 'project' : 'projects'}${f === 'all' ? '' : ` in ${c.firstChild!.textContent!.trim()}`}.`;
+    }));
+  </script>
 </Base>

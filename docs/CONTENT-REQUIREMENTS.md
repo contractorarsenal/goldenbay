@@ -20,3 +20,7 @@
 - Re-verify ADU/fee statements in the ADU guide against current City of San José and HCD pages (SB 1117 status noted in research was unresolved; the City FAQ page could not be fetched automatically).
 - 1200×630 social image; real favicon.
 - Analytics IDs and a consent approach.
+
+
+## Update: real photos and reviews received (2026-10-15)
+Received: 16 project photos (phone/video stills; temporary, client-approved) and 7 review texts. See PROJECT-PHOTOS.md and REVIEWS.md. **Still needed:** finished-state and original camera photos (esp. pool house/pavers), confirmation of bathroom/photo groupings, publishable locations and scope per project, review source platform + republishing permission, David's portrait and biography, vector logo, decision on an Outdoor Living / Patios & Pavers service, and everything under "Blocking for launch" above (CSLB verification, legal entity, domain, lead delivery credentials, legal review).

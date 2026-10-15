@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { mkdirSync } from 'node:fs';
 const base = process.env.BASE || 'http://localhost:4321';
 const out = process.env.SHOTS || 'qa-screenshots'; mkdirSync(out, { recursive: true });
-const routes = ['/', '/services/', '/services/adu-construction/', '/services/kitchen-remodeling/', '/projects/', '/about/', '/service-areas/san-jose/', '/guides/san-jose-adu-guide/', '/faq/', '/contact/', '/request-estimate/', '/nope/'];
+const routes = ['/', '/services/', '/services/adu-construction/', '/services/kitchen-remodeling/', '/projects/', '/about/', '/service-areas/san-jose/', '/guides/san-jose-adu-guide/', '/faq/', '/contact/', '/request-estimate/', '/reviews/', '/projects/kitchen-remodel/', '/projects/pool-house-outdoor-living-area/', '/services/bathroom-remodeling/', '/nope/'];
 const sizes = { mobile: { width: 375, height: 800 }, tablet: { width: 820, height: 1100 }, desktop: { width: 1440, height: 900 } };
 const browser = await chromium.launch(); const fails = [];
 for (const [name, vp] of Object.entries(sizes)) {
@@ -38,6 +38,29 @@ for (const w of [375, 768, 1024, 1440, 1920]) {
   const hrefs = await page.$$eval('main a[href^="/"]', (as) => [...new Set(as.map((a) => a.getAttribute('href')))]);
   for (const h of hrefs) { const r = await page.request.get(base + h); if (r.status() !== 200) fails.push(`home@${w}: link ${h} -> ${r.status()}`); }
   if (errs.filter((e) => !/404/.test(e)).length) fails.push(`home@${w}: console errors`);
+  await ctx.close();
+}
+// Real images: every <img> loads (naturalWidth>0), no layout-breaking sizes; projects filter works and only shows real categories
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
+  for (const r of ['/', '/projects/', '/projects/paver-installation/', '/reviews/']) {
+    await page.goto(base + r, { waitUntil: 'networkidle' });
+    await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 400) { window.scrollTo({ top: y, behavior: 'instant' }); await new Promise((x) => setTimeout(x, 60)); } window.scrollTo({ top: 0, behavior: 'instant' }); });
+    await page.waitForTimeout(500);
+    const bad = await page.$$eval('img', (is) => is.filter((i) => !i.complete || i.naturalWidth === 0).map((i) => i.currentSrc || i.src));
+    if (bad.length) fails.push(`${r}: images failed to load: ${bad.slice(0, 2).join(', ')}`);
+    const noAlt = await page.$$eval('img', (is) => is.filter((i) => !i.hasAttribute('alt')).length); if (noAlt) fails.push(`${r}: ${noAlt} images missing alt`);
+  }
+  await page.goto(base + '/projects/', { waitUntil: 'networkidle' });
+  const chips = await page.$$eval('.pf-chip', (c) => c.map((x) => x.firstChild.textContent.trim())); if (chips.join('|') !== 'All Projects|Bathrooms|Kitchens|Outdoor Living|Patios & Pavers') fails.push('projects filters unexpected: ' + chips.join('|'));
+  const visible = () => page.$$eval('.pf-card', (c) => c.filter((x) => !x.hidden).length);
+  if ((await visible()) !== 7) fails.push('projects: expected 7 visible initially');
+  await page.click('.pf-chip[data-filter="bathrooms"]'); if ((await visible()) !== 3) fails.push('projects: Bathrooms filter should show 3');
+  if (!(await page.textContent('#pf-status')).includes('3 projects')) fails.push('projects: filter status not announced');
+  await page.click('.pf-chip[data-filter="patios-pavers"]'); if ((await visible()) !== 2) fails.push('projects: Patios & Pavers should show 2');
+  await page.click('.pf-chip[data-filter="all"]'); if ((await visible()) !== 7) fails.push('projects: All should restore 7');
+  // keyboard: chips reachable and Enter/Space toggles
+  await page.focus('.pf-chip[data-filter="kitchens"]'); await page.keyboard.press('Enter'); if ((await visible()) !== 1) fails.push('projects: Kitchens via keyboard should show 1');
   await ctx.close();
 }
 // Mobile menu + keyboard

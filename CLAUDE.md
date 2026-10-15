@@ -13,6 +13,11 @@ Gold Bay Builders Inc. (provisional brand from the owner's business card; legal 
 - Unfinished/unconfirmed pages use `noindex` and stay out of the sitemap (see `astro.config.mjs` filter).
 - Avoid cliché copy ("dream home", "unparalleled excellence"…). Specific, plain, homeowner-first.
 
+## Real assets (added)
+- Portfolio data: `src/data/projects.ts` (16 client photos, 7 entries; originals in `assets-src/originals/`, never modify). Reviews: `src/data/reviews.ts` (7, **verbatim**; excerpts must be exact substrings; source platform + republishing permission unconfirmed; no ratings/aggregate/Review schema). See docs/PROJECT-PHOTOS.md and docs/REVIEWS.md.
+- Never describe photos beyond what is visible; do not invent locations, materials, budgets or dates; in-progress photos stay labelled. Patios/pavers/pool work is portfolio-only, not a core service, until approved.
+- Review claims ("on schedule", "in budget", "onsite everyday") are customer statements, never company promises.
+
 ## Design principles
 Charcoal / warm white / limestone / bronze accent; Fraunces display + Inter body; editorial, asymmetric, varied section compositions; no repeated card grids; motion subtle and `prefers-reduced-motion` safe; content visible without JS animation.
 
