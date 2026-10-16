@@ -1,102 +1,92 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Cta from '../components/Cta.astro';
 import ProjectImage from '../components/ProjectImage.astro';
 import { business } from '../data/business';
-import { services } from '../data/services';
 import { getProject } from '../data/projects';
 
-// Selected project photographs (real work only). One per project, linking to the project page.
-const selected = ['kitchen-remodel', 'bathroom-stone-shower-terracotta-floor', 'patio-construction'].map((slug) => {
+// Photographs of real Gold Bay work. Each one links to its project page.
+const hero = getProject('kitchen-remodel').images[0];
+const company = getProject('bathroom-stone-shower-terracotta-floor').images[0];
+const work = ['kitchen-remodel', 'bathroom-stone-shower-terracotta-floor', 'patio-construction'].map((slug) => {
   const p = getProject(slug);
   return { p, img: p.images[0] };
 });
 ---
-<Base title="About Gold Bay Builders" description="Gold Bay Builders Inc. is a San Jose residential contractor led by owner David Lerma, building remodels, additions, ADUs and custom homes." path="/about/" crumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }]}>
-  <PageHero eyebrow="About" title="A San Jose builder, led by its owner." lede={`${business.name} is a residential contractor in San Jose, California, led by ${business.owner}.`} crumbs={[{ name: 'Home', href: '/' }]} />
-
-  <section class="v8-section">
-    <div class="wrap v8-split">
+<Base closingCta title="About Gold Bay Builders" description="Gold Bay Builders Inc. is a residential construction company serving San Jose, led by owner David Lerma." path="/about/" crumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }]}>
+  <!-- A: introduction -->
+  <section class="ab-intro" aria-labelledby="about-title">
+    <div class="wrap ab-intro-grid">
       <div>
-        <span class="eyebrow">The company</span>
-        <h2 style="margin-top:.9rem">Homes in San Jose, one project at a time.</h2>
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'About' }]} />
+        <h1 id="about-title">Built Around Your Home.</h1>
+        <p class="lede ab-lede">Gold Bay Builders Inc. is a residential construction company serving San Jose, led by owner {business.owner}.</p>
       </div>
-      <div class="v8-prose">
-        <p>We remodel and build homes in San Jose: whole-home remodels, additions, accessory dwelling units, kitchens, bathrooms and custom homes. A project usually starts with a conversation about the house, your goals and your budget.</p>
-        <p>Projects usually go best when the scope is written down, selections and permits are planned before demolition, and the homeowner is kept informed as the work proceeds.</p>
-      </div>
+      <figure class="ab-intro-photo">
+        <ProjectImage file={hero.file} alt={hero.alt} focus={hero.focus} aspect="4 / 5" mobileAspect="4 / 3" sizes="(min-width: 60rem) 40vw, 100vw" priority />
+      </figure>
     </div>
   </section>
 
-  <section class="v8-section v8-tint">
-    <div class="wrap ab-person">
-      <div class="v8-panel">
-        <span class="eyebrow">The owner</span>
-        <h2 style="font-size:clamp(1.8rem,2.6vw,2.2rem);margin-top:.8rem">{business.owner}</h2>
-        <p style="margin-top:.6rem;color:var(--color-body)">Owner, {business.name}</p>
+  <!-- B: the company -->
+  <section class="v8-section" aria-labelledby="company-title">
+    <div class="wrap ab-company">
+      <div>
+        <span class="eyebrow">The company</span>
+        <h2 id="company-title" class="ab-h2">What we build</h2>
+        <p class="ab-body">We remodel and build residential homes: full home remodels, additions, accessory dwelling units, kitchens and bathrooms, and custom homes.</p>
+        <p class="ab-body">Each project is planned around the house and the people who live in it, and the work is shown in the photographs on this site.</p>
+        <p class="ab-body ab-links"><a class="v8-link" href="/services/">Browse our services <span aria-hidden="true">→</span></a></p>
+      </div>
+      <figure class="ab-company-photo">
+        <ProjectImage file={company.file} alt={company.alt} focus={company.focus} aspect="4 / 3" mobileAspect="4 / 3" sizes="(min-width: 60rem) 45vw, 100vw" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- C: the owner (one introduction only) -->
+  <section class="v8-section v8-tint" aria-labelledby="owner-title">
+    <div class="wrap ab-owner">
+      <div class="ab-owner-type" aria-hidden="true">
+        <span class="ab-owner-name">{business.owner}</span>
+        <span class="ab-owner-role">Owner, {business.name}</span>
       </div>
       <div>
-        <h2>Meet David Lerma</h2>
-        <p class="lede" style="margin-top:1rem">David owns Gold Bay Builders Inc. and is the main point of contact for homeowners.</p>
-        <div class="v8-actions" style="margin-top:1.5rem">
+        <h2 id="owner-title" class="ab-h2">Meet David Lerma</h2>
+        <p class="ab-body">David owns Gold Bay Builders Inc. and is the main point of contact for homeowners who call or write about a project.</p>
+        <p class="ab-body">Homeowners can speak with David directly by phone, or send an estimate request and ask for him.</p>
+        <div class="ab-actions">
           <a class="btn btn-primary" href={business.phoneHref} data-track="click_to_call">Call Now</a>
-          <a class="v8-link" href="/meet-david-lerma/">More about David <span aria-hidden="true">→</span></a>
+          <a class="btn btn-line" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="v8-section">
+  <!-- D: see the work -->
+  <section class="v8-section" aria-labelledby="work-title">
     <div class="wrap">
-      <div class="v8-head">
-        <span class="eyebrow">What we build</span>
-        <h2>Six kinds of residential work.</h2>
-        <p>Each service page explains the planning, permits and scope for that type of project.</p>
+      <div class="ab-work-head">
+        <div>
+          <span class="eyebrow">Our work</span>
+          <h2 id="work-title" class="ab-h2">See the work</h2>
+        </div>
+        <a class="v8-link" href="/projects/">Our Projects <span aria-hidden="true">→</span></a>
       </div>
-      <ul class="ab-services">
-        {services.map((s) => (
-          <li><a href={`/services/${s.slug}/`}>{s.name}<span>{s.short}</span></a></li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <section class="v8-section v8-tint">
-    <div class="wrap">
-      <div class="v8-head">
-        <span class="eyebrow">Recent work</span>
-        <h2>Selected projects.</h2>
-        <p>Photographs from kitchen, bathroom, patio and outdoor projects. Each project page has the full set.</p>
-      </div>
-      <ul class="ab-photos">
-        {selected.map((s) => (
+      <ul class="ab-work">
+        {work.map((w) => (
           <li>
-            <figure>
-              <ProjectImage file={s.img.file} alt={s.img.alt} focus={s.img.focus} aspect="4 / 3" mobileAspect="4 / 3" sizes="(min-width: 48rem) 31vw, 100vw" />
-              <figcaption><a href={`/projects/${s.p.slug}/`}>{s.p.title}</a></figcaption>
-            </figure>
+            <a class="ab-work-img" href={`/projects/${w.p.slug}/`} tabindex="-1" aria-hidden="true">
+              <ProjectImage file={w.img.file} alt={w.img.alt} focus={w.img.focus} aspect="4 / 3" mobileAspect="4 / 3" sizes="(min-width: 48rem) 31vw, 100vw" />
+            </a>
+            <h3><a href={`/projects/${w.p.slug}/`}>{w.p.title}</a></h3>
           </li>
         ))}
       </ul>
-      <p class="ab-note"><a class="v8-link" href="/projects/">See all projects <span aria-hidden="true">→</span></a></p>
     </div>
   </section>
 
-  <section class="v8-section">
-    <div class="wrap">
-      <div class="v8-head">
-        <span class="eyebrow">Working with us</span>
-        <h2>What to expect from the first conversation.</h2>
-      </div>
-      <ul class="v8-grid-3" style="margin-top:2rem">
-        <li><h3>The scope in writing</h3><p>A written scope lists what is included, what is not, and how changes are handled.</p></li>
-        <li><h3>Estimates on the same scope</h3><p>Written estimates for the same scope make proposals easier to compare before you decide.</p></li>
-        <li><h3>Questions along the way</h3><p>Selections, permits and changes are worth discussing before they are priced or built.</p></li>
-      </ul>
-      <p class="ab-note"><a class="v8-link" href="/faq/">Questions to ask any contractor, including how to check a license <span aria-hidden="true">→</span></a></p>
-    </div>
-  </section>
-
-  <Cta />
+  <!-- E: one closing CTA -->
+  <Cta title="Start a conversation about your home." text="Tell us about the project, or call and ask for David." />
 </Base>

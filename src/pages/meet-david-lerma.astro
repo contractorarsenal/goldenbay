@@ -5,7 +5,7 @@ import Cta from '../components/Cta.astro';
 import { business } from '../data/business';
 // Stays noindex until David approves a fuller biography. No portrait is shown until one is supplied.
 ---
-<Base title="Meet David Lerma" description="David Lerma is the owner of Gold Bay Builders Inc., a San Jose residential contractor." path="/meet-david-lerma/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }, { name: 'Meet David Lerma', path: '/meet-david-lerma/' }]}>
+<Base closingCta title="Meet David Lerma" description="David Lerma is the owner of Gold Bay Builders Inc., a San Jose residential contractor." path="/meet-david-lerma/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }, { name: 'Meet David Lerma', path: '/meet-david-lerma/' }]}>
   <PageHero eyebrow="The owner" title="David Lerma" lede={`Owner, ${business.name}`} crumbs={[{ name: 'Home', href: '/' }, { name: 'About', href: '/about/' }]} />
   <section class="v8-section">
     <div class="wrap v8-split">

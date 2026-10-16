@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Cta from '../components/Cta.astro';
 // Served with HTTP 404 by the static host. noindex keeps it out of search.
 ---
-<Base title="Page not found" description="The page you requested could not be found. Return to the Gold Bay Builders home page, our projects or services." path="/404/" noindex>
+<Base closingCta title="Page not found" description="The page you requested could not be found. Return to the Gold Bay Builders home page, our projects or services." path="/404/" noindex>
   <PageHero title="This page could not be found." current="Page not found" lede="The address may have changed, or the page may have moved. You can start again from the home page, or browse our projects and services." crumbs={[{ name: 'Home', href: '/' }]}>
     <div class="v8-actions">
       <a class="btn btn-primary" href="/">Return home</a>

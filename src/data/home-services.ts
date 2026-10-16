@@ -1,46 +1,18 @@
-/** Homepage services: the five service offerings, in the order the client listed them. Copy matches the service pages in services.ts. */
+/** Homepage services: the five offerings the business builds. One primary link each; descriptions kept short. */
 export interface HomeService {
   key: string;
   title: string;
   text: string;
-  scope: string[];
-  links: { label: string; href: string }[];
+  /** Group for the editorial layout. */
+  group: 'remodel' | 'new';
+  href: string;
+  linkLabel: string;
 }
 
 export const homeServices: HomeService[] = [
-  {
-    key: 'fh',
-    title: 'Full Home Remodeling',
-    text: 'Whole-house renovations that rework layout, systems and finishes under one scope.',
-    scope: ['Reconfigured floor plans', 'Updated electrical and plumbing', 'Coordinated finishes'],
-    links: [{ label: 'Full home remodeling', href: '/services/full-home-remodeling/' }],
-  },
-  {
-    key: 'ad',
-    title: 'Home Additions',
-    text: 'Added rooms and second stories that tie into the structure and style of the house you have.',
-    scope: ['Primary suites and family rooms', 'Second-story additions', 'Roof and framing tie-ins'],
-    links: [{ label: 'Home additions', href: '/services/home-additions/' }],
-  },
-  {
-    key: 'adu',
-    title: 'ADU Construction',
-    text: 'Detached, attached and garage-conversion accessory dwelling units.',
-    scope: ['Detached and attached units', 'Garage conversions', 'San José permit context'],
-    links: [{ label: 'ADU construction', href: '/services/adu-construction/' }, { label: 'San Jose ADU guide', href: '/guides/san-jose-adu-guide/' }],
-  },
-  {
-    key: 'kb',
-    title: 'Kitchen & Bathroom Remodeling',
-    text: 'Rooms rebuilt around daily use, with the planning, waterproofing and trades behind the finish.',
-    scope: ['Layout, storage and lighting', 'Waterproofing and ventilation', 'Cabinetry, tile and fixtures'],
-    links: [{ label: 'Kitchen remodeling', href: '/services/kitchen-remodeling/' }, { label: 'Bathroom remodeling', href: '/services/bathroom-remodeling/' }],
-  },
-  {
-    key: 'cu',
-    title: 'Custom Home Building',
-    text: 'New homes planned from the site up, built from your architect’s or designer’s plans.',
-    scope: ['Site and feasibility review', 'Builder input before plans are final', 'Staged inspections to final'],
-    links: [{ label: 'Custom home building', href: '/services/custom-home-construction/' }],
-  },
+  { key: 'fh', group: 'remodel', title: 'Full Home Remodeling', text: 'Whole-house renovations that rework the layout, systems and finishes under one plan.', href: '/services/full-home-remodeling/', linkLabel: 'Full home remodeling' },
+  { key: 'kb', group: 'remodel', title: 'Kitchen & Bathroom Remodeling', text: 'Kitchens and bathrooms rebuilt around daily use, from the layout to the waterproofing and finishes.', href: '/services/kitchen-remodeling/', linkLabel: 'Kitchen remodeling' },
+  { key: 'ad', group: 'new', title: 'Home Additions', text: 'Added rooms and second stories that tie into the structure and style of the house you have.', href: '/services/home-additions/', linkLabel: 'Home additions' },
+  { key: 'adu', group: 'new', title: 'ADU Construction', text: 'Detached, attached and garage-conversion accessory dwelling units.', href: '/services/adu-construction/', linkLabel: 'ADU construction' },
+  { key: 'cu', group: 'new', title: 'Custom Home Building', text: 'New homes planned from the site up, built from your architect’s or designer’s plans.', href: '/services/custom-home-construction/', linkLabel: 'Custom home building' },
 ];

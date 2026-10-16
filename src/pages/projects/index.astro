@@ -13,7 +13,7 @@ const loneDesktop = projects.length % 3 === 1;
 const loneTablet = projects.length % 2 === 1;
 const itemList = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Our Projects', url: abs('/projects/'), hasPart: projects.map((p) => ({ '@type': 'CreativeWork', name: p.title, url: abs(`/projects/${p.slug}/`), about: p.category })) };
 ---
-<Base title="Our Projects: Kitchens, Bathrooms, Patios & Outdoor Living" description="Photographs of recent residential work by Gold Bay Builders: kitchen and bathroom remodels, patios, pavers and outdoor living areas." path="/projects/" noindex={projects.length === 0} schema={[itemList]} crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Projects', path: '/projects/' }]}>
+<Base closingCta title="Our Projects: Kitchens, Bathrooms, Patios & Outdoor Living" description="Photographs of recent residential work by Gold Bay Builders: kitchen and bathroom remodels, patios, pavers and outdoor living areas." path="/projects/" noindex={projects.length === 0} schema={[itemList]} crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Projects', path: '/projects/' }]}>
   <PageHero title="Projects built around real homes." current="Our Projects" id="pj-title" lede="Recent remodeling and construction work by Gold Bay Builders, from kitchens and bathrooms to outdoor living spaces." crumbs={[{ name: 'Home', href: '/' }]}>
     <div class="v8-actions">
       <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>

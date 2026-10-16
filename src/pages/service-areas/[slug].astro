@@ -9,7 +9,7 @@ export function getStaticPaths() { return locations.filter((l) => l.confirmed).m
 const { l } = Astro.props as { l: Location };
 const path = `/service-areas/${l.slug}/`;
 ---
-<Base title={`Home Remodeling & Construction in ${l.name}, CA`} description={`Residential remodeling, additions and ADUs in ${l.name}, California. Local permit and planning considerations from Gold Bay Builders.`} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Service Areas', path: '/service-areas/' }, { name: l.name, path }]}>
+<Base closingCta title={`Home Remodeling & Construction in ${l.name}, CA`} description={`Residential remodeling, additions and ADUs in ${l.name}, California. Local permit and planning considerations from Gold Bay Builders.`} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Service Areas', path: '/service-areas/' }, { name: l.name, path }]}>
   <PageHero eyebrow={`${l.name}`} title={`Building in ${l.name}.`} lede={l.intro} crumbs={[{ name: 'Home', href: '/' }, { name: 'Service Areas', href: '/service-areas/' }]} />
   <section class="v8-section">
     <div class="wrap v8-split">

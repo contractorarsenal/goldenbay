@@ -1,25 +1,16 @@
 ---
 import { homeServices } from '../data/home-services';
 /**
- * Homepage services as ruled rows: number, title, one line, scope tags and links. No boxes, no placeholder frames.
- * Chosen over a photo-plus-list layout (see docs/screenshots/sitewide-v8/services-alternatives/): one photo beside five
- * services implied a specialty the photo does not show.
+ * Homepage services as a 3-over-2 card grid. Cards span two columns, and the last two span three so the bottom row is balanced.
+ * Chosen over an editorial two-column layout (see docs/screenshots/v9-services): that layout left an empty block beside the list.
  */
 ---
-<ul class="sv-list">
-  {homeServices.map((s, i) => (
-    <li class="sv-row">
-      <div>
-        <span class="sv-num">0{i + 1}</span>
-        <h3>{s.title}</h3>
-      </div>
-      <div>
-        <p>{s.text}</p>
-        <ul class="sv-scope">{s.scope.map((x) => <li>{x}</li>)}</ul>
-      </div>
-      <div class="sv-links">
-        {s.links.map((l) => <a href={l.href}>{l.label} <span aria-hidden="true">→</span></a>)}
-      </div>
+<ul class="svc-grid">
+  {homeServices.map((s) => (
+    <li class="svc-card">
+      <h3>{s.title}</h3>
+      <p>{s.text}</p>
+      <a class="svc-card-link" href={s.href}>{s.linkLabel} <span aria-hidden="true">→</span></a>
     </li>
   ))}
 </ul>

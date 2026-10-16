@@ -22,7 +22,7 @@ const faqSchema = {
   mainEntity: s.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 };
 ---
-<Base title={s.metaTitle} description={s.metaDescription} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services/' }, { name: s.name, path }]} schema={[serviceSchema(s.name, path, s.metaDescription), faqSchema]}>
+<Base closingCta title={s.metaTitle} description={s.metaDescription} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services/' }, { name: s.name, path }]} schema={[serviceSchema(s.name, path, s.metaDescription), faqSchema]}>
   <section class="ih" aria-labelledby="svc-title">
     <div class="wrap svp-hero">
       <div>

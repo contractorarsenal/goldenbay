@@ -64,17 +64,14 @@ test('no page imports the removed placeholder or line-drawing components', () =>
 
 test('homepage services: five offerings, each with a working internal link', () => {
   assert.equal(homeServices.length, 5);
-  for (const s of homeServices) {
-    assert.ok(s.links.length >= 1, s.key);
-    for (const l of s.links) assert.match(l.href, /^\/(services|guides)\/[a-z0-9-]+\/$/, l.href);
-  }
+  for (const s of homeServices) assert.match(s.href, /^\/services\/[a-z0-9-]+\/$/, s.href);
   const titles = homeServices.map((s) => s.title);
   for (const t of ['Full Home Remodeling', 'Home Additions', 'ADU Construction', 'Kitchen & Bathroom Remodeling', 'Custom Home Building']) assert.ok(titles.includes(t), t);
 });
 
 test('homepage services list links to real service slugs', () => {
   const slugs = new Set(services.map((s) => s.slug));
-  for (const s of homeServices) for (const l of s.links) if (l.href.startsWith('/services/')) assert.ok(slugs.has(l.href.split('/')[2]), l.href);
+  for (const s of homeServices) assert.ok(slugs.has(s.href.split('/')[2]), s.href);
 });
 
 test('service pages: no numbered "of 06" eyebrow and no dark decorative plate', () => {

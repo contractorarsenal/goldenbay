@@ -17,8 +17,10 @@ interface Props {
   ogType?: 'website' | 'article';
   /** Transparent header over a dark hero that turns solid on scroll. */
   overlayHeader?: boolean;
+  /** Page ends with a full closing CTA band. The footer then omits its action group so the page never has two CTA sections in a row. */
+  closingCta?: boolean;
 }
-const { title, description, path, noindex = false, crumbs, schema = [], ogType = 'website', overlayHeader = false } = Astro.props;
+const { title, description, path, noindex = false, crumbs, schema = [], ogType = 'website', overlayHeader = false, closingCta = false } = Astro.props;
 const fullTitle = path === '/' ? title : `${title} | ${business.shortName}`;
 const robots = !business.indexable || noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
 const graph = [
@@ -56,7 +58,7 @@ const graph = [
     <a class="skip" href="#main">Skip to content</a>
     <Header path={path} overlay={overlayHeader} />
     <main id="main" tabindex="-1"><slot /></main>
-    <Footer />
+    <Footer closingCta={closingCta} path={path} />
     <nav class="callbar" aria-label="Quick contact">
       <a href={business.phoneHref} data-track="click_to_call">Call Now</a>
       <a href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
