@@ -84,11 +84,17 @@ Full-page captures scroll the page first so lazy photos load. The first before-s
 
 ## 11. Commit SHA
 
-To be filled in after commit.
+`4ff64ce` (feature/full-site-build, pushed). Preview built from this commit: `cf-preview` at `143cb63`.
 
 ## 12. Preview URL
 
-https://cf-preview.goldbay-1oh.pages.dev (noindex). Publishing and remote verification are recorded below after the publish step.
+https://cf-preview.goldbay-1oh.pages.dev (noindex).
+
+Live verification after publish:
+- Cloudflare Pages check: success.
+- `verify-remote`: OK, 30 routes crawled, 51 images checked.
+- New service-areas copy and the redesigned pages are served.
+- **Open:** `/service-areas/campbell/` and `/service-areas/cupertino/` still return 200 from an edge cache entry about 51 minutes old (`cf-cache-status: HIT`). The branch does not contain those files. The stale entries should expire on their own; if they persist, purge the cache in the Cloudflare dashboard. These URLs are noindex and unlinked.
 
 ## Items that could not be completed in this pass
 
