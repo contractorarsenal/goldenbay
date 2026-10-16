@@ -1,0 +1,142 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cta from '../../components/Cta.astro';
+import ProjectImage from '../../components/ProjectImage.astro';
+import PageHero from '../../components/PageHero.astro';
+import { projects, relatedProjects, isIndexable, introFor, type Project } from '../../data/projects';
+import { getService } from '../../data/services';
+import { abs } from '../../data/business';
+
+export function getStaticPaths() { return projects.map((p) => ({ params: { slug: p.slug }, props: { p } })); }
+const { p } = Astro.props as { p: Project };
+const path = `/projects/${p.slug}/`;
+const related = relatedProjects(p.slug, 3);
+const total = p.images.length;
+// Pages are indexed only when their details are confirmed (see isIndexable). Until then they stay out of search.
+const noindex = !isIndexable(p);
+// BreadcrumbList JSON-LD is emitted once by Base from the `crumbs` prop below.
+const imageObjects = p.images.map((im) => ({ '@type': 'ImageObject', name: p.title, description: im.alt, representativeOfPage: false }));
+---
+<Base closingCta title={p.title} description={`${introFor(p)} Photographs from Gold Bay Builders.`} path={path} noindex={noindex} schema={[{ '@context': 'https://schema.org', '@type': 'CreativeWork', name: p.title, about: p.category, description: introFor(p), url: abs(path), image: imageObjects }]} crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Projects', path: '/projects/' }, { name: p.title, path }]}>
+  <PageHero title={p.title} current={p.title} id="pd-title" lede={introFor(p)} crumbs={[{ name: 'Home', href: '/' }, { name: 'Our Projects', href: '/projects/' }]} />
+
+  <section class="section">
+    <div class="wrap pj-detail-grid">
+      <div>
+        <ul class="pj-gallery-grid" aria-label={`Photographs: ${p.title}`}>
+          {p.images.map((im, i) => (
+            <li class={total === 1 ? 'pj-single' : undefined}>
+              <div class="pj-thumb">
+                <ProjectImage file={im.file} alt={im.alt} focus={im.focus} aspect="4 / 5" mobileAspect="4 / 5" sizes={total === 1 ? '(min-width: 64rem) 60vw, 100vw' : '(min-width: 48rem) 45vw, 100vw'} priority={i === 0} />
+                <button type="button" class="pj-enlarge" data-index={i} aria-label={`Enlarge photo ${i + 1} of ${total}: ${im.alt}`}>Enlarge</button>
+              </div>
+              {im.state === 'in-progress' && <p class="pj-note">Photo taken during installation.</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <aside class="pj-facts" aria-label="Project details">
+        <h2>About this project</h2>
+        <dl>
+          <dt>Category</dt><dd>{p.category}</dd>
+          <dt>Photographs</dt><dd>{total === 1 ? '1 photo' : `${total} photos`}</dd>
+        </dl>
+        {p.scope && p.scope.length > 0 && (
+          <><h3>Scope of work</h3><ul class="pj-scope">{p.scope.map((s) => <li>{s}</li>)}</ul></>
+        )}
+        <h3>Related services</h3>
+        {p.services.length > 0 ? (
+          <ul class="pj-svc-links">{p.services.map((s) => <li><a class="arrow-link" href={`/services/${s}/`}>{getService(s).name} <span aria-hidden="true">→</span></a></li>)}</ul>
+        ) : (
+          <p class="pj-generic"><a class="arrow-link" href="/services/">Browse all services <span aria-hidden="true">→</span></a></p>
+        )}
+        <div class="pj-facts-cta">
+          <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+          <a class="btn btn-line" href="tel:+14085067184" data-track="click_to_call">Call Now</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="section pj-related" aria-labelledby="rel-title">
+      <div class="wrap">
+        <h2 id="rel-title">More of our projects</h2>
+        <ul class="pj-rel-grid">
+          {related.map((r) => (
+            <li class="pj-card">
+              <a class="pj-img" href={`/projects/${r.slug}/`} tabindex="-1" aria-hidden="true">
+                <ProjectImage file={r.images[0].file} alt={r.images[0].alt} focus={r.images[0].focus} aspect="4 / 5" mobileAspect="4 / 5" sizes="(min-width: 48rem) 31vw, 100vw" />
+              </a>
+              <div class="pj-body">
+                <span class="pj-cat">{r.category}</span>
+                <h3><a href={`/projects/${r.slug}/`}>{r.title}</a></h3>
+                <a class="arrow-link pj-view" href={`/projects/${r.slug}/`}>View project <span aria-hidden="true">→</span></a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <Cta title="Planning Something Similar?" text="Tell us about your project and we’ll talk through scope, timing and next steps." />
+
+  <dialog class="pj-lb" id="pj-lb" aria-label={`Photographs: ${p.title}`}>
+    <div class="pj-lb-bar">
+      <p class="pj-lb-count" id="pj-lb-count" aria-live="polite"></p>
+      <button type="button" class="pj-lb-close" id="pj-lb-close">Close<span class="sr-only"> photo viewer</span></button>
+    </div>
+    <div class="pj-lb-stage">
+      <button type="button" class="pj-lb-nav" id="pj-lb-prev" aria-label="Previous photo">‹</button>
+      <button type="button" class="pj-lb-nav" id="pj-lb-next" aria-label="Next photo">›</button>
+    </div>
+    <p class="pj-lb-alt" id="pj-lb-alt"></p>
+  </dialog>
+
+  <script>
+    const dialog = document.getElementById('pj-lb') as HTMLDialogElement | null;
+    if (dialog) {
+      const triggers = [...document.querySelectorAll<HTMLButtonElement>('.pj-enlarge')];
+      const thumbs = triggers.map((b) => b.closest('.pj-thumb')!.querySelector('img') as HTMLImageElement);
+      // Created on first open so no empty <img> exists in the page before a photo is chosen.
+      const img = document.createElement('img');
+      img.alt = '';
+      const count = document.getElementById('pj-lb-count')!;
+      const alt = document.getElementById('pj-lb-alt')!;
+      const prev = document.getElementById('pj-lb-prev') as HTMLButtonElement;
+      const next = document.getElementById('pj-lb-next') as HTMLButtonElement;
+      let i = 0;
+      // Largest candidate in the thumbnail's srcset is the best source for the enlarged view.
+      const largest = (t: HTMLImageElement) => {
+        const cands = (t.getAttribute('srcset') || '').split(',').map((c) => c.trim().split(' ')).filter((c) => c.length === 2);
+        if (!cands.length) return t.currentSrc || t.src;
+        return cands.sort((a, b) => parseInt(b[1]) - parseInt(a[1]))[0][0];
+      };
+      const show = (n: number) => {
+        i = (n + thumbs.length) % thumbs.length;
+        img.src = largest(thumbs[i]);
+        img.alt = thumbs[i].alt;
+        // Native size of the photo (set by ProjectImage) so the frame reserves the correct ratio.
+        img.width = Number(thumbs[i].getAttribute('width')) || 4;
+        img.height = Number(thumbs[i].getAttribute('height')) || 5;
+        if (!img.isConnected) next.before(img);
+        count.textContent = `Photo ${i + 1} of ${thumbs.length}`;
+        alt.textContent = thumbs[i].alt;
+        prev.disabled = thumbs.length < 2;
+        next.disabled = thumbs.length < 2;
+      };
+      triggers.forEach((b, n) => b.addEventListener('click', () => { show(n); dialog.showModal(); }));
+      prev.addEventListener('click', () => show(i - 1));
+      next.addEventListener('click', () => show(i + 1));
+      document.getElementById('pj-lb-close')!.addEventListener('click', () => dialog.close());
+      dialog.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); show(i - 1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); show(i + 1); }
+      });
+      // Click on the backdrop closes the dialog (the dialog box itself is the click target only when the backdrop is clicked).
+      dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+    }
+  </script>
+</Base>

@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Cta from '../components/Cta.astro';
+import ProjectImage from '../components/ProjectImage.astro';
+import { business } from '../data/business';
+import { services } from '../data/services';
+import { getProject } from '../data/projects';
+
+// Authentic Gold Bay photographs. Each one links to its project page.
+const hero = getProject('kitchen-remodel').images[0];
+const work = ['bathroom-blue-tile-soaking-tub', 'patio-construction', 'pool-house-outdoor-living-area'].map((slug) => {
+  const p = getProject(slug);
+  return { p, img: p.images[0] };
+});
+---
+<Base closingCta title="About Gold Bay Builders" description="Gold Bay Builders Inc. is a residential construction company serving San Jose, led by its owner." path="/about/" crumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }]}>
+  <!-- 1. Introduction -->
+  <section class="ab-intro" aria-labelledby="about-title">
+    <div class="wrap">
+      <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'About' }]} />
+      <div class="ab-intro-grid">
+        <div>
+          <h1 id="about-title">Built Around Your Home.</h1>
+          <p class="lede ab-lede">Gold Bay Builders Inc. is a residential construction company serving San Jose, California.</p>
+        </div>
+        <figure class="ab-intro-photo">
+          <ProjectImage file={hero.file} alt={hero.alt} focus={hero.focus} aspect="1 / 1" mobileAspect="4 / 3" sizes="(min-width: 48rem) 45vw, 100vw" priority />
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. The builder: one introduction, verified facts only -->
+  <section class="ab-sec" aria-labelledby="builder-title">
+    <div class="wrap ab-meet">
+      <div>
+        <span class="eyebrow">The owner</span>
+        <h2 id="builder-title" class="ab-h2">Meet the Builder Behind Gold Bay.</h2>
+      </div>
+      <div class="ab-meet-body">
+        <p class="ab-body">David Lerma owns Gold Bay Builders Inc. and is the main point of contact for homeowners who call or write about a project.</p>
+        <p class="ab-body">The company takes on residential remodeling and construction work:</p>
+        <ul class="ab-meet-list">
+          {services.map((s) => <li>{s.name}</li>)}
+        </ul>
+        <div class="ab-actions">
+          <a class="btn btn-primary" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+          <a class="btn btn-line" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Proof of work: a curated selection, one link to the full set -->
+  <section class="ab-sec" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="ab-work-head">
+        <h2 id="work-title" class="ab-h2">Selected projects</h2>
+        <a class="btn btn-line ab-work-btn" href="/projects/">View Our Projects</a>
+      </div>
+      <ul class="ab-work">
+        {work.map((w) => (
+          <li>
+            <a class="ab-work-img" href={`/projects/${w.p.slug}/`} tabindex="-1" aria-hidden="true">
+              <ProjectImage file={w.img.file} alt={w.img.alt} focus={w.img.focus} aspect="4 / 3" mobileAspect="4 / 3" sizes="(min-width: 48rem) 31vw, 100vw" />
+            </a>
+            <h3><a href={`/projects/${w.p.slug}/`}>{w.p.title}</a></h3>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4. One closing CTA -->
+  <Cta title="Start a conversation about your home." text="Tell us about the project, or call the office." />
+</Base>

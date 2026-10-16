@@ -1,0 +1,10 @@
+# EXAMPLE ONLY. Not read by Cloudflare git builds. Kept out of the repo root while diagnosing a fast Pages build failure
+# (a root wrangler.toml changes how Pages treats the project). Copy to the repo root only for a direct `wrangler pages deploy` workflow.
+# Cloudflare Pages configuration. Build command (dashboard): `npm run build`; output: dist (below).
+# No account_id is set on purpose:
+# authenticate with `wrangler login` (or CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID) and the owner's account.
+name = "goldbay"   # matches the existing Cloudflare Pages project (seen on the GitHub check link)
+pages_build_output_dir = "./dist"
+compatibility_date = "2025-10-01"
+# Secrets (TURNSTILE_SECRET_KEY, RESEND_API_KEY, LEAD_TO_EMAIL, LEAD_FROM_EMAIL) are set in the Pages dashboard,
+# never in this file. Leave PUBLIC_ALLOW_INDEXING unset for previews so they stay noindex.

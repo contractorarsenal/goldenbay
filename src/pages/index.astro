@@ -1,0 +1,183 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectImage from '../components/ProjectImage.astro';
+import Testimonial from '../components/Testimonial.astro';
+import Cta from '../components/Cta.astro';
+import ServicesList from '../components/ServicesList.astro';
+import { business } from '../data/business';
+import { heroPhoto } from '../data/home';
+import { getProject } from '../data/projects';
+import { getReview } from '../data/reviews';
+
+const hero = getProject(heroPhoto.slug).images[heroPhoto.i];
+
+// Homeowner problems: concerns with one practical question each. No guarantees.
+const problems = [
+  { title: 'Unclear scope', text: 'Projects drift when the scope is only discussed, not written down.' },
+  { title: 'Budget surprises', text: 'Costs climb when allowances are vague and changes are priced later.' },
+  { title: 'Poor communication', text: 'Long silences between visits leave homeowners guessing what happens next.' },
+  { title: 'Messy job sites', text: 'Dust and debris spread through a home when the work area is not contained.' },
+];
+
+// Projects: three real photographs, one per project, no bathroom repeated.
+const work = [
+  { slug: 'kitchen-remodel', focus: '50% 52%' },
+  { slug: 'bathroom-stone-shower-terracotta-floor', focus: '50% 45%' },
+  { slug: 'patio-construction', focus: '50% 68%' },
+].map((f) => { const p = getProject(f.slug); return { ...f, p, img: p.images[0] }; });
+
+// Reviews: three exact supplied quotes, presented as equal cards.
+const reviewCards = ['terri-m', 'andrea-j', 'kevin-j'].map((id) => getReview(id));
+
+// Process: general homeowner guidance. These describe how residential projects usually unfold, not confirmed Gold Bay commitments.
+const steps = [
+  { t: 'Start with your goals', x: 'Describe what you want to change, the property, and a budget range you are considering.' },
+  { t: 'Define the scope', x: 'A site visit and a written description of what is and is not included often help both sides agree on the work.' },
+  { t: 'Compare estimates', x: 'Written estimates make it easier to compare proposals on the same scope before you decide.' },
+  { t: 'Plan and build', x: 'Selections, permits and construction follow the agreed scope. Ask how decisions and changes are handled.' },
+];
+---
+<Base closingCta
+  title="Gold Bay Builders | Home Remodeling & Construction in San Jose, CA"
+  description="Gold Bay Builders is a San Jose residential contractor for full home remodels, additions, ADUs, kitchen and bathroom remodeling and custom builds. Request an estimate."
+  path="/"
+  overlayHeader
+>
+  <!-- 2 · HERO -->
+  <section class="hp-hero on-dark" aria-labelledby="hero-title">
+    <div class="hp-hero-bg">
+      <ProjectImage file={hero.file} alt="" focus={hero.focus} aspect="4 / 5" mobileAspect="4 / 5" mobileFocus="60% 56%" sizes="100vw" priority />
+    </div>
+    <div class="wrap hp-hero-inner">
+      <span class="eyebrow">San Jose home remodeling &amp; construction</span>
+      <h1 id="hero-title">Built for the way you live.</h1>
+      <p class="lede">From full home remodels to additions, ADUs, kitchens, bathrooms and custom builds, {business.shortName} helps San Jose homeowners create spaces that work for their lives.</p>
+      <div class="hp-hero-actions">
+        <a class="btn btn-gold" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+        <a class="btn btn-outline-light" href="/projects/">View Our Projects</a>
+      </div>
+      <p class="hp-hero-area">Serving San Jose, California</p>
+    </div>
+  </section>
+
+  <!-- 3 · TRUST STRIP (factual only: no badges, ratings or certifications) -->
+  <section class="hp-trust" aria-label="About Gold Bay Builders">
+    <div class="wrap hp-trust-row">
+      <p><b>Remodels · Additions · ADUs · Kitchens &amp; bathrooms · Custom homes</b></p>
+      <p>Serving San Jose, California · Owned by {business.owner}</p>
+    </div>
+  </section>
+
+  <!-- 4 · HOMEOWNER PROBLEMS -->
+  <section class="section hp-problems" aria-labelledby="prob-title">
+    <div class="wrap hp-prob-wrap">
+      <div class="hp-head">
+        <span class="eyebrow">Common concerns</span>
+        <h2 id="prob-title">Renovations go wrong in predictable ways.</h2>
+      </div>
+      <ul class="hp-problem-grid">
+        {problems.map((p) => (
+          <li class="hp-problem">
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 5 · SERVICES (V8: ruled list, no boxes) -->
+  <section class="section hp-services" aria-labelledby="svc-title">
+    <div class="wrap">
+      <div class="v8-head">
+        <span class="eyebrow">What we build</span>
+        <h2 id="svc-title">Five services for San Jose homes.</h2>
+        <p>Choose the category that fits your project. Each service page explains the planning, permits and scope for that kind of work.</p>
+      </div>
+      <ServicesList />
+      <div class="sv-foot">
+        <a class="btn btn-primary" href="/services/">See all services</a>
+        <a class="v8-link" href="/request-estimate/">Not sure which one? Request an estimate</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · RECENT PROJECTS -->
+  <section class="section hp-work" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="hp-work-head">
+        <div>
+          <span class="eyebrow">Our work</span>
+          <h2 id="work-title">Recent projects</h2>
+          <p>Kitchens, bathrooms and outdoor spaces, shown with the photographs we have for each project.</p>
+        </div>
+        <a class="btn btn-line" href="/projects/">View All Projects</a>
+      </div>
+      <ul class="hp-work-grid">
+        {work.map((w) => (
+          <li class="hp-proj">
+            <a class="hp-proj-img" href={`/projects/${w.p.slug}/`} tabindex="-1" aria-hidden="true">
+              <ProjectImage file={w.img.file} alt={w.img.alt} focus={w.focus} aspect="4 / 3" mobileAspect="4 / 3" sizes="(min-width: 48rem) 31vw, 100vw" />
+            </a>
+            <div class="hp-proj-body">
+              <span class="hp-proj-cat">{w.p.category}</span>
+              <h3>{w.p.title}</h3>
+              <a class="arrow-link" href={`/projects/${w.p.slug}/`} aria-label={`View project: ${w.p.title}`}>View Project <span aria-hidden="true">→</span></a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7 · FOUR-STEP PROCESS -->
+  <section class="section sec-96 hp-process" aria-labelledby="proc-title">
+    <div class="wrap">
+      <div class="hp-head hp-center">
+        <span class="eyebrow">How it works</span>
+        <h2 id="proc-title">How a residential project usually unfolds.</h2>
+      </div>
+      <ol class="hp-steps">
+        {steps.map((s, i) => (<li><span class="num">Step {i + 1}</span><h3>{s.t}</h3><p>{s.x}</p></li>))}
+      </ol>
+      <div class="hp-process-foot">
+        <p>Timelines and terms are set for each project in its written agreement.</p>
+        <a class="arrow-link" href="/our-process/">See our full process <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · REVIEWS (V8: three equal quote cards) -->
+  <section class="section hp-reviews" aria-labelledby="proof-title">
+    <div class="wrap">
+      <div class="v8-head">
+        <span class="eyebrow">What homeowners say</span>
+        <h2 id="proof-title">Customer reviews, in their own words.</h2>
+      </div>
+      <ul class="rv-cards">
+        {reviewCards.map((r) => (
+          <li><Testimonial review={r} mode="excerpt" /></li>
+        ))}
+      </ul>
+      <p class="rv-foot"><a class="btn btn-line" href="/reviews/">View All Reviews</a></p>
+    </div>
+  </section>
+
+  <!-- 9 · SERVICE AREAS -->
+  <section class="section sec-96 hp-area" aria-labelledby="area-title">
+    <div class="wrap hp-area-grid hp-center">
+      <div>
+        <span class="eyebrow">Service area</span>
+        <h2 id="area-title">Based in San Jose, California.</h2>
+        <p>San Jose is our home market. Each project is planned around the permit process of the city where it is located.</p>
+      </div>
+      <div class="hp-area-links">
+        <a class="hp-area-chip" href="/service-areas/san-jose/">San Jose</a>
+        <a class="hp-area-chip" href="/service-areas/">All service areas</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · FINAL CTA (V8: shared charcoal band) -->
+  <Cta title="Ready to get your project started?" text="Tell us about your home and what you want to change. We will follow up to talk through scope and next steps." />
+</Base>

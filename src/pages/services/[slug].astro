@@ -1,0 +1,138 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Cta from '../../components/Cta.astro';
+import Faq from '../../components/Faq.astro';
+import Testimonial from '../../components/Testimonial.astro';
+import { extras } from '../../data/service-extras';
+import { reviewsFor } from '../../data/reviews';
+import { services, getService, type Service } from '../../data/services';
+import { serviceSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+const { s } = Astro.props as { s: Service };
+const path = `/services/${s.slug}/`;
+const x = extras[s.slug];
+const quotes = reviewsFor(s.slug);
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: s.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<Base closingCta title={s.metaTitle} description={s.metaDescription} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services/' }, { name: s.name, path }]} schema={[serviceSchema(s.name, path, s.metaDescription), faqSchema]}>
+  <section class="ih" aria-labelledby="svc-title">
+    <div class="wrap svp-hero">
+      <div>
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services', href: '/services/' }, { name: s.name }]} />
+        <h1 id="svc-title">{s.headline}</h1>
+        <p class="lede">{s.lede}</p>
+        <div class="v8-actions" style="margin-top:1.75rem">
+          <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an estimate</a>
+          <a class="btn btn-line" href="/contact/">Ask a question</a>
+        </div>
+      </div>
+      <dl class="svp-facts">
+        {x.glance.map((g) => <div><dt>{g.label}</dt><dd>{g.value}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="v8-section-tight">
+    <div class="wrap">
+      <p class="svp-answer">{x.quickAnswer}</p>
+    </div>
+  </section>
+
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Overview</span>
+        <h2 style="margin-top:.9rem">{x.title}</h2>
+      </div>
+      <div class="v8-prose">{s.overview.map((p) => <p>{p}</p>)}</div>
+    </div>
+  </section>
+
+  <section class="v8-section v8-tint">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Common projects</span>
+        <h2 style="margin-top:.9rem">Typical work in this category.</h2>
+      </div>
+      <ul class="svp-list">{s.projectTypes.map((t) => <li><h3>{t.title}</h3><p>{t.text}</p></li>)}</ul>
+    </div>
+  </section>
+
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Homeowner concerns</span>
+        <h2 style="margin-top:.9rem">{s.concernsTitle}</h2>
+      </div>
+      <ul class="svp-list">{s.concerns.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
+    </div>
+  </section>
+
+  <section class="v8-section v8-tint">
+    <div class="wrap v8-split v8-split-even">
+      <div class="v8-prose">
+        <h2>{s.planningTitle}</h2>
+        <ul>{s.planning.map((p) => <li>{p}</li>)}</ul>
+      </div>
+      <div class="v8-panel">
+        <h3>What helps us give an accurate estimate</h3>
+        <ul class="v8-prose" style="margin-top:0">{s.beforeEstimate.map((b) => <li style="list-style:disc">{b}</li>)}</ul>
+        <div class="v8-actions" style="margin-top:1.5rem">
+          <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Start your request</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Local relevance</span>
+        <h2 style="margin-top:.9rem">Built for San Jose homes and rules.</h2>
+      </div>
+      <div class="v8-prose">
+        <p>Permit processes, plan review and fees are set by each city. We plan {s.name.toLowerCase()} projects around the requirements of the City of San José, and discuss other jurisdictions case by case.</p>
+        <p><a class="v8-link" href="/service-areas/san-jose/">See how we work in San Jose <span aria-hidden="true">→</span></a></p>
+        <p>Keep reading: {x.guides.map((g, i) => <>{i > 0 && ' · '}<a class="v8-link" href={g.href}>{g.label}</a></>)}</p>
+      </div>
+    </div>
+  </section>
+
+  {quotes.length > 0 && (
+    <section class="v8-section-tight">
+      <div class="wrap">
+        <span class="eyebrow">What homeowners say</span>
+        <div class="svp-quotes">{quotes.map((q) => <Testimonial review={q} mode="excerpt" />)}</div>
+      </div>
+    </section>
+  )}
+
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Questions</span>
+        <h2 style="margin-top:.9rem">{s.name}: frequently asked</h2>
+      </div>
+      <Faq items={s.faqs} />
+    </div>
+  </section>
+
+  <section class="v8-section v8-tint">
+    <div class="wrap">
+      <span class="eyebrow">Related services</span>
+      <ul class="svp-related">
+        {s.related.map((r) => { const rs = getService(r); return <li><a href={`/services/${rs.slug}/`}><b>{rs.name}</b><span>{rs.short}</span></a></li>; })}
+      </ul>
+    </div>
+  </section>
+
+  <Cta />
+</Base>

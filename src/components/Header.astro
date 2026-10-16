@@ -1,0 +1,38 @@
+---
+import { primaryNav } from '../data/nav';
+import { business } from '../data/business';
+import Logo from './Logo.astro';
+const { path, overlay = false } = Astro.props as { path: string; overlay?: boolean };
+const cur = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+// Desktop bar shows the five primary destinations. Services stays reachable from the mobile menu, service cards and footer.
+const desktopNav = primaryNav.filter((i) => i.desktop !== false);
+---
+<header class:list={['site-header', overlay && 'overlay']} data-overlay={overlay ? 'true' : undefined}>
+  <div class="wrap bar">
+    <Logo tone={overlay ? 'dark' : 'light'} />
+    <nav aria-label="Primary" class="desk-nav">
+      <ul class="nav-list">
+        {desktopNav.map((item) => (
+          <li><a class="nav-link" href={item.href} aria-current={cur(item.href) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost-sm header-call" href={business.phoneHref} data-track="click_to_call" aria-label="Call Now: call Gold Bay Builders">Call Now</a>
+      <a class="btn btn-gold btn-sm header-cta" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-panel">Menu</button>
+    </div>
+  </div>
+  <div class="mobile-panel" id="mobile-panel">
+    <nav aria-label="Mobile">
+      {primaryNav.map((item) => (<>
+        <a href={item.href}>{item.label}</a>
+        {item.children && <div class="sub">{item.children.map((c) => <a href={c.href}>{c.label}</a>)}</div>}
+      </>))}
+    </nav>
+    <div class="mobile-ctas">
+      <a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+      <a class="btn btn-line" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+    </div>
+  </div>
+</header>

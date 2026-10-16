@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import { locations, type Location } from '../../data/locations';
+import { services } from '../../data/services';
+// Only confirmed cities get a page. Unconfirmed cities are not generated, so no city landing page exists for them.
+export function getStaticPaths() { return locations.filter((l) => l.confirmed).map((l) => ({ params: { slug: l.slug }, props: { l } })); }
+const { l } = Astro.props as { l: Location };
+const path = `/service-areas/${l.slug}/`;
+---
+<Base closingCta title={`Home Remodeling & Construction in ${l.name}, CA`} description={`Residential remodeling, additions and ADUs in ${l.name}, California. Local permit and planning considerations from Gold Bay Builders.`} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Service Areas', path: '/service-areas/' }, { name: l.name, path }]}>
+  <PageHero eyebrow={`${l.name}`} title={`Building in ${l.name}.`} lede={l.intro} crumbs={[{ name: 'Home', href: '/' }, { name: 'Service Areas', href: '/service-areas/' }]} />
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Local considerations</span>
+        <h2 style="margin-top:.9rem">What to know before building in {l.name}</h2>
+      </div>
+      <div class="v8-prose">
+        <ul>{l.considerations.map((c) => <li>{c}</li>)}</ul>
+        <p>Permits are issued by <strong>{l.department}</strong>. Check their site for current submittal requirements, fees and review times.</p>
+        <p>Planning an ADU? Read our <a class="v8-link" href="/guides/san-jose-adu-guide/">San Jose ADU guide</a>. Budgeting a remodel? See the <a class="v8-link" href="/guides/bay-area-remodeling-budget/">remodeling budget guide</a>.</p>
+      </div>
+    </div>
+  </section>
+  <section class="v8-section v8-tint">
+    <div class="wrap">
+      <div class="v8-head"><span class="eyebrow">Services</span><h2>Work we take on in {l.name}.</h2></div>
+      <ul class="v8-grid-3" style="margin-top:2rem">
+        {services.map((s) => (<li><a href={`/services/${s.slug}/`} style="text-decoration:none;color:inherit;display:block"><h3>{s.name}</h3><p>{s.short}</p></a></li>))}
+      </ul>
+    </div>
+  </section>
+  <Cta />
+</Base>

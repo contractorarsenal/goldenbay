@@ -1,0 +1,56 @@
+---
+import { getImage } from 'astro:assets';
+/**
+ * Responsive, art-directed project photograph.
+ * - `file`: filename inside src/assets/projects/ (optimized to AVIF/WebP, multiple widths)
+ * - `mobileFile`: optional different crop/photo for < 48rem
+ * - If the file is missing the component renders a clearly-labelled PENDING slot (never a fake photo).
+ */
+interface Props {
+  file?: string; mobileFile?: string; alt?: string;
+  aspect?: string; mobileAspect?: string; focus?: string; mobileFocus?: string;
+  sizes?: string; priority?: boolean; caption?: string; credit?: string; class?: string;
+  slot?: string; note?: string;                          // pending-state copy
+  fill?: boolean;                                        // fill a fixed-height parent (mosaic tiles)
+}
+const { file, mobileFile, alt = '', aspect = '3 / 2', mobileAspect, focus = '50% 50%', mobileFocus, sizes = '100vw', priority = false, caption, credit, class: cls = '', fill = false, slot: slotLabel = 'Project photograph', note = 'Awaiting approved project photography' } = Astro.props;
+
+const modules = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.{jpg,jpeg,png,webp,avif}', { eager: true });
+const find = (f?: string) => (f ? modules[`../assets/projects/${f}`]?.default : undefined);
+const WIDTHS = [480, 768, 1100, 1600, 2200];
+async function set(img: ImageMetadata, format: 'avif' | 'webp' | 'jpeg') {
+  const ws = WIDTHS.filter((w) => w < img.width);
+  const use = [...ws, img.width];            // never upscale; include the native width
+  const out = await Promise.all(use.map(async (w) => { const g = await getImage({ src: img, width: w, format }); return `${g.src} ${w}w`; }));
+  return out.join(', ');
+}
+async function sources(img: ImageMetadata) { return { avif: await set(img, 'avif'), webp: await set(img, 'webp'), jpeg: await set(img, 'jpeg') }; }
+const main = find(file);
+const mob = find(mobileFile);
+const mainS = main ? await sources(main) : null;
+const mobS = mob ? await sources(mob) : null;
+const fallback = main ? (await getImage({ src: main, width: Math.min(1100, main.width), format: 'jpeg' })) : null;
+const natural = main ? `${main.width} / ${main.height}` : '3 / 4';
+const A = aspect === 'natural' ? natural : aspect;
+const AM = (mobileAspect ?? aspect) === 'natural' ? natural : (mobileAspect ?? aspect);
+const ar = `--ar:${A};--ar-m:${AM};--fp:${focus};--fp-m:${mobileFocus ?? focus};`;
+---
+<figure class:list={['pimg', cls, fill && 'fill']} style={ar}>
+  {main && mainS && fallback ? (
+    <picture>
+      {mob && mobS && (<>
+        <source media="(max-width: 47.99rem)" type="image/avif" srcset={mobS.avif} sizes="100vw" />
+        <source media="(max-width: 47.99rem)" type="image/webp" srcset={mobS.webp} sizes="100vw" />
+      </>)}
+      <source type="image/avif" srcset={mainS.avif} sizes={sizes} />
+      <source type="image/webp" srcset={mainS.webp} sizes={sizes} />
+      <img src={fallback.src} srcset={mainS.jpeg} sizes={sizes} alt={alt} width={main.width} height={main.height} decoding="async" loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} />
+    </picture>
+  ) : (
+    <div class="pimg-pending" role="img" aria-label={`${slotLabel}: ${note}`}>
+      <span class="crop tl"></span><span class="crop tr"></span><span class="crop bl"></span><span class="crop br"></span>
+      <div><b>Photo slot</b><span>{slotLabel}</span><small>{A}{mobileAspect && mobileAspect !== aspect ? ` · mobile ${mobileAspect}` : ''} · {note}</small></div>
+    </div>
+  )}
+  {(caption || credit) && <figcaption>{caption}{credit && <span> · Photo: {credit}</span>}</figcaption>}
+</figure>

@@ -1,0 +1,18 @@
+---
+import { business } from '../data/business';
+/** Closing call to action (V8): charcoal band, headline and text on the left, the three contact actions on one row on the right. */
+const { title = 'Tell us about your project.', text = 'Share the basics online or call. We will follow up to talk through scope, timing and next steps.', id = 'cta-title' } = Astro.props as { title?: string; text?: string; id?: string };
+---
+<section class="cb on-dark" aria-labelledby={id}>
+  <div class="wrap cb-grid">
+    <div>
+      <h2 id={id}>{title}</h2>
+      <p class="cb-text">{text}</p>
+    </div>
+    <div class="cb-actions">
+      <a class="btn btn-gold" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+      <a class="btn btn-outline-light" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+      <a class="btn btn-outline-light" href={`mailto:${business.email}`} data-track="email_us">Email Us</a>
+    </div>
+  </div>
+</section>

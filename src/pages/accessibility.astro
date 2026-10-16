@@ -1,0 +1,8 @@
+---
+import Legal from '../components/Legal.astro';
+import { business } from '../data/business';
+---
+<Legal title="Accessibility Statement" description="Gold Bay Builders' commitment to an accessible website and how to report barriers." path="/accessibility/">
+  <p>We aim for this website to conform to WCAG 2.2 Level AA. The site is built with semantic HTML, keyboard-operable navigation and forms, visible focus indicators and support for reduced motion.</p>
+  <p>Accessibility work is ongoing and we have not completed an independent audit. If you encounter a barrier, contact us using the <a href={`mailto:${business.email}`}>Email Us</a> or <a href={business.phoneHref}>Call Now</a> links on this site and we will help you directly and work to fix the issue.</p>
+</Legal>

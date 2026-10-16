@@ -1,0 +1,4 @@
+# Repo-root robots.txt: only served if Cloudflare publishes the repository root as-is.
+# The built site generates its own robots.txt (Disallow for previews, Allow + Sitemap in production).
+User-agent: *
+Disallow: /
