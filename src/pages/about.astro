@@ -17,26 +17,27 @@ const work = ['kitchen-remodel', 'bathroom-stone-shower-terracotta-floor', 'pati
 <Base closingCta title="About Gold Bay Builders" description="Gold Bay Builders Inc. is a residential construction company serving San Jose, led by owner David Lerma." path="/about/" crumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }]}>
   <!-- A: introduction -->
   <section class="ab-intro" aria-labelledby="about-title">
-    <div class="wrap ab-intro-grid">
+    <div class="wrap">
+      <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'About' }]} />
+      <div class="ab-intro-grid">
       <div>
-        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'About' }]} />
         <h1 id="about-title">Built Around Your Home.</h1>
-        <p class="lede ab-lede">Gold Bay Builders Inc. is a residential construction company serving San Jose, led by owner {business.owner}.</p>
+        <p class="lede ab-lede">Gold Bay Builders Inc. is a residential construction company serving San Jose, California.</p>
       </div>
       <figure class="ab-intro-photo">
-        <ProjectImage file={hero.file} alt={hero.alt} focus={hero.focus} aspect="4 / 5" mobileAspect="4 / 3" sizes="(min-width: 60rem) 40vw, 100vw" priority />
+        <ProjectImage file={hero.file} alt={hero.alt} focus={hero.focus} aspect="1 / 1" mobileAspect="4 / 3" sizes="(min-width: 60rem) 45vw, 100vw" priority />
       </figure>
+      </div>
     </div>
   </section>
 
   <!-- B: the company -->
-  <section class="v8-section" aria-labelledby="company-title">
+  <section class="ab-sec" aria-labelledby="company-title">
     <div class="wrap ab-company">
       <div>
         <span class="eyebrow">The company</span>
         <h2 id="company-title" class="ab-h2">What we build</h2>
-        <p class="ab-body">We remodel and build residential homes: full home remodels, additions, accessory dwelling units, kitchens and bathrooms, and custom homes.</p>
-        <p class="ab-body">Each project is planned around the house and the people who live in it, and the work is shown in the photographs on this site.</p>
+        <p class="ab-body">Full home remodels, additions, accessory dwelling units, kitchens, bathrooms and custom homes. Recent work includes kitchen and bathroom remodels, patios and pavers, and an outdoor living area around a pool house.</p>
         <p class="ab-body ab-links"><a class="v8-link" href="/services/">Browse our services <span aria-hidden="true">→</span></a></p>
       </div>
       <figure class="ab-company-photo">
@@ -46,11 +47,11 @@ const work = ['kitchen-remodel', 'bathroom-stone-shower-terracotta-floor', 'pati
   </section>
 
   <!-- C: the owner (one introduction only) -->
-  <section class="v8-section v8-tint" aria-labelledby="owner-title">
+  <section class="ab-sec" aria-labelledby="owner-title">
     <div class="wrap ab-owner">
       <div class="ab-owner-type" aria-hidden="true">
-        <span class="ab-owner-name">{business.owner}</span>
-        <span class="ab-owner-role">Owner, {business.name}</span>
+        <span class="ab-owner-name">Owner</span>
+        <span class="ab-owner-role">{business.name}<br />San Jose, California</span>
       </div>
       <div>
         <h2 id="owner-title" class="ab-h2">Meet David Lerma</h2>
@@ -65,7 +66,7 @@ const work = ['kitchen-remodel', 'bathroom-stone-shower-terracotta-floor', 'pati
   </section>
 
   <!-- D: see the work -->
-  <section class="v8-section" aria-labelledby="work-title">
+  <section class="ab-sec" aria-labelledby="work-title">
     <div class="wrap">
       <div class="ab-work-head">
         <div>
