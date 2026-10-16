@@ -40,6 +40,7 @@ const graph = [
     <link rel="canonical" href={abs(path)} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#1d1c1a" />
+    {import.meta.env.PUBLIC_BUILD_ID && <meta name="gb-build" content={import.meta.env.PUBLIC_BUILD_ID} />}
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={business.name} />
     <meta property="og:title" content={fullTitle} />

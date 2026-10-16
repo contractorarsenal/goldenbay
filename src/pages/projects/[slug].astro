@@ -20,7 +20,7 @@ const imageObjects = p.images.map((im) => ({ '@type': 'ImageObject', name: p.tit
 <Base title={p.title} description={`${introFor(p)} Photographs from Gold Bay Builders.`} path={path} noindex={noindex} schema={[{ '@context': 'https://schema.org', '@type': 'CreativeWork', name: p.title, about: p.category, description: introFor(p), url: abs(path), image: imageObjects }]} crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Projects', path: '/projects/' }, { name: p.title, path }]}>
   <PageHero title={p.title} current={p.title} id="pd-title" lede={introFor(p)} crumbs={[{ name: 'Home', href: '/' }, { name: 'Our Projects', href: '/projects/' }]} />
 
-  <section class="section pj-detail">
+  <section class="section">
     <div class="wrap pj-detail-grid">
       <div>
         <ul class="pj-gallery-grid" aria-label={`Photographs: ${p.title}`}>

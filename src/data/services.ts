@@ -170,7 +170,7 @@ export const services: Service[] = [
     ],
     beforeEstimate: ['Photos of the current kitchen', 'Rough dimensions or a floor plan', 'Whether the layout will change', 'Appliances you plan to keep or buy', 'Budget range and target completion'],
     faqs: [
-      { q: 'How much does a kitchen remodel cost in San Jose?', a: 'Costs vary widely with size, layout changes, cabinetry and appliance choices. We provide a written estimate after reviewing your project and do not quote figures without seeing the space.' },
+      { q: 'How much does a kitchen remodel cost in San Jose?', a: 'Costs vary widely with size, layout changes, cabinetry and appliance choices. A written estimate usually follows a review of the project, and figures are not quoted without seeing the space.' },
       { q: 'Will I be without a kitchen the whole time?', a: 'Usually for a significant part of the project. Many homeowners set up a temporary kitchen elsewhere in the house. We help you plan for it.' },
       { q: 'Do I need a permit for a kitchen remodel?', a: 'Cosmetic updates may not, but moving plumbing, gas or electrical, or changing walls, generally does. Your city’s building department makes the call.' },
       { q: 'Can you work from my designer’s plans?', a: 'Yes. We can build from plans by your designer or architect, or discuss design options with you.' },

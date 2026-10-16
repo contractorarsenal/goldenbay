@@ -141,7 +141,7 @@
 .ct-panel h2 { color: var(--color-white); font-size: clamp(1.9rem, 3vw, 2.4rem); }
 .ct-panel p { color: var(--color-on-dark); margin-top: .75rem; }
 .ct-panel .btn { margin-top: 1.75rem; width: 100%; }
-.ct-panel .ct-fine { font-size: .9rem; color: var(--color-on-dark-muted); margin-top: 1rem; }
+
 
 /* ---------- Service pages ---------- */
 .svp-hero { display: grid; gap: 2rem; align-items: start; }
@@ -179,3 +179,50 @@
 .ct-panel .ct-steps span { color: var(--color-on-dark); }
 .ct-panel .ct-steps li::before { background: var(--color-gold); color: var(--color-charcoal); }
 .ab-photos figcaption a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* ---------- Estimate wizard (V8 presentation; script and validation unchanged) ---------- */
+.wz-layout { display: grid; gap: 2.5rem; align-items: start; }
+@media (min-width: 60rem) { .wz-layout { grid-template-columns: minmax(0, 1fr) 19rem; gap: 3.5rem; } }
+.wiz { max-width: 44rem; }
+.wiz fieldset { border: 0; padding: 0; min-inline-size: 0; margin: 0; }
+.wiz legend { font: 700 clamp(1.6rem, 3vw, 2rem)/1.12 var(--font-display); color: var(--color-charcoal); margin-bottom: 1.5rem; padding: 0; }
+.wz-step-label { font: 600 .85rem/1.4 var(--font-sans); color: var(--color-muted); margin-bottom: .9rem; }
+.progress { display: flex; gap: .4rem; margin-bottom: .75rem; }
+.progress i { flex: 1; height: 4px; background: var(--color-border); transition: background-color .3s; }
+.progress i.done { background: var(--color-gold); }
+.wz-label { display: block; font: 600 .95rem/1.4 var(--font-sans); color: var(--color-charcoal); margin-bottom: .5rem; }
+.wz-optional { font-weight: 400; color: var(--color-muted); }
+.wiz .field label, .wiz .field .wz-label { font: 600 .95rem/1.4 var(--font-sans); color: var(--color-charcoal); }
+.wiz .field input, .wiz .field textarea { border-radius: var(--radius-btn); border-color: #8A8F97; font: 400 1rem/1.4 var(--font-sans); }
+.wiz .field input:focus-visible, .wiz .field textarea:focus-visible { outline: 3px solid var(--color-gold); outline-offset: 2px; }
+.wiz .field .hint, .wiz .hint { font-size: .9rem; color: var(--color-muted); }
+.choice span { border-radius: var(--radius-btn); font: 500 1rem/1.35 var(--font-sans); color: var(--color-charcoal); }
+.choice input:checked + span { background: var(--color-charcoal); color: var(--color-white); border-color: var(--color-charcoal); }
+.choice input:focus-visible + span { outline: 3px solid var(--color-gold); outline-offset: 2px; }
+.wiz .err, .wiz .form-err { font: 600 .9rem/1.4 var(--font-sans); color: #9b1c1c; }
+.wz-consent { display: flex; gap: .75rem; align-items: flex-start; font: 400 .95rem/1.5 var(--font-sans); color: var(--color-body); }
+.wz-consent input { width: 1.35rem; min-height: 1.35rem; margin-top: .2rem; flex: 0 0 auto; }
+.wiz .wiz-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2rem; }
+.wiz .wiz-nav .btn { min-width: 9rem; }
+.wz-aside { background: var(--color-charcoal); color: var(--color-white); border-radius: var(--radius-card); padding: clamp(1.5rem, 3vw, 2rem); }
+.wz-aside-title { color: var(--color-white); font: 700 1.6rem/1.15 var(--font-display); }
+.wz-steps { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 1rem; }
+.wz-steps li { display: grid; grid-template-columns: 2.25rem 1fr; gap: .9rem; align-items: start; }
+.wz-steps p { color: var(--color-on-dark); font-size: .98rem; margin: .25rem 0 0; }
+.wz-num { width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--color-gold); color: var(--color-charcoal); display: inline-flex; align-items: center; justify-content: center; font: 700 .95rem/1 var(--font-sans); }
+.wz-aside-note { margin-top: 1.5rem; color: var(--color-on-dark); font-size: .98rem; }
+.wz-aside-note a, .wz-aside-fine a { color: var(--color-white); text-decoration: underline; text-underline-offset: 3px; }
+.wz-aside-fine { margin-top: 1rem; font-size: .9rem; color: var(--color-on-dark-muted); }
+.wz-result { max-width: 44rem; background: var(--color-light); border-radius: var(--radius-card); padding: clamp(1.5rem, 3vw, 2.25rem); margin-top: 2rem; }
+.wz-result h2 { font: 700 clamp(1.6rem, 3vw, 2rem)/1.15 var(--font-display); }
+.wz-result p { margin-top: .75rem; color: var(--color-body); }
+.wz-result:focus { outline: 3px solid var(--color-gold); outline-offset: 4px; }
+
+/* ---------- Legal pages ---------- */
+.legal-status { background: var(--color-light); border-left: 3px solid var(--color-gold); border-radius: var(--radius-card); padding: 1rem 1.25rem; margin-bottom: 2.25rem; }
+.legal-status p { margin: 0; font-size: .95rem; color: var(--color-body); }
+.legal-status strong { color: var(--color-charcoal); }
+.legal-body { max-width: 68ch; }
+.legal-body h2 { font-size: clamp(1.5rem, 2.4vw, 1.9rem); margin-top: 2.25rem; }
+.legal-body p { margin-top: .9rem; color: var(--color-body); }
+.legal-body a { color: var(--color-charcoal); text-decoration: underline; text-underline-offset: 3px; }

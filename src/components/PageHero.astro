@@ -16,7 +16,7 @@ const items = [...crumbs, { name: current ?? eyebrow ?? title }];
   <div class="wrap">
     <Breadcrumbs items={items} />
     <h1 id={id}>{title}</h1>
-    {lede && <p class="lede ih-lede">{lede}</p>}
+    {lede && <p class="lede">{lede}</p>}
     <slot />
   </div>
 </section>

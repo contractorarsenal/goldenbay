@@ -25,7 +25,7 @@ const site = join(ROOT, '.preview-site'), work = join(tmp, 'branch');
 rmSync(site, { recursive: true, force: true });
 
 console.log(`Building ${srcBranch}@${sha} for ${SITE} (noindex)...`);
-const env = { ...process.env, PUBLIC_SITE_URL: SITE }; delete env.PUBLIC_ALLOW_INDEXING;
+const env = { ...process.env, PUBLIC_SITE_URL: SITE, PUBLIC_BUILD_ID: sha }; delete env.PUBLIC_ALLOW_INDEXING; // build marker: the commit SHA is already public on the branch
 execFileSync('npx', ['astro', 'build', '--outDir', site], { cwd: ROOT, env, stdio: ['ignore', 'ignore', 'inherit'] });
 
 const exists = sh('git', ['ls-remote', '--heads', origin, BRANCH]).length > 0;
