@@ -7,6 +7,10 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
 ---
 <Base title="Request an Estimate" description="Tell Gold Bay Builders about your San Jose remodel, addition, ADU or custom home. Seven short steps, about two minutes." path="/request-estimate/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'Request an Estimate', path: '/request-estimate/' }]}>
   <PageHero eyebrow="Request an estimate" title="Tell us about your project." lede="Seven short steps. About two minutes. No obligation." crumbs={[{ name: 'Home', href: '/' }]} />
+  <style is:global>
+    /* The form has its own Continue and Send buttons; the fixed call bar would sit over them on phones. */
+    @media (max-width: 47.99rem) { .callbar { display: none; } }
+  </style>
   <section class="v8-section">
     <div class="wrap wz-layout" id="wizrow">
       <div>

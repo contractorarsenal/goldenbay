@@ -226,3 +226,6 @@
 .legal-body h2 { font-size: clamp(1.5rem, 2.4vw, 1.9rem); margin-top: 2.25rem; }
 .legal-body p { margin-top: .9rem; color: var(--color-body); }
 .legal-body a { color: var(--color-charcoal); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Phones: the fixed call bar sits over the bottom of the viewport. Keyboard focus scrolling must leave room for it. */
+@media (max-width: 47.99rem) { html { scroll-padding-bottom: 76px; } }

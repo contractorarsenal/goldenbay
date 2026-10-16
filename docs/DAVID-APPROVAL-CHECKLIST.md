@@ -8,6 +8,8 @@ Written for: David Lerma, to review before the site is published. Each item says
 - [ ] **Written estimates.** Site says: "A written estimate usually follows a review of your project" (cost guide, kitchen cost FAQ). Confirm the estimate is written and how it is prepared.
 - [ ] **Estimates on the same scope.** About: "Written estimates for the same scope make proposals easier to compare." Confirm you price on the same scope when comparing.
 - [ ] **Site visits.** Process page and homepage: "Often includes a visit to the property." The estimate form no longer says a visit is arranged. Confirm whether you usually visit before estimating.
+- [ ] **First conversation.** About: "A project usually starts with a conversation about the house, your goals and your budget." Confirm.
+- [ ] **Asking for you by name.** Contact page: "Ask for David Lerma when you call." Confirm that calls reach you or the office as stated.
 - [ ] **Changes and selections.** About: "Selections, permits and changes are worth discussing before they are priced or built." Confirm you handle change orders this way.
 - [ ] **Final review.** Process step 6: "Projects usually end with a review of the finished work." Confirm you do a final walk-through with the homeowner.
 
