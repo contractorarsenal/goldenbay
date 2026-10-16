@@ -4,41 +4,37 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { business } from '../data/business';
 // Phone and email appear only inside tel:/mailto: links, never as visible text.
 ---
-<Base title="Contact Gold Bay Builders" description="Call or email Gold Bay Builders in San Jose, CA, or request an estimate for your remodel, addition, ADU or custom home." path="/contact/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }]}>
+<Base title="Contact Gold Bay Builders" description="Request an estimate from Gold Bay Builders in San Jose, CA, or contact the company directly by phone or email." path="/contact/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }]}>
   <style is:global>
     /* This page already shows Call Now and the estimate action in full; the fixed bar would sit over the estimate panel on phones. */
     @media (max-width: 47.99rem) { .callbar { display: none; } }
   </style>
+
   <section class="ct-intro" aria-labelledby="contact-title">
     <div class="wrap">
       <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Contact' }]} />
-      <h1 id="contact-title" class="ct-title">Contact Gold Bay Builders</h1>
-      <p class="ct-lede">Request an estimate for your project, or call the office with a question. We serve San Jose, California.</p>
+      <h1 id="contact-title" class="ct-title">Let’s Talk About Your Project.</h1>
+      <p class="ct-lede">Request an estimate online, or contact Gold Bay Builders directly.</p>
     </div>
   </section>
 
   <section class="ct-main" aria-label="Ways to get in touch">
     <div class="wrap ct-grid">
-      <!-- Estimate action first on phones; second column on desktop -->
-      <div class="ct-panel">
-        <h2 class="ct-h2">Request an estimate</h2>
-        <p class="ct-text">Tell us about your home and what you want to change. The request takes about two minutes.</p>
-        <ol class="ct-steps">
-          <li><b>Describe the project</b><span>The type of work, the property and the budget range you are considering.</span></li>
-          <li><b>We review your request</b><span>Each request is read before we follow up.</span></li>
-          <li><b>We follow up</b><span>We talk through scope and next steps with you.</span></li>
-        </ol>
-        <a class="btn btn-gold ct-primary" href="/request-estimate/" data-track="request_estimate_click">Start your estimate request</a>
+      <!-- Primary: request an estimate (first on phones) -->
+      <div class="ct-primary-panel">
+        <h2 class="ct-primary-title">Request an Estimate</h2>
+        <p class="ct-primary-text">Tell us about your home and what you want to change. We review each request before we follow up.</p>
+        <a class="btn btn-gold ct-primary-btn" href="/request-estimate/" data-track="request_estimate_click">Start your estimate request</a>
       </div>
 
-      <div class="ct-direct">
-        <h2 class="ct-h2">Talk to us directly</h2>
-        <p class="ct-text">Call the office, or email your questions. Ask for David Lerma when you call.</p>
+      <!-- Secondary: contact directly -->
+      <div class="ct-secondary">
+        <h2 class="ct-secondary-title">Contact Directly</h2>
         <div class="ct-buttons">
           <a class="btn btn-primary" href={business.phoneHref} data-track="click_to_call">Call Now</a>
           <a class="btn btn-line" href={`mailto:${business.email}`} data-track="email_us">Email Us</a>
         </div>
-        <p class="ct-meta">Serving San Jose, California. Owned by {business.owner}.</p>
+        <p class="ct-location">Serving San Jose, California.</p>
       </div>
     </div>
   </section>

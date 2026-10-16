@@ -47,10 +47,11 @@ test('built HTML: footer contact link is restrained and not on the contact page'
   }
 });
 
-test('About has one owner introduction (no duplicate David Lerma headings)', () => {
+test('About introduces David Lerma once, with no black owner block or placeholder', () => {
   const src = read('src/pages/about.astro');
-  assert.equal((src.match(/Meet David Lerma/g) || []).length, 1);
-  assert.ok(!/<h2[^>]*>\{business\.owner\}/.test(src), 'owner name is not a second heading');
+  assert.equal((src.match(/David Lerma/g) || []).length, 1, 'David introduced once');
+  assert.ok(!/ab-owner/.test(src), 'no owner rectangle');
+  assert.ok(!/Meet David Lerma/.test(src), 'owner heading merged into the builder section');
 });
 
 test('Projects hub and detail keep their closing CTA and the approved structure', () => {
