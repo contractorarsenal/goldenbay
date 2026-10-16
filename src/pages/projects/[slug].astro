@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Cta from '../../components/Cta.astro';
 import ProjectImage from '../../components/ProjectImage.astro';
+import PageHero from '../../components/PageHero.astro';
 import { projects, relatedProjects, isIndexable, introFor, type Project } from '../../data/projects';
 import { getService } from '../../data/services';
 import { abs } from '../../data/business';
@@ -17,14 +18,7 @@ const noindex = !isIndexable(p);
 const imageObjects = p.images.map((im) => ({ '@type': 'ImageObject', name: p.title, description: im.alt, representativeOfPage: false }));
 ---
 <Base title={p.title} description={`${introFor(p)} Photographs from Gold Bay Builders.`} path={path} noindex={noindex} schema={[{ '@context': 'https://schema.org', '@type': 'CreativeWork', name: p.title, about: p.category, description: introFor(p), url: abs(path), image: imageObjects }]} crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Projects', path: '/projects/' }, { name: p.title, path }]}>
-  <section class="pj-detail-hero" aria-labelledby="pd-title">
-    <div class="wrap">
-      <nav aria-label="Breadcrumb" class="pj-crumbs"><a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/projects/">Our Projects</a> <span aria-hidden="true">/</span> <span aria-current="page">{p.title}</span></nav>
-      <span class="eyebrow">{p.category}</span>
-      <h1 id="pd-title">{p.title}</h1>
-      <p class="lede">{introFor(p)}</p>
-    </div>
-  </section>
+  <PageHero title={p.title} current={p.title} id="pd-title" lede={introFor(p)} crumbs={[{ name: 'Home', href: '/' }, { name: 'Our Projects', href: '/projects/' }]} />
 
   <section class="section pj-detail">
     <div class="wrap pj-detail-grid">
@@ -48,10 +42,8 @@ const imageObjects = p.images.map((im) => ({ '@type': 'ImageObject', name: p.tit
           <dt>Category</dt><dd>{p.category}</dd>
           <dt>Photographs</dt><dd>{total === 1 ? '1 photo' : `${total} photos`}</dd>
         </dl>
-        {p.scope && p.scope.length > 0 ? (
+        {p.scope && p.scope.length > 0 && (
           <><h3>Scope of work</h3><ul class="pj-scope">{p.scope.map((s) => <li>{s}</li>)}</ul></>
-        ) : (
-          <p class="pj-generic">A selection of photographs documenting this project. Scope details will be added once they are confirmed.</p>
         )}
         <h3>Related services</h3>
         {p.services.length > 0 ? (

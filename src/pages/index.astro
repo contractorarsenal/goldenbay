@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ProjectImage from '../components/ProjectImage.astro';
 import Testimonial from '../components/Testimonial.astro';
+import Cta from '../components/Cta.astro';
+import ServicesList from '../components/ServicesList.astro';
 import { business } from '../data/business';
 import { heroPhoto } from '../data/home';
 import { getProject } from '../data/projects';
@@ -17,16 +19,6 @@ const problems = [
   { title: 'Messy job sites', text: 'Dust and debris spread through a home when the work area is not contained.' },
 ];
 
-// Services. The two feature cards use real photographs; the rest are text cards (no empty image frames).
-const kitchenPhotos = [getProject('kitchen-remodel').images[0], getProject('bathroom-stone-shower-terracotta-floor').images[0]];
-const services = [
-  { key: 'kb', feature: true, title: 'Kitchen & Bathroom Remodeling', text: 'Rooms rebuilt around daily use, with the planning, waterproofing and trades behind the finish.', scope: ['Layout, storage and lighting', 'Waterproofing and ventilation', 'Cabinetry, tile and fixtures'], links: [{ label: 'Kitchen remodeling', href: '/services/kitchen-remodeling/' }, { label: 'Bathroom remodeling', href: '/services/bathroom-remodeling/' }] },
-  { key: 'fh', feature: false, title: 'Full Home Remodeling', text: 'Whole-house renovations that rework layout, systems and finishes under one scope.', scope: ['Opening and reconfiguring floor plans', 'Updating older electrical and plumbing', 'Coordinated finishes, room to room'], links: [{ label: 'Full home remodeling', href: '/services/full-home-remodeling/' }] },
-  { key: 'ad', feature: false, title: 'Home Additions', text: 'Added rooms and second stories that tie into the structure and style of the house you have.', scope: ['Primary suites and family rooms', 'Second-story additions', 'Roof, framing and systems tie-ins'], links: [{ label: 'Home additions', href: '/services/home-additions/' }] },
-  { key: 'adu', feature: false, title: 'ADU Construction', text: 'Detached, attached and garage-conversion accessory dwelling units.', scope: ['Detached and attached units', 'Garage conversions', 'San José permitting context'], links: [{ label: 'ADU construction', href: '/services/adu-construction/' }, { label: 'San Jose ADU guide', href: '/guides/san-jose-adu-guide/' }] },
-  { key: 'cu', feature: false, title: 'Custom Home Building', text: 'New homes planned from the site up, built from your architect’s or designer’s plans.', scope: ['Site and feasibility review', 'Builder input before plans are final', 'Staged inspections to final'], links: [{ label: 'Custom home building', href: '/services/custom-home-construction/' }] },
-];
-
 // Projects: three real photographs, one per project, no bathroom repeated.
 const work = [
   { slug: 'kitchen-remodel', focus: '50% 52%' },
@@ -34,10 +26,8 @@ const work = [
   { slug: 'patio-construction', focus: '50% 68%' },
 ].map((f) => { const p = getProject(f.slug); return { ...f, p, img: p.images[0] }; });
 
-// Reviews: exact supplied text.
-const lead = getReview('terri-m');
-const pairA = getReview('andrea-j');
-const pairB = getReview('kevin-j');
+// Reviews: three exact supplied quotes, presented as equal cards.
+const reviewCards = ['terri-m', 'andrea-j', 'kevin-j'].map((id) => getReview(id));
 
 // Process: general homeowner guidance. These describe how residential projects usually unfold, not confirmed Gold Bay commitments.
 const steps = [
@@ -97,35 +87,18 @@ const steps = [
     </div>
   </section>
 
-  <!-- 5 · SERVICES -->
+  <!-- 5 · SERVICES (V8: ruled list, no boxes) -->
   <section class="section hp-services" aria-labelledby="svc-title">
     <div class="wrap">
-      <div class="hp-head hp-center">
+      <div class="v8-head">
         <span class="eyebrow">What we build</span>
         <h2 id="svc-title">Five services for San Jose homes.</h2>
         <p>Choose the category that fits your project. Each service page explains the planning, permits and scope for that kind of work.</p>
       </div>
-      <ul class="hp-svc-grid">
-        {services.map((s) => (
-          <li class:list={['hp-svc', s.key === 'cu' ? 'band' : 'compact']}>
-            {s.key === 'kb' && (
-              <div class="hp-svc-media" aria-hidden="true">
-                {kitchenPhotos.map((im) => <ProjectImage file={im.file} alt="" focus={im.focus} aspect="4 / 3" mobileAspect="4 / 3" sizes="(min-width: 48rem) 22vw, 45vw" />)}
-              </div>
-            )}
-            <div class="hp-svc-body">
-              <h3>{s.title}</h3>
-              <p>{s.text}</p>
-              <div class="hp-svc-links">
-                {s.links.map((l) => <a class="arrow-link" href={l.href}>{l.label} <span aria-hidden="true">→</span></a>)}
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div class="hp-services-foot">
+      <ServicesList />
+      <div class="sv-foot">
         <a class="btn btn-primary" href="/services/">See all services</a>
-        <a class="arrow-link" href="/request-estimate/">Not sure which one? Request an estimate <span aria-hidden="true">→</span></a>
+        <a class="v8-link" href="/request-estimate/">Not sure which one? Request an estimate</a>
       </div>
     </div>
   </section>
@@ -175,23 +148,19 @@ const steps = [
     </div>
   </section>
 
-  <!-- 8 · TESTIMONIALS -->
+  <!-- 8 · REVIEWS (V8: three equal quote cards) -->
   <section class="section hp-reviews" aria-labelledby="proof-title">
     <div class="wrap">
-      <div class="hp-head">
+      <div class="v8-head">
         <span class="eyebrow">What homeowners say</span>
         <h2 id="proof-title">Customer reviews, in their own words.</h2>
       </div>
-      <div class="hp-review-grid">
-        <div class="hp-review-main">
-          <Testimonial review={lead} mode="excerpt" size="lg" />
-        </div>
-        <div class="hp-review-side">
-          <div><Testimonial review={pairA} mode="excerpt" /></div>
-          <div><Testimonial review={pairB} mode="excerpt" /></div>
-        </div>
-      </div>
-      <p class="hp-reviews-foot"><a class="btn btn-line" href="/reviews/">View All Reviews</a></p>
+      <ul class="rv-cards">
+        {reviewCards.map((r) => (
+          <li><Testimonial review={r} mode="excerpt" /></li>
+        ))}
+      </ul>
+      <p class="rv-foot"><a class="btn btn-line" href="/reviews/">View All Reviews</a></p>
     </div>
   </section>
 
@@ -210,21 +179,6 @@ const steps = [
     </div>
   </section>
 
-  <!-- 10 · FINAL CTA -->
-  <section class="section sec-128 hp-cta on-dark" aria-labelledby="cta-title">
-    <div class="wrap hp-cta-grid hp-center">
-      <div>
-        <span class="eyebrow">Get started</span>
-        <h2 id="cta-title">Ready to get your project started?</h2>
-        <p>Tell us about your home and what you want to change. We will follow up to talk through scope and next steps.</p>
-      </div>
-      <div>
-        <div class="hp-cta-btns">
-          <a class="btn btn-gold" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
-          <a class="btn btn-outline-light" href={business.phoneHref} data-track="click_to_call">Call Now</a>
-        </div>
-        <p class="hp-cta-note">Estimate requests take about two minutes. Prefer email? <a href={`mailto:${business.email}`} data-track="email_us" style="color:var(--color-white);text-decoration:underline">Email Us</a>.</p>
-      </div>
-    </div>
-  </section>
+  <!-- 10 · FINAL CTA (V8: shared charcoal band) -->
+  <Cta title="Ready to get your project started?" text="Tell us about your home and what you want to change. We will follow up to talk through scope and next steps." />
 </Base>

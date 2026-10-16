@@ -2,19 +2,120 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Cta from '../components/Cta.astro';
+import ProjectImage from '../components/ProjectImage.astro';
 import { business } from '../data/business';
+import { services } from '../data/services';
+import { getProject } from '../data/projects';
+
+// Selected project photographs (real work only). One per project, linking to the project page.
+const selected = ['kitchen-remodel', 'bathroom-stone-shower-terracotta-floor', 'patio-construction'].map((slug) => {
+  const p = getProject(slug);
+  return { p, img: p.images[0] };
+});
 ---
 <Base title="About Gold Bay Builders" description="Gold Bay Builders Inc. is a San Jose residential contractor led by owner David Lerma, building remodels, additions, ADUs and custom homes." path="/about/" crumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }]}>
-  <PageHero eyebrow="About" title="A San Jose builder, led by its owner." lede="Gold Bay Builders Inc. builds and remodels homes in San Jose, California." crumbs={[{ name: 'Home', href: '/' }]} />
-  <section class="section"><div class="wrap split">
-    <div><h2>Building Your Bay Home</h2></div>
-    <div class="prose">
-      <p class="lede">{business.name} is a residential general contractor owned by {business.owner}. We take on whole-home remodels, additions, accessory dwelling units, kitchens, bathrooms and custom homes.</p>
-      <p>Our approach is practical: define the scope, put it in writing, plan selections and permits before demolition, and keep the homeowner informed as the work proceeds.</p>
-      <h2>How to check a contractor</h2>
-      <p>California requires contractors working on projects of this type to be licensed by the Contractors State License Board. You can check any contractor’s license, bond and workers’ compensation status at <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/CheckLicense.aspx" rel="noopener">cslb.ca.gov</a>. We encourage you to do this for every contractor you consider.</p>
-      <p><a href="/meet-david-lerma/">Meet David Lerma</a> · <a href="/our-process/">How we work</a> · <a href="/services/">Our services</a></p>
+  <PageHero eyebrow="About" title="A San Jose builder, led by its owner." lede={`${business.name} builds and remodels homes in San Jose, California.`} crumbs={[{ name: 'Home', href: '/' }]} />
+
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">The company</span>
+        <h2 style="margin-top:.9rem">A residential contractor in San Jose.</h2>
+      </div>
+      <div class="v8-prose">
+        <p class="lede">{business.name} is a residential general contractor owned by {business.owner}. We take on whole-home remodels, additions, accessory dwelling units, kitchens, bathrooms and custom homes.</p>
+        <p>Our approach is practical: define the scope, put it in writing, plan selections and permits before demolition, and keep the homeowner informed as the work proceeds.</p>
+      </div>
     </div>
-  </div></section>
+    <div class="wrap">
+      <ul class="ab-facts">
+        <li><b>Residential work</b><span>Homes in San Jose, California, planned around the City of San José’s permit process.</span></li>
+        <li><b>Owner-led</b><span>{business.owner} owns the company and is the main point of contact for homeowners.</span></li>
+        <li><b>Scope in writing</b><span>What is included, what is not, and how changes are handled, written down before the work begins.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="v8-section v8-tint">
+    <div class="wrap ab-person">
+      <div class="v8-panel">
+        <span class="eyebrow">The owner</span>
+        <h2 style="font-size:clamp(1.8rem,2.6vw,2.2rem);margin-top:.8rem">{business.owner}</h2>
+        <p style="margin-top:.6rem;color:var(--color-body)">Owner, {business.name}</p>
+      </div>
+      <div>
+        <h2>Meet David Lerma</h2>
+        <p class="lede" style="margin-top:1rem">David owns Gold Bay Builders Inc. and is the main point of contact for homeowners.</p>
+        <div class="v8-actions" style="margin-top:1.5rem">
+          <a class="btn btn-primary" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+          <a class="v8-link" href="/meet-david-lerma/">More about David <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="v8-section">
+    <div class="wrap">
+      <div class="v8-head">
+        <span class="eyebrow">What we build</span>
+        <h2>Six kinds of residential work.</h2>
+        <p>Each service page explains the planning, permits and scope for that type of project.</p>
+      </div>
+      <ul class="ab-services">
+        {services.map((s) => (
+          <li><a href={`/services/${s.slug}/`}>{s.name}<span>{s.short}</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="v8-section v8-tint">
+    <div class="wrap">
+      <div class="v8-head">
+        <span class="eyebrow">Recent work</span>
+        <h2>Selected projects.</h2>
+        <p>Photographs from projects we have documented. Each project page has the full set.</p>
+      </div>
+      <ul class="ab-photos">
+        {selected.map((s) => (
+          <li>
+            <figure>
+              <ProjectImage file={s.img.file} alt={s.img.alt} focus={s.img.focus} aspect="4 / 3" mobileAspect="4 / 3" sizes="(min-width: 48rem) 31vw, 100vw" />
+              <figcaption><a href={`/projects/${s.p.slug}/`}>{s.p.title}</a></figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+      <p class="ab-note"><a class="v8-link" href="/projects/">See all projects <span aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
+  <section class="v8-section">
+    <div class="wrap">
+      <div class="v8-head">
+        <span class="eyebrow">Working with us</span>
+        <h2>What homeowners can expect.</h2>
+      </div>
+      <ul class="v8-grid-3" style="margin-top:2rem">
+        <li><h3>Scope in writing</h3><p>The work, its exclusions and any allowances are written out so both sides are working from the same plan.</p></li>
+        <li><h3>Estimates on the same scope</h3><p>Written estimates for the same scope make proposals easier to compare before you decide.</p></li>
+        <li><h3>Questions at every stage</h3><p>Selections, permits and changes are discussed with you before they are priced or built.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="v8-section v8-section-tight">
+    <div class="wrap v8-split v8-split-even">
+      <div>
+        <span class="eyebrow">Checking a contractor</span>
+        <h2 style="margin-top:.9rem;font-size:clamp(1.8rem,2.6vw,2.2rem)">Verify any license before you sign.</h2>
+      </div>
+      <div class="v8-prose">
+        <p>California requires contractors working on projects of this type to be licensed by the Contractors State License Board. You can check any contractor’s license, bond and workers’ compensation status at <a class="v8-link" href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/CheckLicense.aspx" rel="noopener">cslb.ca.gov</a>.</p>
+        <p style="margin-top:1rem"><a class="v8-link" href="/faq/">Read the homeowner FAQ, including questions to ask any contractor <span aria-hidden="true">→</span></a></p>
+      </div>
+    </div>
+  </section>
+
   <Cta />
 </Base>

@@ -6,9 +6,25 @@ import { services } from '../../data/services';
 ---
 <Base title="Residential Construction Services in San Jose" description="Full home remodeling, home additions, ADU construction, kitchen and bathroom remodeling, and custom homes from Gold Bay Builders in San Jose, CA." path="/services/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services/' }]}>
   <PageHero eyebrow="Services" title="What we build for San Jose homeowners." lede="Six services covering most residential projects, from a single bathroom to a new home." crumbs={[{ name: 'Home', href: '/' }]} />
-  <section class="section"><div class="wrap">
-    {services.map((s) => <a class="svc-row" href={`/services/${s.slug}/`}><span class="num">{s.num}</span><h3>{s.name}</h3><p>{s.short}</p><span class="go" aria-hidden="true">→</span></a>)}
-    <div style="border-top:1px solid var(--color-stone-2)"></div>
-  </div></section>
+  <section class="v8-section">
+    <div class="wrap">
+      <ul class="sv-list">
+        {services.map((s) => (
+          <li class="sv-row">
+            <div>
+              <span class="sv-num">{s.num}</span>
+              <h2 class="sv-title"><a href={`/services/${s.slug}/`}>{s.name}</a></h2>
+            </div>
+            <div>
+              <p>{s.short}</p>
+            </div>
+            <div class="sv-links">
+              <a href={`/services/${s.slug}/`}>View service <span aria-hidden="true">→</span></a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
   <Cta />
 </Base>

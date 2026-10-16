@@ -2,14 +2,26 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Cta from '../components/Cta.astro';
-import Placeholder from '../components/Placeholder.astro';
 import { business } from '../data/business';
+// Stays noindex until David approves a fuller biography. No portrait is shown until one is supplied.
 ---
-<Base title="Meet David Lerma" description="David Lerma is the owner of Gold Bay Builders Inc., a San Jose residential contractor." path="/meet-david-lerma/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'Meet David Lerma', path: '/meet-david-lerma/' }]}>
-  <PageHero eyebrow="The owner" title="David Lerma" lede="Owner, Gold Bay Builders Inc." crumbs={[{ name: 'Home', href: '/' }]} />
-  <section class="section"><div class="wrap split rev">
-    <div class="prose"><p class="lede">David leads every Gold Bay Builders project and is the homeowner’s main point of contact.</p><p>His full story, including his background in construction, how the company started and what he cares about in a job, is being collected and will be published here after his review. We will not publish a biography he has not approved.</p><p>To speak with David directly, use the <a href={business.phoneHref}>Call Now</a> link on this page.</p></div>
-    <Placeholder label="Portrait of David Lerma" ratio="4 / 5" />
-  </div></section>
+<Base title="Meet David Lerma" description="David Lerma is the owner of Gold Bay Builders Inc., a San Jose residential contractor." path="/meet-david-lerma/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }, { name: 'Meet David Lerma', path: '/meet-david-lerma/' }]}>
+  <PageHero eyebrow="The owner" title="David Lerma" lede={`Owner, ${business.name}`} crumbs={[{ name: 'Home', href: '/' }, { name: 'About', href: '/about/' }]} />
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div class="v8-prose">
+        <p class="lede">David owns Gold Bay Builders Inc. and is the main point of contact for homeowners.</p>
+        <p>To talk through a project with David, call the office or send an estimate request. You can also read how the company works with homeowners on the <a class="v8-link" href="/about/">About page</a>.</p>
+      </div>
+      <div class="v8-panel">
+        <h2 style="font-size:1.6rem">Start a conversation</h2>
+        <p>Share the basics about your home and what you want to change, or call to speak with David directly.</p>
+        <div class="v8-actions" style="margin-top:1.5rem">
+          <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+          <a class="btn btn-line" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
   <Cta />
 </Base>

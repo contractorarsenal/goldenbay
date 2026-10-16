@@ -78,7 +78,7 @@ test('project detail page wires indexing, breadcrumbs, lightbox and related link
   assert.ok(src.includes('noindex={noindex}') && src.includes('const noindex = !isIndexable(p)'));
   assert.ok(!src.includes("'@type': 'BreadcrumbList'"), 'Base already emits BreadcrumbList from crumbs; do not duplicate');
   assert.ok(src.includes('crumbs={[{ name: \'Home\''));
-  assert.ok(src.includes('aria-label="Breadcrumb"'));
+  assert.ok(src.includes("import PageHero from '../../components/PageHero.astro'"), 'detail hero uses the shared PageHero (breadcrumb + H1)');
   assert.ok(src.includes('id="pj-lb"') && src.includes('showModal()'));
   assert.ok(src.includes('relatedProjects(p.slug, 3)'));
   assert.ok(src.includes('Planning Something Similar?'));
@@ -88,7 +88,9 @@ test('project detail page wires indexing, breadcrumbs, lightbox and related link
 
 test('projects hub has one H1, accessible filter group, and status region', () => {
   const src = read('src/pages/projects/index.astro');
-  assert.equal((src.match(/<h1/g) || []).length, 1);
+  // The H1 is rendered by the shared PageHero component; the hub passes exactly one title.
+  assert.equal((src.match(/<PageHero /g) || []).length, 1);
+  assert.equal(read('src/components/PageHero.astro').match(/<h1/g)?.length, 1);
   assert.ok(src.includes('role="group"') && src.includes('aria-pressed'));
   assert.ok(src.includes('aria-live="polite"'));
   assert.ok(!/example\.(invalid|com)/.test(src), 'placeholder domain in hub');

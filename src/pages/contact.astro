@@ -2,19 +2,34 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { business } from '../data/business';
+// Phone and email appear only inside tel:/mailto: links, never as visible text.
 ---
-<Base title="Contact Gold Bay Builders" description="Call or email Gold Bay Builders in San Jose, CA, or request an estimate for your remodel, addition, ADU or custom home." path="/contact/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }]}>
-  <PageHero eyebrow="Contact" title="Let’s talk about your project." crumbs={[{ name: 'Home', href: '/' }]} />
-  <section class="section"><div class="wrap split">
-    <div class="contact-actions">
-      <h2 style="font-size:1.6rem">Talk to us</h2>
-      <p>Call or email the owner’s office directly, or send an estimate request. Contact details are one tap away on this page.</p>
-      <div class="contact-btns">
-        <a class="btn btn-primary" href={business.phoneHref} data-track="click_to_call">Call Now</a>
-        <a class="btn btn-line" href={`mailto:${business.email}`} data-track="email_us">Email Us</a>
+<Base title="Contact Gold Bay Builders" description="Call or email Gold Bay Builders in San Jose, CA, or request an estimate for your remodel, addition, ADU or custom home." path="/contact/" crumbs={[{ name: 'Home', path: '/' }]}>
+  <PageHero eyebrow="Contact" title="Talk with Gold Bay Builders." lede="Call or email the office, or request an estimate for your project. We serve San Jose, California." crumbs={[{ name: 'Home', href: '/' }]} />
+
+  <section class="v8-section">
+    <div class="wrap ct-grid">
+      <div>
+        <span class="eyebrow">Call or email</span>
+        <h2 style="margin-top:.9rem">Prefer to talk first?</h2>
+        <p class="lede" style="margin-top:1rem">Call to speak with the office, or email us with your questions. Ask for David Lerma when you call.</p>
+        <div class="ct-direct">
+          <a class="btn btn-primary" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+          <a class="btn btn-line" href={`mailto:${business.email}`} data-track="email_us">Email Us</a>
+        </div>
+        <p class="ct-meta">Serving San Jose, California. Owned by {business.owner}.</p>
       </div>
-      <p class="serving">Serving San Jose, California</p>
+
+      <div class="ct-panel">
+        <h2>Request an Estimate</h2>
+        <p>Tell us about your home and what you want to change. The request takes about two minutes and helps us prepare for the first conversation.</p>
+        <ol class="ct-steps">
+          <li><b>Tell us about the project</b><span>Type of work, the property and the budget range you are considering.</span></li>
+          <li><b>We review your request</b><span>Each request is reviewed before we follow up.</span></li>
+          <li><b>We follow up</b><span>We talk through scope and next steps with you.</span></li>
+        </ol>
+        <a class="btn btn-gold" href="/request-estimate/" data-track="request_estimate_click">Start your estimate request</a>
+      </div>
     </div>
-    <div class="prose"><p class="lede">The fastest way to start is the estimate request. It takes about two minutes and helps us come to the first conversation prepared.</p><p><a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a></p><p>Prefer to talk first? Use Call Now and ask for David Lerma.</p></div>
-  </div></section>
+  </section>
 </Base>

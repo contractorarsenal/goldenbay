@@ -1,0 +1,25 @@
+---
+import { homeServices } from '../data/home-services';
+/**
+ * Homepage services as ruled rows: number, title, one line, scope tags and links. No boxes, no placeholder frames.
+ * Chosen over a photo-plus-list layout (see docs/screenshots/sitewide-v8/services-alternatives/): one photo beside five
+ * services implied a specialty the photo does not show.
+ */
+---
+<ul class="sv-list">
+  {homeServices.map((s, i) => (
+    <li class="sv-row">
+      <div>
+        <span class="sv-num">0{i + 1}</span>
+        <h3>{s.title}</h3>
+      </div>
+      <div>
+        <p>{s.text}</p>
+        <ul class="sv-scope">{s.scope.map((x) => <li>{x}</li>)}</ul>
+      </div>
+      <div class="sv-links">
+        {s.links.map((l) => <a href={l.href}>{l.label} <span aria-hidden="true">→</span></a>)}
+      </div>
+    </li>
+  ))}
+</ul>

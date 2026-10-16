@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Cta from '../../components/Cta.astro';
 import ProjectImage from '../../components/ProjectImage.astro';
+import PageHero from '../../components/PageHero.astro';
 import { projects, activeFilterGroups, groupOf, introFor } from '../../data/projects';
 import { abs } from '../../data/business';
 
@@ -13,17 +14,11 @@ const loneTablet = projects.length % 2 === 1;
 const itemList = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Our Projects', url: abs('/projects/'), hasPart: projects.map((p) => ({ '@type': 'CreativeWork', name: p.title, url: abs(`/projects/${p.slug}/`), about: p.category })) };
 ---
 <Base title="Our Projects: Kitchens, Bathrooms, Patios & Outdoor Living" description="Photographs of recent residential work by Gold Bay Builders: kitchen and bathroom remodels, patios, pavers and outdoor living areas." path="/projects/" noindex={projects.length === 0} schema={[itemList]} crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Projects', path: '/projects/' }]}>
-  <section class="pj-hero" aria-labelledby="pj-title">
-    <div class="wrap">
-      <nav aria-label="Breadcrumb" class="pj-crumbs"><a href="/">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Our Projects</span></nav>
-      <span class="eyebrow">Our work</span>
-      <h1 id="pj-title">Projects built around real homes.</h1>
-      <p class="lede">Recent remodeling and construction work by Gold Bay Builders, from kitchens and bathrooms to outdoor living spaces.</p>
-      <div class="pj-hero-actions">
-        <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
-      </div>
+  <PageHero title="Projects built around real homes." current="Our Projects" id="pj-title" lede="Recent remodeling and construction work by Gold Bay Builders, from kitchens and bathrooms to outdoor living spaces." crumbs={[{ name: 'Home', href: '/' }]}>
+    <div class="v8-actions">
+      <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
     </div>
-  </section>
+  </PageHero>
 
   <section class="pj-gallery section" aria-label="Project gallery">
     <div class="wrap">

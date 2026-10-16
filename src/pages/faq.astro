@@ -19,7 +19,8 @@ const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntit
     <div>
       <h2 style="font-size:clamp(1.6rem,2.6vw,2.2rem)">Six questions worth asking any contractor.</h2>
       <p style="margin-top:1rem">Communication, cost changes and unclear scope cause most homeowner frustration. These questions apply to us as much as to anyone you interview.</p>
-      <p style="margin-top:1rem;font-size:.92rem">Always check a license, bond and workers’ compensation on the <a href={business.license.cslbUrl} rel="noopener">CSLB license lookup</a>.</p>
+      <h3 style="margin-top:2rem">How to check a contractor</h3>
+      <p style="margin-top:.75rem">California requires contractors working on projects of this type to be licensed by the Contractors State License Board. You can check any contractor’s license, bond and workers’ compensation status on the <a class="v8-link" href={business.license.cslbUrl} rel="noopener">CSLB license lookup</a>. We encourage you to do this for every contractor you consider, including us.</p>
     </div>
     <div class="faq">
       {contractorChecks.map((c) => (

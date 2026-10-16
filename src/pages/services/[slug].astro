@@ -1,11 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Cta from '../../components/Cta.astro';
 import Faq from '../../components/Faq.astro';
-import Placeholder from '../../components/Placeholder.astro';
-import ArchPlate from '../../components/ArchPlate.astro';
-import { extras } from '../../data/service-extras';
 import Testimonial from '../../components/Testimonial.astro';
+import { extras } from '../../data/service-extras';
 import { reviewsFor } from '../../data/reviews';
 import { services, getService, type Service } from '../../data/services';
 import { serviceSchema } from '../../lib/schema';
@@ -17,7 +16,6 @@ const { s } = Astro.props as { s: Service };
 const path = `/services/${s.slug}/`;
 const x = extras[s.slug];
 const quotes = reviewsFor(s.slug);
-const kind = ({ 'full-home-remodeling': 'remodel', 'home-additions': 'addition', 'adu-construction': 'adu', 'kitchen-remodeling': 'kitchen', 'bathroom-remodeling': 'bath', 'custom-home-construction': 'custom' } as const)[s.slug as keyof typeof extras] ?? 'remodel';
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -25,83 +23,116 @@ const faqSchema = {
 };
 ---
 <Base title={s.metaTitle} description={s.metaDescription} path={path} crumbs={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services/' }, { name: s.name, path }]} schema={[serviceSchema(s.name, path, s.metaDescription), faqSchema]}>
-  <section class="bg-ink on-dark blueprint" style="padding-block:clamp(2.5rem,6vw,5rem)">
-    <div class="wrap">
-      <nav aria-label="Breadcrumb" style="font-size:.85rem;color:#cfc8bb;margin-bottom:2rem"><ol style="display:flex;flex-wrap:wrap;gap:.5rem;list-style:none"><li><a href="/">Home</a> <span aria-hidden="true">/</span></li><li><a href="/services/">Services</a> <span aria-hidden="true">/</span></li></ol></nav>
-      <div class="svc-hero-grid">
-        <div>
-          <span class="eyebrow">Service {s.num} of 06</span>
-          <h1 style="margin-top:1.25rem">{s.headline}</h1>
-          <p class="lede" style="margin-top:1.5rem">{s.lede}</p>
-          <div style="margin-top:2.25rem;display:flex;flex-wrap:wrap;gap:.85rem"><a class="btn btn-brass" href="/request-estimate/" data-track="request_estimate_click">Request an estimate</a><a class="btn btn-line" href="/contact/">Ask a question</a></div>
+  <section class="ih" aria-labelledby="svc-title">
+    <div class="wrap svp-hero">
+      <div>
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services', href: '/services/' }, { name: s.name }]} />
+        <h1 id="svc-title">{s.headline}</h1>
+        <p class="lede">{s.lede}</p>
+        <div class="v8-actions" style="margin-top:1.75rem">
+          <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an estimate</a>
+          <a class="btn btn-line" href="/contact/">Ask a question</a>
         </div>
-        <ArchPlate kind={kind} />
       </div>
-      <dl class="glance">{x.glance.map((g) => <div><dt>{g.label}</dt><dd>{g.value}</dd></div>)}</dl>
+      <dl class="svp-facts">
+        {x.glance.map((g) => <div><dt>{g.label}</dt><dd>{g.value}</dd></div>)}
+      </dl>
     </div>
   </section>
 
-  <section class="section" style="padding-bottom:0"><div class="wrap"><p class="eyebrow" style="margin-bottom:1.25rem">The short answer</p><p class="answer-box">{x.quickAnswer}</p></div></section>
-
-  <section class="section"><div class="wrap split">
-    <div><span class="eyebrow">Overview</span><h2 style="margin-top:1.25rem">{x.title}</h2></div>
-    <div class="prose">{s.overview.map((p) => <p>{p}</p>)}</div>
-  </div></section>
-
-  {s.layout === 'editorial' && (
-    <section class="section bg-stone"><div class="wrap">
-      <span class="eyebrow">Common projects</span>
-      <div class="tiles three" style="margin-top:2rem">{s.projectTypes.map((t) => <div><h3>{t.title}</h3><p>{t.text}</p></div>)}</div>
-    </div></section>
-  )}
-  {s.layout === 'split' && (
-    <section class="section bg-stone"><div class="wrap split rev">
-      <div><span class="eyebrow">Common projects</span><ul class="rule-list" style="margin-top:1.5rem">{s.projectTypes.map((t) => <li style="grid-template-columns:1fr"><h3>{t.title}</h3><p>{t.text}</p></li>)}</ul></div>
-      <div><Placeholder label={`${s.name} project`} ratio="4 / 5" /></div>
-    </div></section>
-  )}
-  {s.layout === 'numbered' && (
-    <section class="section bg-ink on-dark"><div class="wrap">
-      <span class="eyebrow">Types and options</span>
-      <ul class="rule-list" style="margin-top:2rem">{s.projectTypes.map((t, i) => <li><span class="num">0{i + 1}</span><h3>{t.title}</h3><p>{t.text}</p></li>)}</ul>
-    </div></section>
-  )}
-
-  <section class="section"><div class="wrap split">
-    <div><span class="eyebrow">Homeowner concerns</span><h2 style="margin-top:1.25rem">{s.concernsTitle}</h2></div>
-    <ul class="rule-list">{s.concerns.map((c) => <li style="grid-template-columns:1fr"><h3>{c.title}</h3><p style="color:var(--color-ink-2)">{c.text}</p></li>)}</ul>
-  </div></section>
-
-  <section class="section bg-stone"><div class="wrap split rev">
-    <div class="prose"><h2 style="margin-top:0">{s.planningTitle}</h2><ul>{s.planning.map((p) => <li>{p}</li>)}</ul></div>
-    <div style="background:var(--color-paper);padding:2rem;border:1px solid var(--color-stone-2)">
-      <h3>What helps us give an accurate estimate</h3>
-      <ul style="margin:1rem 0 0 1.2rem;list-style:disc;display:grid;gap:.5rem">{s.beforeEstimate.map((b) => <li>{b}</li>)}</ul>
-      <p style="margin-top:1.5rem"><a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Start your request</a></p>
+  <section class="v8-section-tight">
+    <div class="wrap">
+      <p class="svp-answer">{x.quickAnswer}</p>
     </div>
-  </div></section>
+  </section>
 
-  <section class="section"><div class="wrap split">
-    <div><span class="eyebrow">Local relevance</span><h2 style="margin-top:1.25rem">Built for San Jose homes and rules.</h2></div>
-    <div class="prose"><p>Permit processes, plan review and fees are set by each city. We plan {s.name.toLowerCase()} projects around the requirements of the City of San José, and discuss other jurisdictions case by case.</p><p><a href="/service-areas/san-jose/">See how we work in San Jose</a></p><p>Keep reading: {x.guides.map((g, i) => <>{i > 0 && ' · '}<a href={g.href}>{g.label}</a></>)}</p></div>
-  </div></section>
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Overview</span>
+        <h2 style="margin-top:.9rem">{x.title}</h2>
+      </div>
+      <div class="v8-prose">{s.overview.map((p) => <p>{p}</p>)}</div>
+    </div>
+  </section>
+
+  <section class="v8-section v8-tint">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Common projects</span>
+        <h2 style="margin-top:.9rem">Typical work in this category.</h2>
+      </div>
+      <ul class="svp-list">{s.projectTypes.map((t) => <li><h3>{t.title}</h3><p>{t.text}</p></li>)}</ul>
+    </div>
+  </section>
+
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Homeowner concerns</span>
+        <h2 style="margin-top:.9rem">{s.concernsTitle}</h2>
+      </div>
+      <ul class="svp-list">{s.concerns.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
+    </div>
+  </section>
+
+  <section class="v8-section v8-tint">
+    <div class="wrap v8-split v8-split-even">
+      <div class="v8-prose">
+        <h2>{s.planningTitle}</h2>
+        <ul>{s.planning.map((p) => <li>{p}</li>)}</ul>
+      </div>
+      <div class="v8-panel">
+        <h3>What helps us give an accurate estimate</h3>
+        <ul class="v8-prose" style="margin-top:0">{s.beforeEstimate.map((b) => <li style="list-style:disc">{b}</li>)}</ul>
+        <div class="v8-actions" style="margin-top:1.5rem">
+          <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Start your request</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Local relevance</span>
+        <h2 style="margin-top:.9rem">Built for San Jose homes and rules.</h2>
+      </div>
+      <div class="v8-prose">
+        <p>Permit processes, plan review and fees are set by each city. We plan {s.name.toLowerCase()} projects around the requirements of the City of San José, and discuss other jurisdictions case by case.</p>
+        <p><a class="v8-link" href="/service-areas/san-jose/">See how we work in San Jose <span aria-hidden="true">→</span></a></p>
+        <p>Keep reading: {x.guides.map((g, i) => <>{i > 0 && ' · '}<a class="v8-link" href={g.href}>{g.label}</a></>)}</p>
+      </div>
+    </div>
+  </section>
 
   {quotes.length > 0 && (
-    <section class="section" style="padding-top:0"><div class="wrap">
-      <span class="eyebrow">What homeowners say</span>
-      <div class="svc-quotes">{quotes.map((q) => <Testimonial review={q} mode="excerpt" />)}</div>
-    </div></section>
+    <section class="v8-section-tight">
+      <div class="wrap">
+        <span class="eyebrow">What homeowners say</span>
+        <div class="svp-quotes">{quotes.map((q) => <Testimonial review={q} mode="excerpt" />)}</div>
+      </div>
+    </section>
   )}
 
-  <section class="section" style="padding-top:0"><div class="wrap split">
-    <div><span class="eyebrow">Questions</span><h2 style="margin-top:1.25rem">{s.name}: frequently asked</h2></div>
-    <Faq items={s.faqs} />
-  </div></section>
+  <section class="v8-section">
+    <div class="wrap v8-split">
+      <div>
+        <span class="eyebrow">Questions</span>
+        <h2 style="margin-top:.9rem">{s.name}: frequently asked</h2>
+      </div>
+      <Faq items={s.faqs} />
+    </div>
+  </section>
 
-  <section class="section bg-stone"><div class="wrap">
-    <span class="eyebrow">Related services</span>
-    <div class="tiles three" style="margin-top:2rem">{s.related.map((r) => { const rs = getService(r); return <a href={`/services/${rs.slug}/`} style="text-decoration:none"><span class="num">{rs.num}</span><h3>{rs.name}</h3><p style="color:var(--color-muted)">{rs.short}</p></a>; })}</div>
-  </div></section>
+  <section class="v8-section v8-tint">
+    <div class="wrap">
+      <span class="eyebrow">Related services</span>
+      <ul class="svp-related">
+        {s.related.map((r) => { const rs = getService(r); return <li><a href={`/services/${rs.slug}/`}><b>{rs.name}</b><span>{rs.short}</span></a></li>; })}
+      </ul>
+    </div>
+  </section>
 
   <Cta />
 </Base>

@@ -1,6 +1,6 @@
 import type { Faq } from './services';
 export const generalFaqs: Faq[] = [
-  { q: 'Where does Gold Bay Builders work?', a: 'San Jose, California is our home market. Additional nearby cities are being confirmed; ask us if your project is outside San Jose.' },
+  { q: 'Where does Gold Bay Builders work?', a: 'San Jose, California is our home market. For projects outside San Jose, contact us with your address and we will tell you whether we can take the work.' },
   { q: 'How do I start a project?', a: 'Request an estimate online, or use the Call Now button. We ask about your project type, location, timeline and budget range, then follow up to schedule a conversation.' },
 { q: 'Can I add an ADU and split my lot under SB 9?', a: 'They are separate laws. SB 9 allows duplexes and lot splits on many single-family lots under specific conditions, and it can interact with ADU rules. Eligibility depends on zoning, overlays, tenant history and, for lot splits, an owner-occupancy affidavit. The City determines whether your lot qualifies; see our San José ADU guide for sources.' },
   { q: 'Do you handle permits?', a: 'Most remodeling, addition and ADU work requires permits. We discuss who prepares and submits what during planning. Approval timing is controlled by the city.' },
