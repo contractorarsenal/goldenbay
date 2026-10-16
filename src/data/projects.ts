@@ -107,3 +107,18 @@ export const filterGroups: { key: string; label: string; categories: ProjectCate
 export const groupOf = (p: Project) => filterGroups.find((g) => g.categories.includes(p.category))?.key ?? 'other';
 export const activeFilterGroups = () => filterGroups.filter((g) => projects.some((p) => g.categories.includes(p.category)));
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug)!;
+
+/** Up to `n` other projects for a "related projects" block: same category first, then the rest. Never includes `slug` itself. */
+export const relatedProjects = (slug: string, n = 3): Project[] => {
+  const current = getProject(slug);
+  const others = projects.filter((p) => p.slug !== slug);
+  const same = others.filter((p) => p.category === current.category);
+  const rest = others.filter((p) => p.category !== current.category);
+  return [...same, ...rest].slice(0, n);
+};
+
+/** Whether a project should be indexed. Only projects with confirmed details (scope, location or a client-approved description) qualify. */
+export const isIndexable = (p: Project) => p.detailed === true;
+
+/** Short, factual intro shown on cards and detail pages. Uses only what the photographs and client description show. */
+export const introFor = (p: Project) => p.summary;
