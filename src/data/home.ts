@@ -25,15 +25,6 @@ export const contractorChecks = [
   { topic: 'Permits and Inspections', ask: 'Which permits does my project need, and who prepares and submits them?', good: 'A plain explanation of what the city requires for your scope, and no guarantee of approval dates.' },
 ];
 
-export const projectStages = [
-  { n: '01', title: 'Goals and budget', text: 'Define what you want to change, what the house allows and a realistic budget range.' },
-  { n: '02', title: 'Site review and scope', text: 'Walk the property, identify constraints and write down what is in and out of scope.' },
-  { n: '03', title: 'Estimate and contract', text: 'Compare written proposals on the same scope and settle terms before work begins.' },
-  { n: '04', title: 'Plans, selections, permits', text: 'Finalize drawings, order long-lead materials and obtain the approvals the work needs.' },
-  { n: '05', title: 'Construction', text: 'Demolition through finishes in a planned sequence, with decisions raised before they delay work.' },
-  { n: '06', title: 'Inspections and closeout', text: 'Required inspections, a final walk-through and completion of any remaining items.' },
-];
-
 /** Homepage FAQ. Deliberately excludes questions the accordion already answers (permits, change orders, license check is in the accordion footnote). */
 export const homeFaqKeys = ['Where does Gold Bay Builders work?', 'How do I start a project?', 'Can you build from my architect’s plans?', 'Can I stay in my home during a remodel?', 'Can I add an ADU and split my lot under SB 9?'];
 

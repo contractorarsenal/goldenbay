@@ -39,12 +39,12 @@ const lead = getReview('terri-m');
 const pairA = getReview('andrea-j');
 const pairB = getReview('kevin-j');
 
-// Process: four general steps. Not confirmed operating commitments.
+// Process: general homeowner guidance. These describe how residential projects usually unfold, not confirmed Gold Bay commitments.
 const steps = [
-  { t: 'Tell us about the project', x: 'Share what you want to change, the property and a budget range.' },
-  { t: 'Site review and scope', x: 'We look at the property and write down what is and is not included.' },
-  { t: 'Estimate and agreement', x: 'You receive a written estimate to compare, and terms are settled before work begins.' },
-  { t: 'Planning, build and closeout', x: 'Selections, permits, construction and a final walk-through, with decisions raised before they delay work.' },
+  { t: 'Start with your goals', x: 'Describe what you want to change, the property, and a budget range you are considering.' },
+  { t: 'Define the scope', x: 'A site visit and a written description of what is and is not included help both sides agree on the work.' },
+  { t: 'Compare estimates', x: 'Written estimates make it easier to compare proposals on the same scope before you decide.' },
+  { t: 'Plan and build', x: 'Selections, permits and construction follow the agreed scope. Ask how decisions and changes are handled.' },
 ];
 ---
 <Base
@@ -163,13 +163,13 @@ const steps = [
     <div class="wrap">
       <div class="hp-head hp-center">
         <span class="eyebrow">How it works</span>
-        <h2 id="proc-title">A clear process from first call to final walk-through.</h2>
+        <h2 id="proc-title">How a residential project usually unfolds.</h2>
       </div>
       <ol class="hp-steps">
         {steps.map((s, i) => (<li><span class="num">Step {i + 1}</span><h3>{s.t}</h3><p>{s.x}</p></li>))}
       </ol>
       <div class="hp-process-foot">
-        <p>General guidance for homeowners. Timelines and sequence are set for each project in the estimate and agreement.</p>
+        <p>General guidance for homeowners, not a commitment. Timelines, sequence and terms are set for each project in its written agreement.</p>
         <a class="arrow-link" href="/our-process/">See our full process <span aria-hidden="true">→</span></a>
       </div>
     </div>

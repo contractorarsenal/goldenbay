@@ -1,8 +1,9 @@
+// General homeowner guidance. Describes how residential projects usually unfold; not confirmed Gold Bay operating commitments.
 export const processSteps = [
-  { n: '01', title: 'First conversation', text: 'You describe the project, the property and what you hope to accomplish. We listen first and ask about budget range and timing.' },
-  { n: '02', title: 'Site visit and scope', text: 'We look at the property, discuss constraints and define a clear scope of work.' },
-  { n: '03', title: 'Written estimate', text: 'You receive a written proposal describing what is and is not included.' },
-  { n: '04', title: 'Planning and permits', text: 'Plans, selections and permit submittals are organized so work does not start before it is ready.' },
-  { n: '05', title: 'Construction', text: 'Work proceeds in a planned sequence with regular updates and decisions raised before they delay the job.' },
-  { n: '06', title: 'Final walkthrough', text: 'We review the finished work with you, address punch-list items and complete required inspections.' },
+  { n: '01', title: 'First conversation', text: 'A typical first conversation covers the project, the property, the goals and a budget range.' },
+  { n: '02', title: 'Site visit and scope', text: 'Typically a site visit and discussion of constraints, leading to a written description of the scope.' },
+  { n: '03', title: 'Written estimate', text: 'A written proposal lets you compare what is and is not included before you decide.' },
+  { n: '04', title: 'Planning and permits', text: 'Plans, selections and permit submittals are typically prepared before construction begins.' },
+  { n: '05', title: 'Construction', text: 'Construction follows the agreed scope. Ask how decisions and changes are communicated.' },
+  { n: '06', title: 'Final walkthrough', text: 'A final review of the work, with any remaining items and required inspections completed before closeout.' },
 ];
