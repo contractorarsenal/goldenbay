@@ -30,19 +30,17 @@ const nf = await page.goto(BASE + '/definitely-not-a-page/'); if (nf.status() !=
 const rt = await (await ctx.request.get(BASE + '/robots.txt')).text(); if (!/Disallow: \//.test(rt) || /Allow: \//.test(rt)) fails.push('robots.txt is not a full Disallow');
 // raw repo must not be exposed
 for (const p of ['/README.md', '/package.json', '/CLAUDE.md', '/src/data/business.ts', '/.env.example', '/assets-src/manifest.json']) { const s = (await ctx.request.get(BASE + p)).status(); if (s === 200) fails.push(`repo file exposed: ${p}`); }
-// Estimate endpoint: unconfigured must be a clean 503, never success
+// Forms submit to Web3Forms from the browser; the site has no server endpoint. Nothing is submitted by this check.
 const probe = await ctx.request.post(BASE + '/api/estimate', { data: {}, headers: { 'content-type': 'application/json' } });
-console.log('POST /api/estimate {} ->', probe.status(), await probe.text());
-if (probe.status() === 503) {
-  await page.goto(BASE + '/request-estimate/', { waitUntil: 'networkidle' });
-  const next = () => page.click('#next');
-  await page.check('input[value="ADU"]'); await next(); await page.check('input[value="I own the home"]'); await page.fill('#zip', '95112'); await next();
-  await page.check('input[value="Planning"]'); await next(); await page.check('input[value="Not sure yet"]'); await next(); await page.check('input[value="Flexible"]'); await next();
-  await page.fill('#details', 'Automated preview test. Please ignore.'); await next();
-  await page.fill('#name', 'Preview Test'); await page.fill('#phone', '4085550100'); await page.fill('#email', 'preview-test@example.invalid'); await page.check('input[value="Email"]'); await page.check('input[name="consent"]');
-  await page.click('#submit'); await page.waitForSelector('#unavailable:not([hidden])', { timeout: 15000 }).catch(() => fails.push('wizard: did not show the unavailable state'));
-  if (await page.isVisible('#success')) fails.push('wizard: claimed success while delivery is unconfigured');
-  console.log('wizard (unmocked) -> unavailable state shown:', await page.isVisible('#unavailable'));
-} else console.log('Endpoint is NOT unconfigured; skipping the wizard submit to avoid any real delivery.');
+console.log('POST /api/estimate (removed endpoint) ->', probe.status());
+if (probe.status() < 400) fails.push(`/api/estimate answered ${probe.status()}: a server endpoint is live that should not exist`);
+for (const path of ['/request-estimate/', '/contact/']) {
+  await page.goto(BASE + path, { waitUntil: 'networkidle' });
+  const srcs = await page.$$eval('script[src]', (s) => s.map((x) => x.src));
+  let wired = false;
+  for (const u of srcs) { if ((await (await ctx.request.get(u)).text()).includes('api.web3forms.com/submit')) { wired = true; break; } }
+  if (!wired) fails.push(`${path}: Web3Forms endpoint not found in the page scripts`);
+  console.log(path, '-> Web3Forms endpoint wired:', wired);
+}
 await b.close();
 console.log(`${routes.length} routes crawled, ${imgCount} <img> checked`); console.log(fails.length ? 'FAILURES:\n' + fails.join('\n') : 'verify-remote: OK'); process.exit(fails.length ? 1 : 0);

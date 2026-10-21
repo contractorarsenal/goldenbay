@@ -33,7 +33,7 @@ The fixed bar is hidden on phone widths on the estimate and contact pages, where
 
 ## Launch blockers (unchanged)
 
-- Resend and Turnstile are not configured. The estimate form cannot deliver requests; no working-delivery claim is made.
+- Form delivery: both forms now submit through Web3Forms (see docs/WEB3FORMS.md). Real API submission and inbox delivery are unverified until a labelled test submission is authorized and checked. (This line replaced the earlier Resend/Turnstile blocker.)
 - Legal review of privacy, terms and accessibility.
 - Review permission and source platform.
 - License verification and legal entity name.

@@ -4,7 +4,7 @@
 0. **LEGAL ENTITY (new, highest priority):** the Gemini report and a CSLB pending-list entry (Jan 2026, license # field `0`) point to **"Goldbay Builders Inc."** (David Lerma Macias, 1025 Franquette Ave) rather than "Golden Bay Builders Inc."; a different company at goldenbaybuildersinc.com uses license #1137377. Confirm the exact registered name, any DBA, and whether a CSLB license has actually been **issued** (active, bonded, workers' comp). See RESEARCH-RECONCILIATION.md. Site name, schema and domain may need to change.
 1. **Contractor license:** supplied `115776` returned no CSLB match for Golden Bay Builders. Need: exact legal entity name, CSLB license number & classification(s), bond/insurance confirmation. Then set `business.license` (footer + About show it automatically).
 2. **Production domain** → `PUBLIC_SITE_URL`; then `PUBLIC_ALLOW_INDEXING=true`.
-3. **Lead delivery credentials:** Resend (or alternative), destination/from emails, Cloudflare Turnstile keys; then a real end-to-end test.
+3. **Form delivery (Web3Forms):** both forms submit through Web3Forms with the public access key in `src/lib/web3forms.ts`. Still needed: confirm the receiving inbox and sender settings in the Web3Forms dashboard, then one real end-to-end test. Real API submission and inbox delivery are **unverified** until that test is done (see docs/WEB3FORMS.md).
 4. **Legal review** of Privacy Policy, Terms, Accessibility drafts; confirm whether estimates are free and the consent language.
 5. **Gemini research report:** received and reconciled in `docs/RESEARCH-RECONCILIATION.md`. David must decide which of its proposed promises (fixed price, guaranteed timelines/weekly updates, project manager) are real before any are published.
 

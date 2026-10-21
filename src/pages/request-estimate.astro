@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { projectTypes, propertyStatuses, stages, budgets, timelines, contactMethods } from '../lib/estimate';
 import { business } from '../data/business';
-const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
+// Submissions go to Web3Forms from the browser through the shared module in src/lib/web3forms.ts (same as the contact form).
 ---
 <Base title="Request an Estimate" description="Tell Gold Bay Builders about your San Jose remodel, addition, ADU or custom home. Seven short steps, about two minutes." path="/request-estimate/" noindex crumbs={[{ name: 'Home', path: '/' }, { name: 'Request an Estimate', path: '/request-estimate/' }]}>
   <PageHero eyebrow="Request an estimate" title="Tell us about your project." lede="Seven short steps. About two minutes. No obligation." crumbs={[{ name: 'Home', href: '/' }]} />
@@ -14,11 +14,11 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
   <section class="v8-section">
     <div class="wrap wz-layout" id="wizrow">
       <div>
-        <form id="wiz" class="wiz" novalidate data-turnstile={siteKey ?? ''} aria-labelledby="wiz-title">
+        <form id="wiz" class="wiz" novalidate aria-labelledby="wiz-title">
           <h2 id="wiz-title" class="sr-only">Estimate request form</h2>
           <div class="progress" aria-hidden="true">{[0,1,2,3,4,5,6].map(() => <i></i>)}</div>
           <p id="step-label" class="wz-step-label" aria-live="polite"></p>
-          <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
+          <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label><label>Leave this box empty <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" /></label></div>
 
           <fieldset data-step="0"><legend>What kind of project?</legend>
             <div class="choices cols">{projectTypes.map((v) => <label class="choice"><input type="radio" name="projectType" value={v} /><span>{v}</span></label>)}</div><p class="err field" role="alert" data-err="projectType"></p></fieldset>
@@ -48,7 +48,6 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
             <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" /><p class="err" role="alert" data-err="email"></p></div>
             <div class="field"><span class="wz-label" id="cm">Preferred contact method</span><div class="choices cols" role="group" aria-labelledby="cm">{contactMethods.map((v) => <label class="choice"><input type="radio" name="contactMethod" value={v} /><span>{v}</span></label>)}</div><p class="err" role="alert" data-err="contactMethod"></p></div>
             <div class="field"><label class="wz-consent"><input type="checkbox" name="consent" /><span>I agree that {business.name} may contact me about this request. See the <a href="/privacy-policy/" target="_blank" rel="noopener">privacy policy</a>.</span></label><p class="err" role="alert" data-err="consent"></p></div>
-            {siteKey && <div class="cf-turnstile" data-sitekey={siteKey}></div>}
           </fieldset>
 
           <p class="form-err" id="form-err" role="alert"></p>
@@ -75,14 +74,10 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
       <h2>Thank you. Your request was sent.</h2>
       <p>We’ll contact you using your preferred method. If it’s urgent, <a href={business.phoneHref}>Call Now</a>.</p>
     </div>
-    <div id="unavailable" class="wz-result" hidden tabindex="-1">
-      <h2>Online requests aren’t available right now.</h2>
-      <p>Your request was not sent. Please <a href={business.phoneHref} data-track="click_to_call">Call Now</a> or <a href={`mailto:${business.email}`}>Email Us</a>.</p>
-    </div>
   </section>
-  {siteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
   <script>
     import { validateEstimate, stepFields, type EstimateInput } from '../lib/estimate';
+    import { submitEstimate } from '../lib/web3forms';
     const form = document.getElementById('wiz') as HTMLFormElement;
     const bars = form.querySelectorAll<HTMLElement>('.progress i');
     const steps = [...form.querySelectorAll<HTMLFieldSetElement>('fieldset[data-step]')];
@@ -129,17 +124,17 @@ const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
       if (Object.keys(errs).length) { const bad = stepFields.findIndex((fs) => fs.some((f) => errs[f])); show(bad); showErrors(errs, stepFields[bad] as string[]); return; }
       sending = true; submit.disabled = true; submit.textContent = 'Sending…'; formErr.textContent = '';
       try {
-        const fd = new FormData(form);
-        const res = await fetch('/api/estimate', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...data(), website: fd.get('website') ?? '', turnstileToken: fd.get('cf-turnstile-response') ?? '' }) });
-        if (res.status === 503 || res.status === 404 || res.status === 405) { document.getElementById('wizrow')!.hidden = true; const u = document.getElementById('unavailable')!; u.hidden = false; u.focus(); return; }
-        const out = await res.json().catch(() => ({}));
-        if (res.ok && out.ok) {
+        // Success is shown only when Web3Forms confirms the submission in its response body.
+        const botcheck = (form.elements.namedItem('botcheck') as HTMLInputElement | null)?.checked ?? false;
+        const website = String((new FormData(form)).get('website') ?? '');
+        const result = await submitEstimate({ ...(data() as EstimateInput), website, botcheck });
+        if (result.ok) {
           sent = true; push('form_submit'); push('generate_lead'); document.getElementById('wizrow')!.hidden = true;
           const s = document.getElementById('success')!; s.hidden = false; s.focus(); return;
         }
-        if (res.status === 422 && out.errors) { const bad = stepFields.findIndex((fs) => fs.some((f) => out.errors[f])); show(bad); showErrors(out.errors, stepFields[bad] as string[]); return; }
-        formErr.textContent = out.error === 'spam_check_failed' ? 'We could not verify you are human. Please try again.' : 'Something went wrong and your request was not sent. Please try again or call us.';
-      } catch { formErr.textContent = 'We could not reach the server. Your answers are still here; please try again or call us.'; }
+        // Every entered answer stays in place; the visitor can retry without restarting the wizard.
+        formErr.textContent = result.message;
+      }
       finally { sending = false; if (!sent) { submit.disabled = false; submit.textContent = 'Send request'; } }
     });
     show(0, false);

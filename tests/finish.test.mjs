@@ -46,19 +46,23 @@ test('legal pages: pending-review status is shown and pages stay noindex', () =>
   assert.ok(!/has been reviewed by an attorney|attorney review (is )?complete/i.test(src), 'must not claim attorney review is complete');
 });
 
-test('estimate wizard: no commitment that a site visit is arranged, and the submit logic is unchanged', () => {
+test('estimate wizard: no commitment that a site visit is arranged; submits through the shared Web3Forms module', () => {
   const src = read('src/pages/request-estimate.astro');
   assert.ok(!/arrange a site visit/i.test(src));
-  assert.ok(src.includes("fetch('/api/estimate'"));
-  assert.ok(src.includes("res.status === 503 || res.status === 404 || res.status === 405"), 'unavailable state still handled');
+  assert.ok(src.includes("import { submitEstimate } from '../lib/web3forms';"));
+  assert.ok(src.includes('await submitEstimate('), 'submission goes through the shared module');
+  assert.ok(!src.includes("fetch('/api/estimate'"), 'no placeholder endpoint');
+  assert.ok(!src.includes('id="unavailable"'), 'unavailable state removed');
+  assert.ok(!/turnstile/i.test(src), 'Turnstile not used');
   assert.ok(!/success[^<]*Thank you/.test(src.split('<div id="success"')[0]), 'success is not shown before a response');
 });
 
-test('wizard failure states: unavailable and validation messages exist in markup', () => {
+test('wizard failure states: validation messages, error region and honeypot exist in markup', () => {
   const src = read('src/pages/request-estimate.astro');
-  assert.ok(src.includes('id="unavailable"'));
   assert.ok(src.includes('data-err="projectType"') && src.includes('role="alert"'));
   assert.ok(src.includes('id="form-err"'));
+  assert.ok(src.includes('name="botcheck"') && src.includes('name="website"'));
+  assert.ok(src.includes('formErr.textContent = result.message'), 'failures show the helpful message');
 });
 
 test('build marker is emitted only when PUBLIC_BUILD_ID is set, and the publisher sets it', () => {

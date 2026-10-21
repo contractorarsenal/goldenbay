@@ -6,5 +6,5 @@
 name = "goldbay"   # matches the existing Cloudflare Pages project (seen on the GitHub check link)
 pages_build_output_dir = "./dist"
 compatibility_date = "2025-10-01"
-# Secrets (TURNSTILE_SECRET_KEY, RESEND_API_KEY, LEAD_TO_EMAIL, LEAD_FROM_EMAIL) are set in the Pages dashboard,
-# never in this file. Leave PUBLIC_ALLOW_INDEXING unset for previews so they stay noindex.
+# No secrets are needed: the forms submit to Web3Forms from the browser (see docs/WEB3FORMS.md).
+# Never put credentials in this file. Leave PUBLIC_ALLOW_INDEXING unset for previews so they stay noindex.

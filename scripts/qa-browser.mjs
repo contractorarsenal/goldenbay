@@ -52,15 +52,15 @@ for (const w of [375, 768, 1024, 1440, 1920]) {
     const noAlt = await page.$$eval('img', (is) => is.filter((i) => !i.hasAttribute('alt')).length); if (noAlt) fails.push(`${r}: ${noAlt} images missing alt`);
   }
   await page.goto(base + '/projects/', { waitUntil: 'networkidle' });
-  const chips = await page.$$eval('.pf-chip', (c) => c.map((x) => x.firstChild.textContent.trim())); if (chips.join('|') !== 'All Projects|Bathrooms|Kitchens|Outdoor Living|Patios & Pavers') fails.push('projects filters unexpected: ' + chips.join('|'));
-  const visible = () => page.$$eval('.pf-card', (c) => c.filter((x) => !x.hidden).length);
+  const chips = await page.$$eval('.pj-chip', (c) => c.map((x) => x.firstChild.textContent.trim())); if (chips.join('|').toLowerCase() !== 'all projects|bathrooms|kitchens|outdoor living|patios & pavers') fails.push('projects filters unexpected: ' + chips.join('|'));
+  const visible = () => page.$$eval('.pj-card', (c) => c.filter((x) => !x.hidden).length);
   if ((await visible()) !== 7) fails.push('projects: expected 7 visible initially');
-  await page.click('.pf-chip[data-filter="bathrooms"]'); if ((await visible()) !== 3) fails.push('projects: Bathrooms filter should show 3');
-  if (!(await page.textContent('#pf-status')).includes('3 projects')) fails.push('projects: filter status not announced');
-  await page.click('.pf-chip[data-filter="patios-pavers"]'); if ((await visible()) !== 2) fails.push('projects: Patios & Pavers should show 2');
-  await page.click('.pf-chip[data-filter="all"]'); if ((await visible()) !== 7) fails.push('projects: All should restore 7');
+  await page.click('.pj-chip[data-filter="bathrooms"]'); if ((await visible()) !== 3) fails.push('projects: Bathrooms filter should show 3');
+  if (!(await page.textContent('#pj-status')).includes('3 projects')) fails.push('projects: filter status not announced');
+  await page.click('.pj-chip[data-filter="patios-pavers"]'); if ((await visible()) !== 2) fails.push('projects: Patios & Pavers should show 2');
+  await page.click('.pj-chip[data-filter="all"]'); if ((await visible()) !== 7) fails.push('projects: All should restore 7');
   // keyboard: chips reachable and Enter/Space toggles
-  await page.focus('.pf-chip[data-filter="kitchens"]'); await page.keyboard.press('Enter'); if ((await visible()) !== 1) fails.push('projects: Kitchens via keyboard should show 1');
+  await page.focus('.pj-chip[data-filter="kitchens"]'); await page.keyboard.press('Enter'); if ((await visible()) !== 1) fails.push('projects: Kitchens via keyboard should show 1');
   await ctx.close();
 }
 // Mobile menu geometry: the open panel must fill the viewport below the header, on an overlay page after scrolling and on a normal page after scrolling
@@ -139,13 +139,14 @@ async function fill(page) {
   await fill(page); await page.click('#back'); await page.click('#back');
   await page.click('#next'); await page.click('#next');
   if (!(await page.inputValue('#name'))) fails.push('wizard: answers not preserved across steps');
-  await page.route('**/api/estimate', (r) => r.fulfill({ status: 503, body: '{"ok":false}' }));
-  await page.click('#submit'); await page.waitForSelector('#unavailable:not([hidden])'); if (await page.isVisible('#success')) fails.push('wizard: claimed success on 503');
+  // Web3Forms is mocked: every request is answered locally, so nothing is sent.
+  await page.route('https://api.web3forms.com/**', (r) => r.fulfill({ status: 500, contentType: 'application/json', body: '{"statusCode":500,"error":"mocked"}' }));
+  await page.click('#submit'); await page.waitForSelector('#form-err:not(:empty)'); if (await page.isVisible('#success')) fails.push('wizard: claimed success on HTTP 500');
   await ctx.close();
 }
 {
   const ctx = await browser.newContext({ viewport: sizes.desktop }); const page = await ctx.newPage(); await page.goto(base + '/request-estimate/');
-  let calls = 0; await page.route('**/api/estimate', async (r) => { calls++; await new Promise((x) => setTimeout(x, 300)); r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
+  let calls = 0; await page.route('https://api.web3forms.com/**', async (r) => { calls++; await new Promise((x) => setTimeout(x, 300)); r.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' }); });
   await fill(page); await page.dblclick('#submit'); await page.waitForSelector('#success:not([hidden])');
   if (calls !== 1) fails.push(`wizard: duplicate submit, ${calls} calls`);
   await ctx.close();

@@ -45,7 +45,17 @@ Written for: David Lerma, to review before the site is published. Each item says
 ## Legal (required before launch)
 
 - [ ] **Privacy policy, terms and accessibility statement** are pending attorney review. They are noindex and say so. Confirm the review will happen before launch.
-- [ ] **Estimate form delivery.** The form cannot deliver requests until email delivery and spam protection are configured and tested. Confirm the notification address.
+## Forms (Web3Forms)
+
+Both the contact form and the estimate wizard send through Web3Forms. Full details: [WEB3FORMS.md](WEB3FORMS.md).
+
+- [ ] **Receiving inbox.** Web3Forms emails submissions to the address set in the Web3Forms dashboard, not in the website. Confirm the inbox that should receive estimate and contact requests.
+- [ ] **Sender and reply-to.** Replies go to the customer's email address (Reply-To). Confirm that is the behaviour you want.
+- [ ] **Domain restriction.** Restricting the key to the production domain is a Web3Forms Pro feature. Decide whether to upgrade, or accept the free plan's limits.
+- [ ] **Spam protection.** The site uses a honeypot only. Web3Forms recommends other protection, and reCAPTCHA or Turnstile are Pro features. Confirm the level of protection you accept.
+- [ ] **Real test.** Nothing has been submitted to the live service. Authorize one labelled test submission to confirm the API response and inbox delivery.
+
+Status: real API submission and inbox delivery are **unverified** until that test is done.
 
 ## Items the site cannot publish until confirmed
 

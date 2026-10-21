@@ -277,3 +277,22 @@
 .legal-links a { display: inline-flex; align-items: center; min-height: 44px; }
 .legal-links li { display: flex; }
 .site-footer .legal-links li + li { margin-top: 0; }
+
+/* ---------- Contact message form (Web3Forms) ---------- */
+.ct-form-sec { padding-block: 0 4.5rem; }
+@media (min-width: 48rem) { .ct-form-sec { padding-block: 0 5.5rem; } }
+.ct-form-wrap { display: grid; gap: 2rem; max-width: 44rem; border-top: 1px solid var(--color-border); padding-top: 3rem; }
+.ct-form { display: grid; gap: 1.25rem; }
+.ct-form .field { margin-bottom: 0; }
+.ct-form select { width: 100%; min-height: 3.25rem; padding: .8rem 1rem; border: 1px solid #8A8F97; border-radius: var(--radius-btn); background: #fff; font: 400 1rem/1.4 var(--font-sans); color: var(--color-charcoal); }
+.ct-form select:focus-visible, .ct-form textarea:focus-visible { outline: 3px solid var(--color-gold); outline-offset: 2px; }
+.ct-form textarea { width: 100%; min-height: 9rem; padding: .8rem 1rem; border: 1px solid #8A8F97; border-radius: var(--radius-btn); background: #fff; font: 400 1rem/1.5 var(--font-sans); color: var(--color-charcoal); resize: vertical; }
+.ct-form input[aria-invalid="true"], .ct-form textarea[aria-invalid="true"] { border-color: #9b1c1c; border-width: 2px; }
+.ct-req { color: #9b1c1c; }
+.ct-optional { font-weight: 400; color: var(--color-muted); }
+.ct-form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+.ct-form-actions .btn { min-width: 12rem; }
+.ct-form-status { font: 500 .95rem/1.4 var(--font-sans); color: var(--color-muted); }
+.ct-fine { font-size: .9rem; color: var(--color-muted); }
+.ct-h2 { font-family: var(--font-display); font-weight: 700; text-transform: none; font-size: clamp(1.9rem, 3vw, 2.4rem); line-height: 1.08; color: var(--color-charcoal); }
+.ct-text { margin-top: .75rem; color: var(--color-body); max-width: 52ch; }

@@ -1,6 +1,7 @@
 // Publishes a NOINDEX preview build to the `cf-preview` branch, for a Cloudflare Pages project that has no build command
 // and serves each branch's repository root (confirmed 2026-10-15). Cloudflare then serves that branch's root as the site
-// and compiles functions/. Normal (non-force) push; never touches main or the source branch.
+// Normal (non-force) push; never touches main or the source branch. The site has no server functions: estimate and
+// contact forms submit to Web3Forms from the browser.
 //   Usage: npm run preview:branch      (requires a clean working tree so the build matches a commit)
 // Remove this once the Pages project's dashboard is set to: build command `npm run build`, output directory `dist`.
 import { execFileSync } from 'node:child_process';
@@ -35,9 +36,6 @@ else { mkdirSync(work); sh('git', ['init', '-q', '-b', BRANCH], { cwd: work }); 
 for (const f of readdirSync(work)) if (f !== '.git') rmSync(join(work, f), { recursive: true, force: true });
 cpSync(site, work, { recursive: true });                                   // the built site (incl. _headers, robots.txt)
 rmSync(site, { recursive: true, force: true });
-cpSync(join(ROOT, 'functions'), join(work, 'functions'), { recursive: true }); // Pages Functions (lead endpoint)
-mkdirSync(join(work, 'src/lib'), { recursive: true });                      // functions import ../../src/lib/estimate.ts
-cpSync(join(ROOT, 'src/lib/estimate.ts'), join(work, 'src/lib/estimate.ts'));
 
 const gitCfg = ['-c', `user.name=${process.env.GIT_AUTHOR_NAME || sh('git', ['config', 'user.name'], { cwd: ROOT }) || 'Preview Builder'}`, '-c', `user.email=${process.env.GIT_AUTHOR_EMAIL || sh('git', ['config', 'user.email'], { cwd: ROOT }) || 'preview@invalid'}`];
 sh('git', ['add', '-A'], { cwd: work });
