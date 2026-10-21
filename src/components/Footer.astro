@@ -1,0 +1,42 @@
+---
+import { business } from '../data/business';
+import { services } from '../data/services';
+import { legalNav, primaryNav } from '../data/nav';
+import { locations } from '../data/locations';
+import Logo from './Logo.astro';
+/** closingCta: the page already ends with a closing CTA band, so the footer shows no action group. */
+const { closingCta = false, path = '' } = Astro.props as { closingCta?: boolean; path?: string };
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <p class="foot-tag">Building <b>YOUR</b> bay home.</p>
+        <p class="foot-lede">Residential remodeling and construction in San Jose, California.</p>
+      </div>
+      {!closingCta && path !== '/contact/' && <a class="foot-contact" href="/contact/">Contact us <span aria-hidden="true">→</span></a>}
+    </div>
+    <div class="footer-grid">
+      <div class="foot-brand">
+        <Logo tone="dark" />
+        <p>{business.owner}, {business.ownerRole}</p>
+        {business.license.verified && business.license.number && (
+          <p>California Contractor License #{business.license.number} · <a href={business.license.cslbUrl} rel="noopener">Verify with CSLB</a></p>
+        )}
+      </div>
+      <div><h2>Services</h2><ul>{services.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}</ul></div>
+      <div><h2>Navigation</h2><ul>
+        {primaryNav.filter((i) => i.href !== '/' && !i.children).map((i) => <li><a href={i.href}>{i.label}</a></li>)}
+        <li><a href="/our-process/">Our Process</a></li><li><a href="/faq/">FAQ</a></li></ul></div>
+      <div><h2>Locations</h2><ul>
+        <li><a href="/service-areas/san-jose/">San Jose</a></li>
+        {locations.filter((l) => l.confirmed && l.slug !== 'san-jose').map((l) => <li><a href={`/service-areas/${l.slug}/`}>{l.name}</a></li>)}
+        <li><a href="/service-areas/">All service areas</a></li></ul></div>
+    </div>
+    <div class="legal">
+      <span>© {new Date().getFullYear()} {business.name} All rights reserved.</span>
+      <nav aria-label="Legal"><ul class="legal-links">{legalNav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></nav>
+    </div>
+    <p class="credit">Website by <a href="https://contractorarsenal.com" rel="noopener" target="_blank">Contractor Arsenal</a></p>
+  </div>
+</footer>

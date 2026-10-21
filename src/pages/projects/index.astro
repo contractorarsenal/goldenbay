@@ -1,0 +1,68 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cta from '../../components/Cta.astro';
+import ProjectImage from '../../components/ProjectImage.astro';
+import PageHero from '../../components/PageHero.astro';
+import { projects, activeFilterGroups, groupOf, introFor } from '../../data/projects';
+import { abs } from '../../data/business';
+
+const groups = activeFilterGroups();
+const count = (key: string) => projects.filter((p) => groupOf(p) === key).length;
+// A lone last card spans the full row, so no column is left with a single card.
+const loneDesktop = projects.length % 3 === 1;
+const loneTablet = projects.length % 2 === 1;
+const itemList = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Our Projects', url: abs('/projects/'), hasPart: projects.map((p) => ({ '@type': 'CreativeWork', name: p.title, url: abs(`/projects/${p.slug}/`), about: p.category })) };
+---
+<Base closingCta title="Our Projects: Kitchens, Bathrooms, Patios & Outdoor Living" description="Photographs of recent residential work by Gold Bay Builders: kitchen and bathroom remodels, patios, pavers and outdoor living areas." path="/projects/" noindex={projects.length === 0} schema={[itemList]} crumbs={[{ name: 'Home', path: '/' }, { name: 'Our Projects', path: '/projects/' }]}>
+  <PageHero title="Projects built around real homes." current="Our Projects" id="pj-title" lede="Recent remodeling and construction work by Gold Bay Builders, from kitchens and bathrooms to outdoor living spaces." crumbs={[{ name: 'Home', href: '/' }]}>
+    <div class="v8-actions">
+      <a class="btn btn-primary" href="/request-estimate/" data-track="request_estimate_click">Request an Estimate</a>
+    </div>
+  </PageHero>
+
+  <section class="section" aria-label="Project gallery">
+    <div class="wrap">
+      <div class="pj-filters" role="group" aria-label="Filter projects by category">
+        <button type="button" class="pj-chip" data-filter="all" aria-pressed="true">All projects <span>{projects.length}</span></button>
+        {groups.map((g) => <button type="button" class="pj-chip" data-filter={g.key} aria-pressed="false">{g.label} <span>{count(g.key)}</span></button>)}
+      </div>
+      <p class="pj-status" id="pj-status" role="status" aria-live="polite"></p>
+      <ul class="pj-grid">
+        {projects.map((p, i) => {
+          const last = i === projects.length - 1;
+          const lone = last && (loneDesktop || loneTablet);
+          const cls = ['pj-card', lone && 'pj-lone', lone && loneDesktop && 'pj-lone-3', lone && loneTablet && 'pj-lone-2'].filter(Boolean).join(' ');
+          return (
+            <li class={cls} data-group={groupOf(p)}>
+              <a class="pj-img" href={`/projects/${p.slug}/`} tabindex="-1" aria-hidden="true">
+                <ProjectImage file={p.images[0].file} alt={p.images[0].alt} focus={p.images[0].focus} aspect="4 / 5" mobileAspect="4 / 5" sizes="(min-width: 64rem) 31vw, (min-width: 48rem) 46vw, 100vw" />
+              </a>
+              <div class="pj-body">
+                <span class="pj-cat">{p.category}</span>
+                <h2><a href={`/projects/${p.slug}/`}>{p.title}</a></h2>
+                <p class="pj-intro">{introFor(p)}</p>
+                <div class="pj-meta">
+                  <span>{p.images.length === 1 ? '1 photo' : `${p.images.length} photos`}</span>
+                  {p.images.some((im) => im.state === 'in-progress') && <span>Includes installation photos</span>}
+                </div>
+                <a class="arrow-link pj-view" href={`/projects/${p.slug}/`}>View project <span aria-hidden="true">→</span></a>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+  <Cta title="Planning Something Similar?" text="Tell us about your project and we’ll talk through scope, timing and next steps." />
+  <script>
+    const chips = document.querySelectorAll<HTMLButtonElement>('.pj-chip');
+    const cards = document.querySelectorAll<HTMLElement>('.pj-grid > li');
+    const status = document.getElementById('pj-status')!;
+    chips.forEach((c) => c.addEventListener('click', () => {
+      const f = c.dataset.filter!; let n = 0;
+      chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+      cards.forEach((card) => { const show = f === 'all' || card.dataset.group === f; card.hidden = !show; if (show) n++; });
+      status.textContent = `Showing ${n} ${n === 1 ? 'project' : 'projects'}${f === 'all' ? '' : ` in ${c.textContent!.replace(/\d+/g, '').trim()}`}.`;
+    }));
+  </script>
+</Base>

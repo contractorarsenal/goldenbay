@@ -1,0 +1,22 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+/**
+ * Shared interior-page header (V8). Breadcrumb trail, one H1, optional lede and actions.
+ * `crumbs` are the ancestor links; the current page is appended automatically from `title`
+ * unless `current` is given. `eyebrow` is accepted for compatibility but not shown, to avoid
+ * repeating the breadcrumb label above the heading.
+ */
+const { eyebrow, title, lede, crumbs = [], current, id = 'page-title' } = Astro.props as {
+  eyebrow?: string; title: string; lede?: string; crumbs?: { name: string; href: string }[]; current?: string; id?: string;
+};
+// Short section name for the trail (e.g. "About"); falls back to the full title.
+const items = [...crumbs, { name: current ?? eyebrow ?? title }];
+---
+<section class="ih" aria-labelledby={id}>
+  <div class="wrap">
+    <Breadcrumbs items={items} />
+    <h1 id={id}>{title}</h1>
+    {lede && <p class="lede">{lede}</p>}
+    <slot />
+  </div>
+</section>

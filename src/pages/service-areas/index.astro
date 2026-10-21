@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import { locations } from '../../data/locations';
+import { services } from '../../data/services';
+// San Jose is the only confirmed service city. Other cities are not listed as served locations.
+const sanJose = locations.find((l) => l.slug === 'san-jose')!;
+---
+<Base closingCta title="Service Areas" description="Gold Bay Builders builds and remodels homes in San Jose, California. Learn how local permitting and housing shape projects here." path="/service-areas/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Service Areas', path: '/service-areas/' }]}>
+  <PageHero eyebrow="Service areas" title="Based in San Jose, California." lede="San Jose is our home market. Each project is planned around the permit process of the city where it is located." crumbs={[{ name: 'Home', href: '/' }]} />
+
+  <section class="v8-section">
+    <div class="wrap sa-san">
+      <div class="sa-card">
+        <span class="eyebrow on-dark">Our home market</span>
+        <h3 style="margin-top:.9rem">San Jose</h3>
+        <p>{sanJose.intro}</p>
+        <p style="margin-top:1.5rem"><a class="v8-link" href="/service-areas/san-jose/">Read about building in San Jose <span aria-hidden="true">→</span></a></p>
+      </div>
+      <div class="v8-prose">
+        <h2 style="font-size:clamp(1.8rem,2.6vw,2.2rem)">What to know before building in San Jose</h2>
+        <ul>{sanJose.considerations.map((c) => <li>{c}</li>)}</ul>
+        <p style="margin-top:1.25rem"><a class="v8-link" href="/guides/san-jose-adu-guide/">San Jose ADU guide <span aria-hidden="true">→</span></a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="v8-section v8-tint">
+    <div class="wrap">
+      <div class="v8-head">
+        <span class="eyebrow">Types of work</span>
+        <h2>Projects we take on in San Jose.</h2>
+      </div>
+      <ul class="v8-grid-3" style="margin-top:2rem">
+        {services.map((s) => (
+          <li><a href={`/services/${s.slug}/`} style="text-decoration:none;color:inherit;display:block"><h3>{s.name}</h3><p>{s.short}</p></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sa-end">
+    <div class="wrap">
+      <div class="v8-panel sa-outside">
+        <div>
+          <h2 style="font-size:clamp(1.6rem,2.4vw,2rem)">Outside San Jose?</h2>
+          <p style="margin-top:.6rem;color:var(--color-body);max-width:60ch">Contact us with your address and project. We will tell you whether we can take the work.</p>
+        </div>
+        <a class="btn btn-primary" href="/contact/">Contact us</a>
+      </div>
+    </div>
+  </section>
+
+  <Cta />
+</Base>

@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from './PageHero.astro';
+const { title, description, path } = Astro.props as { title: string; description: string; path: string };
+// LEGAL REVIEW PENDING: this template and the policy text have not been reviewed by an attorney.
+// Keep noindex until review is complete. Do not describe any page here as attorney-reviewed.
+---
+<Base title={title} description={description} path={path} noindex crumbs={[{ name: 'Home', path: '/' }, { name: title, path }]}>
+  <PageHero title={title} crumbs={[{ name: 'Home', href: '/' }]} />
+  <section class="v8-section">
+    <div class="wrap">
+      <div class="legal-status" data-legal-status="pending-attorney-review" role="note">
+        <p><strong>Pending legal review.</strong> This page has not yet been reviewed by an attorney. It is not indexed by search engines.</p>
+      </div>
+      <div class="legal-body"><slot /></div>
+    </div>
+  </section>
+</Base>

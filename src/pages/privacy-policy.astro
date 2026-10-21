@@ -1,0 +1,19 @@
+---
+import Legal from '../components/Legal.astro';
+import { business } from '../data/business';
+---
+<Legal title="Privacy Policy" description="How Gold Bay Builders collects, uses and protects information submitted through this website." path="/privacy-policy/">
+  <p>Last updated: October 15, 2026.</p>
+  <h2>Information we collect</h2>
+  <p>When you submit an estimate request, we collect the details you provide: project type, location (city, ZIP and optional street address), project stage, budget range, timeline, project description, and your name, phone number, email and preferred contact method.</p>
+  <h2>How we use it</h2>
+  <p>We use this information to respond to your request, prepare an estimate and communicate about your project. We do not sell it.</p>
+  <h2>Analytics</h2>
+  <p>If analytics tools are enabled, they record page views and events such as button clicks. We do not send names, phone numbers, email addresses, street addresses or project descriptions to analytics.</p>
+  <h2>Service providers</h2>
+  <p>Submissions are delivered by email and may pass through our form-delivery and spam-protection providers.</p>
+  <h2>Your choices</h2>
+  <p>You can ask us to access or delete information you submitted. California residents may have additional rights under California law.</p>
+  <h2>Contact</h2>
+  <p>{business.name}. Use the <a href={`mailto:${business.email}`}>Email Us</a> or <a href={business.phoneHref}>Call Now</a> links on this site.</p>
+</Legal>

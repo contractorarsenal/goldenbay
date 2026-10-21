@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from './PageHero.astro';
+import Cta from './Cta.astro';
+import { articleSchema } from '../lib/schema';
+const { title, description, path, answer, updated } = Astro.props as { title: string; description: string; path: string; answer: string; updated: string };
+---
+<Base closingCta title={title} description={description} path={path} ogType="article" schema={[articleSchema(title, path, description, updated, updated)]} crumbs={[{ name: 'Home', path: '/' }, { name: title, path }]}>
+  <PageHero eyebrow="Guide" title={title} crumbs={[{ name: 'Home', href: '/' }]}><p style="margin-top:1rem;color:var(--color-muted);font-size:.9rem">By Gold Bay Builders · Last reviewed {updated}</p></PageHero>
+  <section class="section"><div class="wrap">
+    <div class="prose" style="margin-bottom:2rem"><p class="lede" style="border-left:3px solid var(--color-bronze);padding-left:1.25rem"><strong>Short answer.</strong> {answer}</p></div>
+    <article class="prose"><slot /></article>
+  </div></section>
+  <Cta />
+</Base>

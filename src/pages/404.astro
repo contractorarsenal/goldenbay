@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+// Served with HTTP 404 by the static host. noindex keeps it out of search.
+---
+<Base closingCta title="Page not found" description="The page you requested could not be found. Return to the Gold Bay Builders home page, our projects or services." path="/404/" noindex>
+  <PageHero title="This page could not be found." current="Page not found" lede="The address may have changed, or the page may have moved. You can start again from the home page, or browse our projects and services." crumbs={[{ name: 'Home', href: '/' }]}>
+    <div class="v8-actions">
+      <a class="btn btn-primary" href="/">Return home</a>
+      <a class="btn btn-line" href="/projects/">Our Projects</a>
+      <a class="btn btn-line" href="/services/">Services</a>
+    </div>
+  </PageHero>
+  <section class="v8-section">
+    <div class="wrap">
+      <ul class="v8-grid-3">
+        <li><h3>Need a remodel or build?</h3><p>Request an estimate and tell us about your project.</p><p style="margin-top:1rem"><a class="v8-link" href="/request-estimate/">Request an Estimate <span aria-hidden="true">→</span></a></p></li>
+        <li><h3>Looking for work we have done?</h3><p>Photographs of kitchens, bathrooms and outdoor projects.</p><p style="margin-top:1rem"><a class="v8-link" href="/projects/">See our projects <span aria-hidden="true">→</span></a></p></li>
+        <li><h3>Want to talk first?</h3><p>Call or email the office and ask about your project.</p><p style="margin-top:1rem"><a class="v8-link" href="/contact/">Contact us <span aria-hidden="true">→</span></a></p></li>
+      </ul>
+    </div>
+  </section>
+  <Cta />
+</Base>

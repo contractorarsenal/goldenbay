@@ -1,0 +1,11 @@
+---
+import type { Review } from '../data/reviews';
+/** Exact quote with attribution. `excerpt` shows only the supplied contiguous excerpt; `full` shows the complete review. No ratings/stars, no schema. */
+const { review, mode = 'full', size = 'md', tone = 'light' } = Astro.props as { review: Review; mode?: 'full' | 'excerpt'; size?: 'md' | 'lg'; tone?: 'light' | 'dark' };
+const body = mode === 'excerpt' && review.excerpt ? review.excerpt : review.text;
+const partial = mode === 'excerpt' && !!review.excerpt && review.excerpt !== review.text;
+---
+<figure class:list={['tq', `tq-${size}`, `tq-${tone}`]}>
+  <blockquote><p>“{body}”</p></blockquote>
+  <figcaption><b>{review.name}</b><span>{review.category} · {review.date}</span>{partial && <small>Excerpt from a longer review</small>}</figcaption>
+</figure>

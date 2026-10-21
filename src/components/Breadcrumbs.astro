@@ -1,0 +1,16 @@
+---
+/** Visible breadcrumb trail. Items with `href` are links; the final item is the current page (no link, aria-current). */
+interface Crumb { name: string; href?: string }
+const { items = [] } = Astro.props as { items?: Crumb[] };
+---
+{items.length > 0 && (
+  <nav aria-label="Breadcrumb" class="crumbs">
+    <ol>
+      {items.map((c, i) => (
+        <li>
+          {c.href && i < items.length - 1 ? <a href={c.href}>{c.name}</a> : <span aria-current="page">{c.name}</span>}
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

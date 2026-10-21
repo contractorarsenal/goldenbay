@@ -1,0 +1,22 @@
+{
+  "_readme": "Maps each client-supplied original (assets-src/originals/<id>.jpg, never modified) to its processed, descriptively named copy in src/assets/projects/. `crop` trims stray black pixel rows only. Run: node scripts/process-images.mjs",
+  "source": "Client-supplied GitHub attachment https://github.com/user-attachments/assets/<id> (downloaded 2026-10-15). All 1320px-wide portrait video/phone stills; approved by the client for temporary use.",
+  "images": [
+    { "id": "17e05a17-b548-44d9-a3c6-1ccf628d41a6", "name": "patio-paver-court-wood-fence-01" },
+    { "id": "9943b010-cc07-4ebc-8bd2-c03cc4cb3c87", "name": "patio-paver-entry-walkway-02" },
+    { "id": "d1c2bd96-87d5-4153-af3d-bb875a1b353a", "name": "pavers-large-format-patio-01" },
+    { "id": "aa373208-40bb-445f-a710-45df8ed9b940", "name": "pavers-stepping-stones-turf-02" },
+    { "id": "fbb67174-6344-497a-a877-f9d50bcc5fba", "name": "pavers-stepping-stone-path-03", "crop": { "bottom": 4 } },
+    { "id": "cbb92c52-87e9-4370-800c-654c8d9600ab", "name": "pool-deck-pavers-01" },
+    { "id": "4fe3eaef-bbaf-4aa4-a1c1-8d08a8aed345", "name": "pool-outdoor-paver-courtyard-02" },
+    { "id": "550e4c95-0284-45bb-80b0-9d1721482d11", "name": "pool-outdoor-paver-courtyard-03" },
+    { "id": "178f6d5a-fa49-4c8d-ac20-926480accee2", "name": "bathroom-blue-tile-soaking-tub-01" },
+    { "id": "233880fe-44e3-4b81-8cb2-9bbb40d52547", "name": "bathroom-blue-tile-shower-wall-02" },
+    { "id": "978a2b3d-c4e0-47b5-a002-7e20b1ccf380", "name": "bathroom-blue-tile-tub-window-03" },
+    { "id": "21f18e44-7b5e-4711-8ede-a1ea9633f186", "name": "bathroom-stone-shower-terracotta-floor-01", "crop": { "bottom": 4 } },
+    { "id": "ecc4087f-c400-4ac1-8eca-ee53eb27bd2a", "name": "bathroom-stone-shower-fixtures-02" },
+    { "id": "447d805f-bf39-447d-af59-8441b4f856c9", "name": "bathroom-terracotta-floor-vanity-03", "crop": { "top": 3 } },
+    { "id": "a73176d2-a0d5-42ab-a902-c5a3289cbe97", "name": "bathroom-floating-vanity-glass-shower-01" },
+    { "id": "943452da-9d06-4157-8703-cebeb8c23979", "name": "kitchen-white-cabinets-island-01" }
+  ]
+}

@@ -1,0 +1,6 @@
+# Repo-ROOT Cloudflare Pages headers. They only apply when Cloudflare publishes the repository root as-is
+# (which happens while the Pages project has no build command / output directory configured).
+# The built site has its own, fuller headers file (public/_headers -> dist/_headers).
+/*
+  X-Robots-Tag: noindex, nofollow
+  X-Content-Type-Options: nosniff

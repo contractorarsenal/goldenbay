@@ -1,0 +1,161 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { business } from '../data/business';
+import { services } from '../data/services';
+import { WEB3FORMS_ACCESS_KEY } from '../lib/web3forms';
+// Phone and email appear only inside tel:/mailto: links, never as visible text.
+// The message form posts to Web3Forms from the browser (src/lib/web3forms.ts).
+---
+<Base title="Contact Gold Bay Builders" description="Request an estimate from Gold Bay Builders in San Jose, CA, or contact the company directly by phone or email." path="/contact/" crumbs={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }]}>
+  <style is:global>
+    /* This page already shows Call Now and the estimate action in full; the fixed bar would sit over the estimate panel on phones. */
+    @media (max-width: 47.99rem) { .callbar { display: none; } }
+  </style>
+
+  <section class="ct-intro" aria-labelledby="contact-title">
+    <div class="wrap">
+      <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Contact' }]} />
+      <h1 id="contact-title" class="ct-title">Let’s Talk About Your Project.</h1>
+      <p class="ct-lede">Request an estimate online, or contact Gold Bay Builders directly.</p>
+    </div>
+  </section>
+
+  <section class="ct-main" aria-label="Ways to get in touch">
+    <div class="wrap ct-grid">
+      <!-- Primary: request an estimate (first on phones) -->
+      <div class="ct-primary-panel">
+        <h2 class="ct-primary-title">Request an Estimate</h2>
+        <p class="ct-primary-text">Tell us about your home and what you want to change. We review each request before we follow up.</p>
+        <a class="btn btn-gold ct-primary-btn" href="/request-estimate/" data-track="request_estimate_click">Start your estimate request</a>
+      </div>
+
+      <!-- Secondary: contact directly -->
+      <div class="ct-secondary">
+        <h2 class="ct-secondary-title">Contact Directly</h2>
+        <div class="ct-buttons">
+          <a class="btn btn-primary" href={business.phoneHref} data-track="click_to_call">Call Now</a>
+          <a class="btn btn-line" href={`mailto:${business.email}`} data-track="email_us">Email Us</a>
+        </div>
+        <p class="ct-location">Serving San Jose, California.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ct-form-sec" aria-labelledby="form-title">
+    <div class="wrap ct-form-wrap">
+      <div>
+        <h2 id="form-title" class="ct-h2">Send us a message</h2>
+        <p class="ct-text">Ask a question about a project or about our work. Fields marked * are required.</p>
+      </div>
+
+      <form id="contact-form" class="ct-form" novalidate aria-labelledby="form-title">
+        <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+        <div class="hp" aria-hidden="true">
+          <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          <label>Leave this box empty <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        <div class="field">
+          <label for="c-name">Full name <span class="ct-req" aria-hidden="true">*</span></label>
+          <input id="c-name" name="name" required aria-required="true" autocomplete="name" />
+          <p class="err" role="alert" data-err="name"></p>
+        </div>
+        <div class="field">
+          <label for="c-email">Email <span class="ct-req" aria-hidden="true">*</span></label>
+          <input id="c-email" name="email" type="email" required aria-required="true" autocomplete="email" />
+          <p class="err" role="alert" data-err="email"></p>
+        </div>
+        <div class="field">
+          <label for="c-phone">Phone <span class="ct-optional">(optional)</span></label>
+          <input id="c-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" />
+          <p class="err" role="alert" data-err="phone"></p>
+        </div>
+        <div class="field">
+          <label for="c-service">Service of interest <span class="ct-optional">(optional)</span></label>
+          <select id="c-service" name="service">
+            <option value="">Choose a service</option>
+            {services.map((s) => <option value={s.name}>{s.name}</option>)}
+            <option value="Not sure yet">Not sure yet</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="c-message">Message <span class="ct-req" aria-hidden="true">*</span></label>
+          <textarea id="c-message" name="message" required aria-required="true" rows="6" maxlength="3000"></textarea>
+          <p class="err" role="alert" data-err="message"></p>
+        </div>
+
+        <p class="form-err" id="c-form-err" role="alert"></p>
+        <div class="ct-form-actions">
+          <button type="submit" class="btn btn-primary" id="c-submit">Send message</button>
+          <p class="ct-form-status" id="c-status" role="status" aria-live="polite"></p>
+        </div>
+        <p class="ct-fine">We use your details only to reply to your message.</p>
+      </form>
+
+      <div id="c-success" class="wz-result" hidden tabindex="-1">
+        <h2>Thank you. Your message was sent.</h2>
+        <p>We’ll reply using the email address you gave.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { validateContact, submitContact, type ContactInput } from '../lib/web3forms';
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const submit = document.getElementById('c-submit') as HTMLButtonElement;
+    const formErr = document.getElementById('c-form-err')!;
+    const status = document.getElementById('c-status')!;
+    const success = document.getElementById('c-success')!;
+    let sending = false, sent = false;
+
+    function read(): ContactInput {
+      const fd = new FormData(form);
+      const v = (k: string) => String(fd.get(k) ?? '').trim();
+      return {
+        name: v('name'), email: v('email'), phone: v('phone'), service: v('service'), message: v('message'),
+        website: v('website'), botcheck: (form.elements.namedItem('botcheck') as HTMLInputElement | null)?.checked ?? false,
+      };
+    }
+    function showErrors(errs: Record<string, string | undefined>) {
+      let first: HTMLElement | null = null;
+      for (const f of ['name', 'email', 'phone', 'message']) {
+        const el = form.querySelector<HTMLElement>(`[data-err="${f}"]`);
+        const input = form.querySelector<HTMLElement>(`[name="${f}"]`);
+        if (el) el.textContent = errs[f] ?? '';
+        if (input) {
+          if (errs[f]) { input.setAttribute('aria-invalid', 'true'); first ||= input; }
+          else input.removeAttribute('aria-invalid');
+        }
+      }
+      first?.focus();
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (sending || sent) return;
+      const input = read();
+      const errs = validateContact(input);
+      formErr.textContent = '';
+      if (Object.keys(errs).length) { showErrors(errs); return; }
+      showErrors({});
+      sending = true; submit.disabled = true; submit.textContent = 'Sending…'; status.textContent = 'Sending your message.';
+      try {
+        const result = await submitContact(input);
+        if (result.ok) {
+          sent = true;
+          form.hidden = true;
+          success.hidden = false;
+          success.focus();
+          return;
+        }
+        // Keep every entered answer so the visitor can retry without retyping.
+        formErr.textContent = result.message;
+        status.textContent = '';
+      } finally {
+        sending = false;
+        if (!sent) { submit.disabled = false; submit.textContent = 'Send message'; }
+      }
+    });
+  </script>
+</Base>

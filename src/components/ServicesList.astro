@@ -1,0 +1,16 @@
+---
+import { homeServices } from '../data/home-services';
+/**
+ * Homepage services as a 3-over-2 card grid. Cards span two columns, and the last two span three so the bottom row is balanced.
+ * Chosen over an editorial two-column layout (see docs/screenshots/v9-services): that layout left an empty block beside the list.
+ */
+---
+<ul class="svc-grid">
+  {homeServices.map((s) => (
+    <li class="svc-card">
+      <h3>{s.title}</h3>
+      <p>{s.text}</p>
+      <a class="svc-card-link" href={s.href}>{s.linkLabel} <span aria-hidden="true">→</span></a>
+    </li>
+  ))}
+</ul>
